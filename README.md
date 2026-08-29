@@ -1,50 +1,86 @@
-# Welcome to your Expo app 👋
+# My Fintech App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+My Fintech App is a mobile-first fintech UI built with Expo and React Native. It is currently focused on the frontend experience and provides a polished banking-style interface for exploring account activity, investments, cards, payments, and lifestyle offers.
 
-## Get started
+## What has been implemented
 
-1. Install dependencies
+The project already includes a working Expo Router app with a bottom tab navigation structure and the following main screens:
 
-   ```bash
-   npm install
-   ```
+- Home dashboard with balance, account list, quick actions, and recent transactions
+- Investment screen with portfolio overview, category cards, watchlist content, and insights
+- Cards screen with a card carousel, action shortcuts, recent transactions, and limits
+- Pay screen with search, quick payment actions, bills, and recent activity
+- Lifestyle screen with offers, rewards, and refer-and-earn content
 
-2. Start the app
+The UI is organized as reusable feature components under the src/components folder, with shared styling defined in the theme layer.
 
-   ```bash
-   npx expo start
-   ```
+## Tech stack
 
-In the output, you'll find options to open the app in a
+- React Native
+- Expo SDK 54
+- Expo Router
+- TypeScript
+- React Navigation
+- NativeWind / Tailwind CSS
+- Ionicons and SVG-based visuals
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- app/ - route entry points and tab-based screen files
+- app/(tabs)/ - main bottom-tab screens
+- src/components/ - reusable UI components grouped by feature area
+- src/constants/ - shared constants and tab metadata
+- src/theme/ - theme values and color definitions
+- assets/ - app images and static assets
 
-## Get a fresh project
+## Getting started
 
-When you're ready, run:
+### Prerequisites
+
+- Node.js 20 or newer
+- npm
+- Expo CLI (optional, but recommended)
+
+### Install dependencies
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Run locally
 
-## Learn more
+```bash
+npm start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+You can then launch the app with:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run android
+npm run ios
+npm run web
+```
 
-## Join the community
+## Available scripts
 
-Join our community of developers creating universal apps.
+- npm start - Start the Expo development server
+- npm run android - Launch the app on Android
+- npm run ios - Launch the app on iOS
+- npm run web - Launch the app in the browser
+- npm run lint - Run lint checks
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Development notes for other contributors
+
+- Keep new screens inside app/ or app/(tabs)/ depending on the navigation pattern.
+- Place reusable UI in the appropriate feature folder inside src/components.
+- Prefer shared colors and theme values from src/theme instead of hardcoding style values.
+- Follow the existing structure of screen components and keep them composable.
+- This project is currently UI-focused; backend integration, authentication, real data fetching, and state management are not yet implemented.
+
+## Suggested next steps
+
+- Connect the screens to real API data
+- Add global state management such as Zustand or Redux Toolkit
+- Implement authentication and protected routes
+- Add tests and component-level coverage
+- Expand the design system for reusable cards, buttons, and form elements

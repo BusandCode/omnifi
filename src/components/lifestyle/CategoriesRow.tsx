@@ -1,0 +1,72 @@
+// src/components/lifestyle/CategoriesRow.tsx
+import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { colors } from "../../theme/colors";
+
+type Category = { icon: keyof typeof Ionicons.glyphMap; label: string };
+
+const categories: Category[] = [
+  { icon: "airplane", label: "Flights" },
+  { icon: "business", label: "Hotels" },
+  { icon: "restaurant", label: "Food" },
+  { icon: "bag", label: "Shopping" },
+  { icon: "film", label: "Entertainment" },
+  { icon: "car", label: "Transport" },
+];
+
+export function CategoriesRow() {
+  return (
+    <View>
+      <View style={styles.header}>
+        <Text style={styles.title}>Categories</Text>
+        <TouchableOpacity>
+          <Text style={styles.viewAll}>See all</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.grid}>
+        {categories.map((c) => (
+          <TouchableOpacity key={c.label} style={styles.item}>
+            <Ionicons name={c.icon} size={22} color={colors.primaryLight} />
+            <Text style={styles.label}>{c.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  title: { color: colors.textPrimary, fontSize: 11.5, fontWeight: "500" },
+  viewAll: { color: colors.primaryLight, fontSize: 11, fontWeight: "600" },
+  grid: {
+    flexDirection: "row",
+    gap: 6,
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+  },
+  item: {
+    flex: 1,
+    aspectRatio: 0.85,
+    borderRadius: 14,
+    backgroundColor: "#0F0F11",
+    borderWidth: 1,
+    borderColor: "rgba(167,139,250,0.35)",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 2,
+    paddingHorizontal: 2,
+    paddingVertical: 4,
+  },
+  label: {
+    color: colors.textPrimary,
+    fontSize: 8,
+    textAlign: "center",
+    lineHeight: 10,
+  },
+});
