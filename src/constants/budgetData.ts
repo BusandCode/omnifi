@@ -10,7 +10,7 @@ export type BudgetCategory = {
 };
 
 export const BUDGET_CATEGORIES: BudgetCategory[] = [
-  { key: 'transfers', label: 'Transfers', icon: 'swap', color: '#8B5CF6', avgLastMonth: 24650 },
+  { key: 'transfers', label: 'Transfers', icon: 'repeat', color: '#8B5CF6', avgLastMonth: 24650 },
   { key: 'bills', label: 'Bills & Utilities', icon: 'zap', color: '#F59E0B', avgLastMonth: 18200 },
   { key: 'shopping', label: 'Shopping', icon: 'shopping-bag', color: '#3B82F6', avgLastMonth: 15600 },
   { key: 'food', label: 'Food & Dining', icon: 'coffee', color: '#22C55E', avgLastMonth: 12800 },

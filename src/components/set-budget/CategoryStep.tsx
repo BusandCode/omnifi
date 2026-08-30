@@ -6,7 +6,7 @@ import { BUDGET_CATEGORIES, BudgetCategoryKey } from '../../constants/budgetData
 import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = {
-  swap: Feather,
+  repeat: Feather,
   zap: Feather,
   'shopping-bag': Feather,
   coffee: Feather,
