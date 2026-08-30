@@ -33,14 +33,14 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   fixedHeader: {
     paddingHorizontal: 20,
-    paddingBottom: 12,
-    gap: 14,
+    paddingBottom: 10,
+    gap: 10,
     backgroundColor: colors.background,
   },
   scroll: { flex: 1 },
   content: {
     paddingHorizontal: 20,
-    paddingTop: 4,
-    paddingBottom: 24,
+    paddingTop: 2,
+    paddingBottom: 20,
   },
 });

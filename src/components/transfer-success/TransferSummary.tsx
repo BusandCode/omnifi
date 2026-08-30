@@ -1,16 +1,19 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
+import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
 type Props = {
   amount: number;
+  currency: CurrencyCode;
   recipientName: string;
   recipientBank: string;
   recipientInitials: string;
 };
 
-export function TransferSummary({ amount, recipientName, recipientBank, recipientInitials }: Props) {
-  const formattedAmount = `₦${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+export function TransferSummary({ amount, currency, recipientName, recipientBank, recipientInitials }: Props) {
+  const { symbol } = getCurrency(currency);
+  const formattedAmount = `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
   return (
     <View style={styles.card}>

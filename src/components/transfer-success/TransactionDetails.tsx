@@ -1,20 +1,24 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
+import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
 type Props = {
   amount: number;
+  currency: CurrencyCode;
   reference: string;
   dateTime: string;
   paymentMethod: string;
 };
 
-export function TransactionDetails({ amount, reference, dateTime, paymentMethod }: Props) {
-  const fmt = `₦${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+export function TransactionDetails({ amount, currency, reference, dateTime, paymentMethod }: Props) {
+  const { symbol } = getCurrency(currency);
+  const fmt = `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const feeFmt = `${symbol}0.00`;
 
   const rows = [
     { label: 'Amount sent', value: fmt },
-    { label: 'Transfer fee', value: '₦0.00', valueColor: colors.success, info: true },
+    { label: 'Transfer fee', value: feeFmt, valueColor: colors.success, info: true },
   ];
 
   const metaRows = [

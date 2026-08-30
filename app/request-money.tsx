@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import { RequestMoneyHeader } from "../src/components/request-money/RequestMoneyHeader";
@@ -27,6 +27,22 @@ export default function RequestMoneyScreen() {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
 
+  const handleRequestMoney = () => {
+    const numericAmount = Number(amount);
+    if (!numericAmount || numericAmount <= 0) return;
+
+    router.push({
+      pathname: "/request-success",
+      params: {
+        amount: numericAmount.toString(),
+        currency: activeCurrency,
+        note,
+        recipientName: recipientMode === "omnifi" ? "John Michael Smith" : "Recipient",
+        recipientSub: recipientMode === "omnifi" ? "OmniFi User • johnsmith@gmail.com" : "",
+      },
+    });
+  };
+
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <View style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}>
@@ -49,7 +65,7 @@ export default function RequestMoneyScreen() {
         <NoteField value={note} onChangeText={setNote} />
         <HowItWorksRow />
 
-        <TouchableOpacity style={styles.submitBtn}>
+        <TouchableOpacity style={styles.submitBtn} onPress={handleRequestMoney}>
           <Text style={styles.submitText}>Request Money</Text>
           <Feather name="arrow-right" size={16} color="#fff" />
         </TouchableOpacity>

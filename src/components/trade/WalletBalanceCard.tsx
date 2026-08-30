@@ -5,12 +5,17 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
-
-const balance = '798,518,301.20';
+import { useBalances } from '../../store/BalanceContext';
 
 export function WalletBalanceCard() {
   const layoutScale = useLayoutScale();
   const [visible, setVisible] = useState(true);
+  const { balances } = useBalances();
+
+  const balance = balances.NGN.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   const { styles, iconSize } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);

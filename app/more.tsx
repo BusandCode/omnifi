@@ -26,8 +26,8 @@ export default function MoreScreen() {
             { icon: "user", title: "Personal details", sub: "View and update your information", route: "/personal-details" },
             // { icon: "home", title: "Linked accounts", sub: "Manage your linked bank accounts and cards" },
             { icon: "file-text", title: "Statements & documents", sub: "Download account statements and documents", route:"/statements" },
-            { icon: "pie-chart", title: "Spending analytics", sub: "View insights and spending reports" },
-            { icon: "more-horizontal", title: "Account limits", sub: "Manage transfer, payment and ATM limits" },
+            { icon: "pie-chart", title: "Spending analytics", sub: "View insights and spending reports" , route:"/spending-analytics"},
+            { icon: "more-horizontal", title: "Account limits", sub: "Manage transfer, payment and ATM limits", route: "/account-limits" },
           ]}
         />
 

@@ -63,36 +63,13 @@ function ForeignSendScreen({
   currency: ForeignCurrency;
   insets: { top: number; bottom: number };
 }) {
-  const [loading, setLoading] = useState(false);
-  const { debit } = useBalances();
-
-  const handleSubmit = async ({ amount, note }: { amount: number; currency: ForeignCurrency; note: string }) => {
-    setLoading(true);
-    try {
-      debit(currency, amount);
-      router.replace({
-        pathname: "/transfer-success",
-        params: {
-          amount: amount.toString(),
-          recipientName: "",
-          recipientBank: "",
-          recipientInitials: "",
-          paymentMethod: `${currency} Transfer`,
-          note,
-        },
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <View style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}>
         <SendHeader subtitle={`${currency} Account`} showDot rightIcon="help" />
       </View>
       <ScrollView contentContainerStyle={styles.foreignScrollContent} showsVerticalScrollIndicator={false}>
-        <ForeignSendContent currency={currency} onSubmit={handleSubmit} loading={loading} />
+        <ForeignSendContent currency={currency} />
       </ScrollView>
     </View>
   );
@@ -171,6 +148,7 @@ function NgnSendContent({ insets }: { insets: { top: number; bottom: number } })
         pathname: "/transfer-success",
         params: {
           amount: numericAmount.toString(),
+          currency: "NGN",
           recipientName: selectedBeneficiary?.name ?? recipient ?? "",
           recipientBank: selectedBeneficiary?.bank ?? "",
           recipientInitials: selectedBeneficiary?.initials ?? "",

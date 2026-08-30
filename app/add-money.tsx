@@ -40,6 +40,7 @@ export default function AddMoneyScreen() {
       pathname: "/transfer-success",
       params: {
         amount: numericAmount.toString(),
+        currency: 'NGN',
         recipientName: "",
         recipientBank: "",
         recipientInitials: "",

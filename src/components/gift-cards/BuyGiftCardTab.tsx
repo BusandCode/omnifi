@@ -1,23 +1,38 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons, Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
 import { useBalances } from '../../store/BalanceContext';
 
-type Brand = { id: string; label: string; icon: React.ReactNode };
+type Brand = { id: string; label: string; icon: React.ReactNode; bg: string };
 
 const brands: Brand[] = [
-  { id: 'amazon', label: 'Amazon', icon: <FontAwesome5 name="amazon" size={20} color="#fff" /> },
-  { id: 'apple', label: 'Apple', icon: <FontAwesome5 name="apple" size={20} color="#fff" /> },
-  { id: 'googleplay', label: 'Google Play', icon: <FontAwesome5 name="google-play" size={19} color="#fff" /> },
-  { id: 'steam', label: 'Steam', icon: <FontAwesome5 name="steam" size={20} color="#fff" /> },
-  { id: 'netflix', label: 'Netflix', icon: <MaterialCommunityIcons name="netflix" size={21} color="#fff" /> },
-  { id: 'spotify', label: 'Spotify', icon: <FontAwesome5 name="spotify" size={20} color="#fff" /> },
+  { id: 'amazon', label: 'Amazon', icon: <FontAwesome5 name="amazon" size={20} color="#fff" />, bg: '#0F0F0F' },
+  { id: 'apple', label: 'Apple', icon: <FontAwesome5 name="apple" size={20} color="#fff" />, bg: colors.surface },
+  { id: 'googleplay', label: 'Google Play', icon: <FontAwesome5 name="google-play" size={19} color="#fff" />, bg: colors.surface },
+  { id: 'steam', label: 'Steam', icon: <FontAwesome5 name="steam" size={20} color="#fff" />, bg: colors.surface },
+  { id: 'netflix', label: 'Netflix', icon: <MaterialCommunityIcons name="netflix" size={21} color="#E50914" />, bg: colors.surface },
+  { id: 'spotify', label: 'Spotify', icon: <FontAwesome5 name="spotify" size={20} color="#1DB954" />, bg: colors.surface },
 ];
 
 const AMOUNTS = [5000, 10000, 20000, 50000, 100000, 200000];
 const FEE_RATE = 0.01; // 1% transaction fee
+
+function StackedCardsIllustration() {
+  return (
+    <View style={illStyles.wrap}>
+      <View style={[illStyles.card, illStyles.cardGreen]} />
+      <View style={[illStyles.card, illStyles.cardBlue]} />
+      <View style={[illStyles.card, illStyles.cardDark]}>
+        <FontAwesome5 name="amazon" size={22} color="#fff" />
+      </View>
+      <View style={illStyles.plusBtn}>
+        <Feather name="plus" size={16} color="#fff" />
+      </View>
+    </View>
+  );
+}
 
 export function BuyGiftCardTab() {
   const { balances, debit } = useBalances();
@@ -56,6 +71,7 @@ export function BuyGiftCardTab() {
         pathname: '/transfer-success',
         params: {
           amount: total.toString(),
+          currency: 'NGN',
           recipientName: '',
           recipientBank: '',
           recipientInitials: '',
@@ -69,12 +85,17 @@ export function BuyGiftCardTab() {
   };
 
   return (
-    <View style={{ gap: 20 }}>
+    <View style={{ gap: 12 }}>
       <View style={styles.promoCard}>
-        <Text style={styles.promoTitle}>Buy Gift Cards Instantly</Text>
-        <Text style={styles.promoSub}>
-          Pay with your wallet balance and get the best deals on top brands.
-        </Text>
+        <View style={styles.promoRow}>
+          <View style={styles.promoTextCol}>
+            <Text style={styles.promoTitle}>Buy Gift Cards Instantly</Text>
+            <Text style={styles.promoSub}>
+              Pay with your wallet balance and get the best deals on top brands.
+            </Text>
+          </View>
+          <StackedCardsIllustration />
+        </View>
 
         <View style={styles.promoFeature}>
           <Ionicons name="shield-checkmark" size={14} color={colors.primaryLight} />
@@ -94,10 +115,14 @@ export function BuyGiftCardTab() {
 
       <View>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>1. Select a Brand</Text>
+          <Text style={styles.sectionTitleNoMargin}>1. Select a Brand</Text>
           <TouchableOpacity><Text style={styles.viewAll}>View all</Text></TouchableOpacity>
         </View>
-        <View style={styles.brandGrid}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.brandRow}
+        >
           {brands.map((b) => {
             const active = b.id === selectedBrand;
             return (
@@ -106,7 +131,7 @@ export function BuyGiftCardTab() {
                 style={styles.brandItem}
                 onPress={() => setSelectedBrand(b.id)}
               >
-                <View style={[styles.brandIcon, active && styles.brandIconActive]}>
+                <View style={[styles.brandIcon, { backgroundColor: b.bg }, active && styles.brandIconActive]}>
                   {b.icon}
                   {active && (
                     <View style={styles.brandCheck}>
@@ -118,7 +143,7 @@ export function BuyGiftCardTab() {
               </TouchableOpacity>
             );
           })}
-        </View>
+        </ScrollView>
       </View>
 
       <View>
@@ -132,14 +157,14 @@ export function BuyGiftCardTab() {
                 style={[styles.amountChip, active && styles.amountChipActive]}
                 onPress={() => handleSelectAmount(a)}
               >
+                {active && (
+                  <View style={styles.amountCheckAbs}>
+                    <Ionicons name="checkmark" size={11} color="#fff" />
+                  </View>
+                )}
                 <Text style={[styles.amountChipText, active && styles.amountChipTextActive]}>
                   ₦{a.toLocaleString()}
                 </Text>
-                {active && (
-                  <View style={styles.amountCheck}>
-                    <Ionicons name="checkmark" size={9} color="#fff" />
-                  </View>
-                )}
               </TouchableOpacity>
             );
           })}
@@ -147,10 +172,15 @@ export function BuyGiftCardTab() {
             style={[styles.amountChip, styles.customChip, customOpen && styles.amountChipActive]}
             onPress={handleSelectCustom}
           >
+            {customOpen && (
+              <View style={styles.amountCheckAbs}>
+                <Ionicons name="checkmark" size={11} color="#fff" />
+              </View>
+            )}
             <Text style={[styles.amountChipText, customOpen && styles.amountChipTextActive]}>
               Custom Amount
             </Text>
-            <Feather name="edit-2" size={12} color={customOpen ? '#fff' : colors.primaryLight} />
+            <Feather name="edit-2" size={12} color={colors.primaryLight} />
           </TouchableOpacity>
         </View>
         {customOpen && (
@@ -224,20 +254,66 @@ export function BuyGiftCardTab() {
       </View>
 
       <View style={styles.infoNote}>
-        <Ionicons name="shield-checkmark" size={16} color={colors.primaryLight} />
         <Text style={styles.infoText}>
           You will receive the gift card code instantly after successful payment.
         </Text>
+        <View style={styles.giftIconBadge}>
+          <Feather name="gift" size={16} color="#fff" />
+        </View>
       </View>
 
       <TouchableOpacity style={styles.payBtn} onPress={handlePay} disabled={loading}>
         <Ionicons name="lock-closed" size={14} color="#fff" />
         <Text style={styles.payText}>Proceed to Pay</Text>
         <Text style={styles.payAmount}>₦{total.toLocaleString()}.00</Text>
+        <Feather name="chevron-right" size={16} color="#fff" />
       </TouchableOpacity>
     </View>
   );
 }
+
+const illStyles = StyleSheet.create({
+  wrap: { width: 90, height: 70, position: 'relative' },
+  card: {
+    position: 'absolute',
+    width: 60,
+    height: 46,
+    borderRadius: 8,
+  },
+  cardGreen: {
+    backgroundColor: '#22C55E',
+    top: 2,
+    left: 22,
+    transform: [{ rotate: '18deg' }],
+  },
+  cardBlue: {
+    backgroundColor: '#3B82F6',
+    top: 8,
+    left: 10,
+    transform: [{ rotate: '6deg' }],
+  },
+  cardDark: {
+    backgroundColor: '#111',
+    top: 18,
+    left: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ rotate: '-6deg' }],
+  },
+  plusBtn: {
+    position: 'absolute',
+    bottom: -2,
+    right: -2,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.surface,
+  },
+});
 
 const styles = StyleSheet.create({
   promoCard: {
@@ -246,19 +322,21 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 10,
   },
+  promoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
+  promoTextCol: { flex: 1, gap: 6 },
   promoTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
   promoSub: { color: colors.textSecondary, fontSize: 11.5, lineHeight: 16 },
-  promoFeature: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 2 },
+  promoFeature: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   promoFeatureTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
   promoFeatureSub: { color: colors.textSecondary, fontSize: 10, marginTop: 1 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   sectionTitle: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700', marginBottom: 10 },
+  sectionTitleNoMargin: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700' },
   viewAll: { color: colors.primaryLight, fontSize: 11.5, fontWeight: '600' },
-  brandGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  brandItem: { width: '28%', alignItems: 'center', gap: 6 },
+  brandRow: { flexDirection: 'row', gap: 14, paddingRight: 8 },
+  brandItem: { alignItems: 'center', gap: 6, width: 56 },
   brandIcon: {
     width: 52, height: 52, borderRadius: 14,
-    backgroundColor: colors.surface,
     justifyContent: 'center', alignItems: 'center',
     borderWidth: 1.5, borderColor: 'transparent',
     position: 'relative',
@@ -274,22 +352,25 @@ const styles = StyleSheet.create({
   brandLabel: { color: colors.textSecondary, fontSize: 9.5, textAlign: 'center' },
   amountGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   amountChip: {
-    width: '47%',
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+    width: '22.5%',
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4,
     backgroundColor: colors.surface,
     borderRadius: 12,
     paddingVertical: 13,
     borderWidth: 1.5, borderColor: 'transparent',
+    position: 'relative',
   },
   amountChipActive: { borderColor: colors.primary, backgroundColor: 'rgba(167,139,250,0.1)' },
-  amountChipText: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '600' },
+  amountChipText: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '600' },
   amountChipTextActive: { color: colors.primaryLight },
-  amountCheck: {
-    width: 14, height: 14, borderRadius: 7,
+  amountCheckAbs: {
+    position: 'absolute', top: -8, left: '50%', marginLeft: -8,
+    width: 16, height: 16, borderRadius: 8,
     backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
+    borderWidth: 2, borderColor: colors.background,
   },
-  customChip: { width: '100%' },
+  customChip: { width: '48.5%' },
   customInput: {
     marginTop: 8,
     backgroundColor: colors.surface,
@@ -331,12 +412,17 @@ const styles = StyleSheet.create({
   summaryTotalLabel: { color: colors.textPrimary, fontSize: 13, fontWeight: '700' },
   summaryTotalValue: { color: colors.primaryLight, fontSize: 14, fontWeight: '700' },
   infoNote: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 10,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 10,
     backgroundColor: 'rgba(167,139,250,0.08)',
     borderRadius: 14,
     padding: 14,
   },
   infoText: { flex: 1, color: colors.textSecondary, fontSize: 11, lineHeight: 16 },
+  giftIconBadge: {
+    width: 36, height: 36, borderRadius: 18,
+    backgroundColor: colors.primary,
+    justifyContent: 'center', alignItems: 'center',
+  },
   payBtn: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
     backgroundColor: colors.primary,

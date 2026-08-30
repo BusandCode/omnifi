@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
@@ -9,11 +9,10 @@ type Props = {
   symbol: string;
   amount: number;
   fee: number;
-  onSubmit: () => void;
-  loading: boolean;
+  onReview: () => void;
 };
 
-export function ForeignSendSummary({ symbol, amount, fee, onSubmit, loading }: Props) {
+export function ForeignSendSummary({ symbol, amount, fee, onReview }: Props) {
   const layoutScale = useLayoutScale();
 
   const { styles, iconSize } = useMemo(() => {
@@ -57,15 +56,9 @@ export function ForeignSendSummary({ symbol, amount, fee, onSubmit, loading }: P
         </View>
       </View>
 
-      <TouchableOpacity style={styles.cta} onPress={onSubmit} disabled={loading}>
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <>
-            <Text style={styles.ctaText}>Review Transfer</Text>
-            <Ionicons name="chevron-forward" size={iconSize} color="#fff" />
-          </>
-        )}
+      <TouchableOpacity style={styles.cta} onPress={onReview} disabled={amount <= 0}>
+        <Text style={styles.ctaText}>Review Transfer</Text>
+        <Ionicons name="chevron-forward" size={iconSize} color="#fff" />
       </TouchableOpacity>
     </View>
   );

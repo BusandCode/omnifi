@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { router } from "expo-router";
 import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
@@ -28,11 +29,9 @@ function SectionHeader({ number, title }: { number: number; title: string }) {
 
 type Props = {
   currency: ForeignCurrency;
-  onSubmit: (payload: { amount: number; currency: ForeignCurrency; note: string }) => void;
-  loading: boolean;
 };
 
-export function ForeignSendContent({ currency, onSubmit, loading }: Props) {
+export function ForeignSendContent({ currency }: Props) {
   const layoutScale = useLayoutScale();
   const account = FOREIGN_ACCOUNTS[currency];
 
@@ -51,6 +50,29 @@ export function ForeignSendContent({ currency, onSubmit, loading }: Props) {
     });
   }, [layoutScale]);
 
+  const handleReview = () => {
+    const recipientName = fields.recipientName || "";
+
+    const idLabel = currency === "USD" ? "Account Number" : "IBAN";
+    const idValue = currency === "USD" ? fields.accountNumber || "" : fields.iban || "";
+    const refLabel = currency === "USD" ? "Routing Number (ABA)" : "BIC / SWIFT";
+    const refValue = currency === "USD" ? fields.routingNumber || "" : fields.bic || "";
+
+    router.push({
+      pathname: "/review-transfer",
+      params: {
+        currency,
+        amount: numericAmount.toString(),
+        recipientName,
+        idLabel,
+        idValue,
+        refLabel,
+        refValue,
+        note,
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       <SendAccountCard account={account} />
@@ -62,21 +84,12 @@ export function ForeignSendContent({ currency, onSubmit, loading }: Props) {
 
       <View style={styles.section}>
         <SectionHeader number={2} title="Recipient Details" />
-        {method === "bank" ? (
-          <RecipientDetailsForm
-            currency={currency}
-            account={account}
-            values={fields}
-            onChangeField={(key, val) => setFields((prev) => ({ ...prev, [key]: val }))}
-          />
-        ) : (
-          <RecipientDetailsForm
-            currency={currency}
-            account={account}
-            values={fields}
-            onChangeField={(key, val) => setFields((prev) => ({ ...prev, [key]: val }))}
-          />
-        )}
+        <RecipientDetailsForm
+          currency={currency}
+          account={account}
+          values={fields}
+          onChangeField={(key, val) => setFields((prev) => ({ ...prev, [key]: val }))}
+        />
       </View>
 
       <View style={styles.section}>
@@ -93,8 +106,7 @@ export function ForeignSendContent({ currency, onSubmit, loading }: Props) {
         symbol={account.symbol}
         amount={numericAmount}
         fee={0}
-        loading={loading}
-        onSubmit={() => onSubmit({ amount: numericAmount, currency, note })}
+        onReview={handleReview}
       />
     </View>
   );

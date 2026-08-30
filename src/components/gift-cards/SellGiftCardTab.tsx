@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, Pressable } from 'react-native';
 import { Ionicons, Feather, FontAwesome5 } from '@expo/vector-icons';
+import Svg, { Defs, LinearGradient, Stop, Rect, Line, Text as SvgText, G } from 'react-native-svg';
 import { colors } from '../../theme/colors';
 
 type Brand = { id: string; label: string; icon: React.ReactNode };
@@ -12,16 +13,53 @@ const brands: Brand[] = [
   { id: 'googleplay', label: 'Google Play Gift Card', icon: <FontAwesome5 name="google-play" size={14} color="#fff" /> },
 ];
 
-const PAYOUT_RATE = 0.855; // ~85.5% of face value, matching the example payout
+const PAYOUT_RATE = 0.855; // ~85.5% of face value, matching the ₦50,000 → ₦42,750 example
+
+function GiftCardIllustration() {
+  return (
+    <View style={illStyles.wrap}>
+      <Svg width={104} height={78} viewBox="0 0 104 78">
+        <Defs>
+          <LinearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+            <Stop offset="0" stopColor="#8B5CF6" />
+            <Stop offset="1" stopColor="#4C1D95" />
+          </LinearGradient>
+        </Defs>
+        <G rotation={-8} origin="52,39">
+          <Rect x={7} y={9} width={90} height={58} rx={10} fill="url(#cardGrad)" />
+          <Line x1={52} y1={9} x2={52} y2={67} stroke="rgba(255,255,255,0.45)" strokeWidth={3} />
+          <Line x1={7} y1={38} x2={97} y2={38} stroke="rgba(255,255,255,0.45)" strokeWidth={3} />
+          <SvgText
+            x={52}
+            y={28}
+            fontSize={11}
+            fontWeight="700"
+            fontStyle="italic"
+            fill="#fff"
+            textAnchor="middle"
+          >
+            GIFT CARD
+          </SvgText>
+        </G>
+      </Svg>
+      <View style={illStyles.bow}>
+        <Feather name="gift" size={13} color="#fff" />
+      </View>
+      <View style={illStyles.cameraBadge}>
+        <Feather name="camera" size={14} color="#fff" />
+      </View>
+    </View>
+  );
+}
 
 export function SellGiftCardTab() {
   const [brandOpen, setBrandOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState('apple');
-  const [cardNumber, setCardNumber] = useState('');
-  const [pin, setPin] = useState('');
+  const [cardNumber, setCardNumber] = useState('X234 5678 9012 3456');
+  const [pin, setPin] = useState('12345678');
   const [pinVisible, setPinVisible] = useState(false);
-  const [cardValue, setCardValue] = useState('');
-  const [imageAttached, setImageAttached] = useState(false);
+  const [cardValue, setCardValue] = useState('50000');
+  const [imageAttached, setImageAttached] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   const brand = brands.find((b) => b.id === selectedBrand)!;
@@ -31,19 +69,23 @@ export function SellGiftCardTab() {
   const canSubmit = cardNumber.length > 0 && pin.length > 0 && numericValue > 0 && imageAttached;
 
   const handleSubmit = () => {
-    if (!canSubmit) return;
+    if (!canSubmit || submitting) return;
     setSubmitting(true);
-    // In a real integration this would call an API to submit for verification.
-    setTimeout(() => setSubmitting(false), 600);
+    setTimeout(() => setSubmitting(false), 700);
   };
 
   return (
-    <View style={{ gap: 20 }}>
+    <View style={{ gap: 10 }}>
       <View style={styles.promoCard}>
-        <Text style={styles.promoTitle}>Sell Your Gift Card</Text>
-        <Text style={styles.promoSub}>
-          Enter your card details and upload a clear image. We'll verify and pay you instantly.
-        </Text>
+        <View style={styles.promoRow}>
+          <View style={styles.promoTextCol}>
+            <Text style={styles.promoTitle}>Sell Your Gift Card</Text>
+            <Text style={styles.promoSub}>
+              Enter your card details and upload a clear image. We'll verify and pay you instantly.
+            </Text>
+          </View>
+          <GiftCardIllustration />
+        </View>
       </View>
 
       <View>
@@ -98,7 +140,10 @@ export function SellGiftCardTab() {
 
         <View style={styles.fieldRow}>
           <View style={styles.fieldHalf}>
-            <Text style={styles.fieldLabel}>PIN / Security Code</Text>
+            <View style={styles.fieldLabelRow}>
+              <Text style={styles.fieldLabel}>PIN / Security Code</Text>
+              <Ionicons name="information-circle-outline" size={11} color={colors.textSecondary} />
+            </View>
             <View style={styles.inputRow}>
               <TextInput
                 value={pin}
@@ -122,10 +167,13 @@ export function SellGiftCardTab() {
           </View>
 
           <View style={styles.fieldHalf}>
-            <Text style={styles.fieldLabel}>Card Value</Text>
+            <View style={styles.fieldLabelRow}>
+              <Text style={styles.fieldLabel}>Card Value</Text>
+              <Ionicons name="information-circle-outline" size={11} color={colors.textSecondary} />
+            </View>
             <View style={styles.inputRow}>
               <TextInput
-                value={cardValue}
+                value={cardValue ? `₦${Number(cardValue).toLocaleString()}` : ''}
                 onChangeText={(t) => setCardValue(t.replace(/[^0-9]/g, ''))}
                 keyboardType="number-pad"
                 placeholder="₦50,000"
@@ -154,19 +202,44 @@ export function SellGiftCardTab() {
         </Text>
 
         <TouchableOpacity
-          style={[styles.uploadBox, imageAttached && styles.uploadBoxActive]}
+          style={styles.uploadBox}
           onPress={() => setImageAttached((v) => !v)}
+          activeOpacity={0.85}
         >
-          <View style={styles.uploadIcon}>
-            <Feather name="upload-cloud" size={18} color={colors.primaryLight} />
-          </View>
-          <Text style={styles.uploadText}>
-            {imageAttached ? 'Image attached — tap to remove' : 'Tap to upload or drag and drop'}
-          </Text>
-          <Text style={styles.uploadHint}>JPG, PNG (Max 5MB)</Text>
-          {imageAttached && (
-            <View style={styles.uploadCheck}>
-              <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+          {imageAttached ? (
+            <View style={styles.uploadRow}>
+              <View style={styles.thumbWrap}>
+                <View style={styles.thumbPlaceholder}>
+                  <FontAwesome5 name={brand.id === 'apple' ? 'apple' : 'gift'} size={20} color="#fff" />
+                </View>
+                <TouchableOpacity
+                  style={styles.thumbRemove}
+                  onPress={() => setImageAttached(false)}
+                  hitSlop={8}
+                >
+                  <Ionicons name="close" size={10} color="#fff" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.uploadPromptCol}>
+                <View style={styles.uploadIconSm}>
+                  <Feather name="upload-cloud" size={16} color={colors.primaryLight} />
+                </View>
+                <Text style={styles.uploadText}>Tap to upload or drag and drop</Text>
+                <Text style={styles.uploadHint}>JPG, PNG (Max 5MB)</Text>
+              </View>
+
+              <View style={styles.uploadCheckAbs}>
+                <Ionicons name="checkmark-circle" size={18} color={colors.success} />
+              </View>
+            </View>
+          ) : (
+            <View style={styles.uploadEmptyCol}>
+              <View style={styles.uploadIconSm}>
+                <Feather name="upload-cloud" size={18} color={colors.primaryLight} />
+              </View>
+              <Text style={styles.uploadText}>Tap to upload or drag and drop</Text>
+              <Text style={styles.uploadHint}>JPG, PNG (Max 5MB)</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -189,6 +262,8 @@ export function SellGiftCardTab() {
         ))}
       </View>
 
+      <View style={styles.divider} />
+
       <View style={styles.payoutRow}>
         <View style={styles.payoutLabelRow}>
           <Text style={styles.payoutLabel}>Estimated Payout</Text>
@@ -205,7 +280,7 @@ export function SellGiftCardTab() {
         onPress={handleSubmit}
         disabled={!canSubmit || submitting}
       >
-        <Text style={styles.submitText}>Submit for Verification</Text>
+        <Text style={styles.submitText}>{submitting ? 'Submitting…' : 'Submit for Verification'}</Text>
       </TouchableOpacity>
 
       <Text style={styles.termsText}>
@@ -216,8 +291,39 @@ export function SellGiftCardTab() {
   );
 }
 
+const illStyles = StyleSheet.create({
+  wrap: { width: 104, height: 78, position: 'relative' },
+  bow: {
+    position: 'absolute',
+    top: -2,
+    left: 40,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#A78BFA',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ rotate: '-8deg' }],
+  },
+  cameraBadge: {
+    position: 'absolute',
+    bottom: -4,
+    right: -2,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.surface,
+  },
+});
+
 const styles = StyleSheet.create({
-  promoCard: { backgroundColor: colors.surface, borderRadius: 18, padding: 16, gap: 6 },
+  promoCard: { backgroundColor: colors.surface, borderRadius: 18, padding: 16 },
+  promoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
+  promoTextCol: { flex: 1, gap: 6 },
   promoTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
   promoSub: { color: colors.textSecondary, fontSize: 11.5, lineHeight: 16 },
   sectionTitle: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700', marginBottom: 10 },
@@ -239,7 +345,8 @@ const styles = StyleSheet.create({
   modalItem: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 12 },
   modalItemActive: { backgroundColor: 'rgba(167,139,250,0.1)' },
   modalItemText: { flex: 1, color: colors.textPrimary, fontSize: 12.5, fontWeight: '600' },
-  fieldLabel: { color: colors.textSecondary, fontSize: 10.5, marginBottom: 6 },
+  fieldLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 6 },
+  fieldLabel: { color: colors.textSecondary, fontSize: 10.5 },
   inputRow: {
     flexDirection: 'row', alignItems: 'center', gap: 8,
     backgroundColor: colors.surface,
@@ -264,32 +371,51 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     borderStyle: 'dashed',
     borderRadius: 16,
-    paddingVertical: 24,
+    padding: 12,
+  },
+  uploadRow: {
+    flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 12,
     position: 'relative',
   },
-  uploadBoxActive: { borderColor: colors.primary, backgroundColor: 'rgba(167,139,250,0.06)' },
-  uploadIcon: {
-    width: 40, height: 40, borderRadius: 20,
+  thumbWrap: { position: 'relative' },
+  thumbPlaceholder: {
+    width: 64,
+    height: 44,
+    borderRadius: 10,
+    backgroundColor: '#1a1a1a',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  thumbRemove: {
+    position: 'absolute',
+    top: -6,
+    right: -6,
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#3A3A3C',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  uploadPromptCol: { flex: 1, alignItems: 'center', gap: 4 },
+  uploadEmptyCol: { alignItems: 'center', gap: 6, paddingVertical: 14 },
+  uploadIconSm: {
+    width: 32, height: 32, borderRadius: 16,
     backgroundColor: 'rgba(167,139,250,0.15)',
     justifyContent: 'center', alignItems: 'center',
-    marginBottom: 4,
   },
-  uploadText: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '600' },
-  uploadHint: { color: colors.textSecondary, fontSize: 10 },
-  uploadCheck: { position: 'absolute', top: 10, right: 10 },
+  uploadText: { color: colors.textPrimary, fontSize: 11, fontWeight: '600', textAlign: 'center' },
+  uploadHint: { color: colors.textSecondary, fontSize: 9.5 },
+  uploadCheckAbs: { position: 'absolute', top: -2, right: 0 },
   nextCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 16, gap: 8 },
   nextHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
   nextTitle: { color: colors.primaryLight, fontSize: 12, fontWeight: '700' },
   nextRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   nextText: { color: colors.textSecondary, fontSize: 11 },
-  payoutRow: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    padding: 14,
-  },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
+  payoutRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   payoutLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   payoutLabel: { color: colors.textSecondary, fontSize: 11.5 },
   payoutValueRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },

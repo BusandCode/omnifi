@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { ReviewHeader } from '../src/components/review-swap/ReviewHeader';
 import { ReviewSwapCard } from '../src/components/review-swap/ReviewSwapCard';
@@ -9,6 +9,24 @@ import { PaymentMethodRow } from '../src/components/review-swap/PaymentMethodRow
 import { colors } from '../src/theme/colors';
 
 export default function ReviewSwapScreen() {
+  const { amount, currency } = useLocalSearchParams<{ amount?: string; currency?: string }>();
+  const swapCurrency = currency === 'USD' || currency === 'EUR' ? currency : 'NGN';
+
+  const handleConfirm = () => {
+    router.replace({
+      pathname: '/transfer-success',
+      params: {
+        amount: amount ?? '0',
+        currency: swapCurrency,
+        recipientName: '',
+        recipientBank: '',
+        recipientInitials: '',
+        paymentMethod: 'Currency Swap',
+        note: '',
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ReviewHeader />
@@ -19,7 +37,7 @@ export default function ReviewSwapScreen() {
 
       <View style={{ flex: 1 }} />
 
-      <TouchableOpacity style={styles.cta} onPress={() => router.replace('/transfer-success')}>
+      <TouchableOpacity style={styles.cta} onPress={handleConfirm}>
         <Feather name="lock" size={13} color="#fff" />
         <Text style={styles.ctaText}>Confirm Swap</Text>
       </TouchableOpacity>
