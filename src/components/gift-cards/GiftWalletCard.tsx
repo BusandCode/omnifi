@@ -44,14 +44,6 @@ export function GiftWalletCard() {
             </View>
             <View style={styles.giftBow} />
           </View>
-
-          <TouchableOpacity
-            style={styles.tradeBtn}
-            onPress={() => router.push('/gift-card-trading')}
-          >
-            <Feather name="repeat" size={10} color={colors.primaryLight} />
-            <Text style={styles.tradeText}>Trade Card</Text>
-          </TouchableOpacity>
         </View>
       </View>
 
@@ -89,13 +81,7 @@ const styles = StyleSheet.create({
     position: 'absolute', top: -5, alignSelf: 'center',
     width: 16, height: 10, borderRadius: 5, backgroundColor: '#8B5CF6',
   },
-  tradeBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: 'rgba(167,139,250,0.15)',
-    borderWidth: 1, borderColor: 'rgba(167,139,250,0.4)',
-    borderRadius: 10, paddingHorizontal: 8, paddingVertical: 4,
-  },
-  tradeText: { color: colors.primaryLight, fontSize: 8.5, fontWeight: '700' },
+  // tradeText: { color: colors.primaryLight, fontSize: 8.5, fontWeight: '700' },
   actionsRow: { flexDirection: 'row', gap: 7 },
   addBtn: {
     flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5,

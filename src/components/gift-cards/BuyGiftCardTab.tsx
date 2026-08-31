@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons, Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
@@ -19,18 +19,13 @@ const brands: Brand[] = [
 const AMOUNTS = [5000, 10000, 20000, 50000, 100000, 200000];
 const FEE_RATE = 0.01; // 1% transaction fee
 
-function StackedCardsIllustration() {
+function BuyGiftIllustration() {
   return (
-    <View style={illStyles.wrap}>
-      <View style={[illStyles.card, illStyles.cardGreen]} />
-      <View style={[illStyles.card, illStyles.cardBlue]} />
-      <View style={[illStyles.card, illStyles.cardDark]}>
-        <FontAwesome5 name="amazon" size={22} color="#fff" />
-      </View>
-      <View style={illStyles.plusBtn}>
-        <Feather name="plus" size={16} color="#fff" />
-      </View>
-    </View>
+    <Image
+      source={require('../../../assets/buy-gift.png')}
+      style={illStyles.image}
+      resizeMode="contain"
+    />
   );
 }
 
@@ -93,23 +88,23 @@ export function BuyGiftCardTab() {
             <Text style={styles.promoSub}>
               Pay with your wallet balance and get the best deals on top brands.
             </Text>
-          </View>
-          <StackedCardsIllustration />
-        </View>
 
-        <View style={styles.promoFeature}>
-          <Ionicons name="shield-checkmark" size={14} color={colors.primaryLight} />
-          <View>
-            <Text style={styles.promoFeatureTitle}>Secure & Trusted</Text>
-            <Text style={styles.promoFeatureSub}>100% safe transactions</Text>
+            <View style={styles.promoFeature}>
+              <Ionicons name="shield-checkmark" size={14} color={colors.primaryLight} />
+              <View>
+                <Text style={styles.promoFeatureTitle}>Secure & Trusted</Text>
+                <Text style={styles.promoFeatureSub}>100% safe transactions</Text>
+              </View>
+            </View>
+            <View style={styles.promoFeature}>
+              <Ionicons name="flash" size={14} color={colors.primaryLight} />
+              <View>
+                <Text style={styles.promoFeatureTitle}>Instant Delivery</Text>
+                <Text style={styles.promoFeatureSub}>Quick & easy to use</Text>
+              </View>
+            </View>
           </View>
-        </View>
-        <View style={styles.promoFeature}>
-          <Ionicons name="flash" size={14} color={colors.primaryLight} />
-          <View>
-            <Text style={styles.promoFeatureTitle}>Instant Delivery</Text>
-            <Text style={styles.promoFeatureSub}>Quick & easy to use</Text>
-          </View>
+          <BuyGiftIllustration />
         </View>
       </View>
 
@@ -273,46 +268,7 @@ export function BuyGiftCardTab() {
 }
 
 const illStyles = StyleSheet.create({
-  wrap: { width: 90, height: 70, position: 'relative' },
-  card: {
-    position: 'absolute',
-    width: 60,
-    height: 46,
-    borderRadius: 8,
-  },
-  cardGreen: {
-    backgroundColor: '#22C55E',
-    top: 2,
-    left: 22,
-    transform: [{ rotate: '18deg' }],
-  },
-  cardBlue: {
-    backgroundColor: '#3B82F6',
-    top: 8,
-    left: 10,
-    transform: [{ rotate: '6deg' }],
-  },
-  cardDark: {
-    backgroundColor: '#111',
-    top: 18,
-    left: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    transform: [{ rotate: '-6deg' }],
-  },
-  plusBtn: {
-    position: 'absolute',
-    bottom: -2,
-    right: -2,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.surface,
-  },
+  image: { width: 150, height: 100 },
 });
 
 const styles = StyleSheet.create({
@@ -320,19 +276,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: 18,
     padding: 16,
-    gap: 10,
   },
-  promoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
+  promoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
   promoTextCol: { flex: 1, gap: 6 },
-  promoTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
-  promoSub: { color: colors.textSecondary, fontSize: 11.5, lineHeight: 16 },
-  promoFeature: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  promoFeatureTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
+  promoTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '600' },
+  promoSub: { color: colors.textSecondary, fontSize: 10.5, lineHeight: 16 },
+  promoFeature: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4 },
+  promoFeatureTitle: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '700' },
   promoFeatureSub: { color: colors.textSecondary, fontSize: 10, marginTop: 1 },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   sectionTitle: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700', marginBottom: 10 },
   sectionTitleNoMargin: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700' },
-  viewAll: { color: colors.primaryLight, fontSize: 11.5, fontWeight: '600' },
+  viewAll: { color: colors.primaryLight, fontSize: 10.5, fontWeight: '600' },
   brandRow: { flexDirection: 'row', gap: 14, paddingRight: 8 },
   brandItem: { alignItems: 'center', gap: 6, width: 56 },
   brandIcon: {

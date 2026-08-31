@@ -1,3 +1,4 @@
+// AIPayScreen.tsx — safe-area bottom padding now wraps the banner instead of the input bar
 import { SecureSmartBanner } from "@/src/components/ai-pay/SecureSmartBanner";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -23,7 +24,6 @@ const MIN_GAP = 2;
 const MAX_GAP = 8;
 const BOTTOM_GAP = 4;
 
-// How far content is allowed to shrink/grow from its designed size.
 const MIN_FACTOR = 0.65;
 const MAX_FACTOR = 1.15;
 
@@ -69,8 +69,6 @@ export default function AIPayScreen() {
     [],
   );
 
-  // Convergence loop: each time measured heights change, check whether the
-  // current factor would make content fit exactly. If not, nudge factor.
   useEffect(() => {
     const allMeasured =
       bodyContainerHeight > 0 &&
@@ -82,7 +80,7 @@ export default function AIPayScreen() {
       (sum, k) => sum + itemHeights[k],
       0,
     );
-    
+
     const totalGaps = MIN_GAP * (BODY_ITEM_KEYS.length - 1);
     const availableForItems = bodyContainerHeight - BOTTOM_GAP - totalGaps;
 
@@ -94,12 +92,11 @@ export default function AIPayScreen() {
     }
   }, [bodyContainerHeight, topHeight, itemHeights]);
 
-  // Calculate gap AFTER factor is applied
   const totalItemHeight = BODY_ITEM_KEYS.reduce(
     (sum, k) => sum + itemHeights[k],
     0,
   );
-  
+
   let gap = MIN_GAP;
   if (bodyContainerHeight > 0) {
     const leftover = bodyContainerHeight - BOTTOM_GAP - totalItemHeight;
@@ -122,7 +119,6 @@ export default function AIPayScreen() {
     setMessages((prev) => [...prev, userMsg]);
     setCommand("");
 
-    // TODO: replace with real AI Pay parse/execute call
     setTimeout(() => {
       const aiMsg: ChatMessage = {
         id: `a-${Date.now()}`,
@@ -159,10 +155,10 @@ export default function AIPayScreen() {
           <View
             style={[
               styles.content,
-              { 
+              {
                 rowGap: gap,
                 paddingBottom: BOTTOM_GAP,
-              }
+              },
             ]}
             onLayout={onBodyContainerLayout}
           >
@@ -181,39 +177,35 @@ export default function AIPayScreen() {
                 ))}
               </ScrollView>
             </View>
-            
+
             <View onLayout={makeItemLayoutHandler("input")}>
               <CommandInputBar
                 value={command}
                 onChangeText={setCommand}
                 onSend={handleSend}
-                onPickImage={() => {
-                  // TODO: expo-image-picker launchImageLibraryAsync
-                }}
-                onPickCamera={() => {
-                  // TODO: expo-image-picker launchCameraAsync
-                }}
-                onPickDocument={() => {
-                  // TODO: expo-document-picker getDocumentAsync
-                }}
+                onPickImage={() => {}}
+                onPickCamera={() => {}}
+                onPickDocument={() => {}}
               />
             </View>
           </View>
         </KeyboardAvoidingView>
       </ScaleProvider>
 
-      <SecureSmartBanner />
+      <View style={{ paddingBottom: Math.max(insets.bottom, 12) }}>
+        <SecureSmartBanner />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: colors.background 
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
   },
-  content: { 
-    flex: 1, 
+  content: {
+    flex: 1,
     paddingHorizontal: 16,
   },
   messages: {

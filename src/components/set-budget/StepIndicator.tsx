@@ -20,7 +20,7 @@ export function StepIndicator({ currentStep }: Props) {
             <View style={styles.stepCol}>
               <View style={[styles.circle, (done || active) && styles.circleActive]}>
                 {done ? (
-                  <Ionicons name="checkmark" size={13} color="#fff" />
+                  <Ionicons name="checkmark" size={11} color="#fff" />
                 ) : (
                   <Text style={[styles.circleText, active && styles.circleTextActive]}>{stepNum}</Text>
                 )}
@@ -40,21 +40,21 @@ export function StepIndicator({ currentStep }: Props) {
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'flex-start', paddingHorizontal: 2 },
   stepGroup: { flexDirection: 'row', alignItems: 'flex-start', flex: 1 },
-  stepCol: { alignItems: 'center', width: 60 },
+  stepCol: { alignItems: 'center', width: 52 },
   circle: {
-    width: 26, height: 26, borderRadius: 13,
+    width: 22, height: 22, borderRadius: 11,
     backgroundColor: colors.surface,
     borderWidth: 1.5, borderColor: colors.border,
     justifyContent: 'center', alignItems: 'center',
   },
   circleActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  circleText: { color: colors.textSecondary, fontSize: 11, fontWeight: '700' },
+  circleText: { color: colors.textSecondary, fontSize: 9.5, fontWeight: '700' },
   circleTextActive: { color: '#fff' },
-  label: { color: colors.textSecondary, fontSize: 9, marginTop: 4, textAlign: 'center' },
+  label: { color: colors.textSecondary, fontSize: 8, marginTop: 3, textAlign: 'center' },
   labelActive: { color: colors.textPrimary, fontWeight: '600' },
   connector: {
     flex: 1, height: 1.5, backgroundColor: colors.border,
-    marginTop: 13, marginHorizontal: -4,
+    marginTop: 11, marginHorizontal: -4,
   },
   connectorActive: { backgroundColor: colors.primary },
 });

@@ -13,10 +13,13 @@ export function GiftCardsHeader() {
           </TouchableOpacity>
           <Text style={styles.title}>Gift Cards</Text>
         </View>
-        <TouchableOpacity style={styles.historyBtn}>
-          <Feather name="clock" size={11} color={colors.primaryLight} />
-          <Text style={styles.historyText}>History</Text>
-        </TouchableOpacity>
+       <TouchableOpacity
+                   style={styles.tradeBtn}
+                   onPress={() => router.push('/gift-card-trading')}
+                 >
+                   <Feather name="repeat" size={10} color={colors.primaryLight} />
+                   <Text style={styles.tradeText}>Trade Card</Text>
+                 </TouchableOpacity>
       </View>
     </View>
   );
@@ -30,10 +33,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center', alignItems: 'center',
   },
   title: { color: colors.textPrimary, fontSize: 17, fontWeight: '700' },
-  historyBtn: {
+  tradeBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 4,
     borderWidth: 1.1, borderColor: colors.primary, borderRadius: 9,
     paddingHorizontal: 9, paddingVertical: 6,
   },
-  historyText: { color: colors.primaryLight, fontSize: 10, fontWeight: '600' },
+  tradeText: { color: colors.primaryLight, fontSize: 10, fontWeight: '600' },
 });

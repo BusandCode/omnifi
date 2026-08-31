@@ -29,11 +29,11 @@ export default function BudgetCreatedScreen() {
       <View style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => router.back()} style={styles.iconBtn} hitSlop={8}>
-            <Ionicons name="chevron-back" size={20} color={colors.textPrimary} />
+            <Ionicons name="chevron-back" size={18} color={colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.title}>Budget Created</Text>
           <TouchableOpacity style={styles.iconBtn}>
-            <Feather name="share" size={16} color={colors.primaryLight} />
+            <Feather name="share" size={14} color={colors.primaryLight} />
           </TouchableOpacity>
         </View>
       </View>
@@ -55,7 +55,7 @@ export default function BudgetCreatedScreen() {
 
         <TouchableOpacity style={styles.viewBtn} onPress={() => router.push('/spending-analytics')}>
           <Text style={styles.viewBtnText}>View My Budgets</Text>
-          <Ionicons name="chevron-forward" size={16} color="#fff" />
+          <Ionicons name="chevron-forward" size={14} color="#fff" />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.dashboardBtn} onPress={() => router.replace('/(tabs)')}>
@@ -68,28 +68,28 @@ export default function BudgetCreatedScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  fixedHeader: { paddingHorizontal: 20, paddingBottom: 10, backgroundColor: colors.background },
+  fixedHeader: { paddingHorizontal: 18, paddingBottom: 9, backgroundColor: colors.background },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   iconBtn: {
-    width: 36, height: 36, borderRadius: 18,
+    width: 32, height: 32, borderRadius: 16,
     backgroundColor: colors.surface,
     justifyContent: 'center', alignItems: 'center',
   },
-  title: { flex: 1, color: colors.textPrimary, fontSize: 16.5, fontWeight: '700', textAlign: 'center' },
+  title: { flex: 1, color: colors.textPrimary, fontSize: 15, fontWeight: '700', textAlign: 'center' },
   scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 20, gap: 12 },
+  content: { paddingHorizontal: 18, paddingTop: 4, paddingBottom: 18, gap: 10 },
   viewBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7,
     backgroundColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
+    borderRadius: 14,
+    paddingVertical: 14,
   },
-  viewBtnText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
+  viewBtnText: { color: '#fff', fontSize: 12.5, fontWeight: '700' },
   dashboardBtn: {
     borderWidth: 1.2, borderColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 15,
+    borderRadius: 14,
+    paddingVertical: 13,
     alignItems: 'center',
   },
-  dashboardBtnText: { color: colors.primaryLight, fontSize: 13.5, fontWeight: '700' },
+  dashboardBtnText: { color: colors.primaryLight, fontSize: 11.5, fontWeight: '700' },
 });

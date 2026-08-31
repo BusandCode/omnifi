@@ -11,7 +11,7 @@ export function ReferEarnCard() {
           <Feather name="gift" size={18} color={colors.primaryLight} />
         </View>
         <View style={styles.textBlock}>
-          <Text style={styles.cardTitle}>Refer & earn</Text>
+          <Text style={styles.cardTitle} onPress={()=>{router.push('/refer-earm')}}>Refer & earn</Text>
           <Text style={styles.sub}>Invite friends and earn rewards</Text>
         </View>
         <Feather name="chevron-right" size={18} color={colors.textSecondary} />

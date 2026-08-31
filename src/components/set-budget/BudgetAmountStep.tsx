@@ -35,10 +35,10 @@ export function BudgetAmountStep({
   const dailyLimit = numericAmount > 0 ? Math.round(numericAmount / 30) : 0;
 
   return (
-    <View style={{ gap: 16 }}>
+    <View style={{ gap: 13 }}>
       <View style={styles.introCard}>
         <View style={styles.introIconBox}>
-          <Ionicons name="swap-horizontal" size={16} color="#fff" />
+          <Ionicons name="swap-horizontal" size={14} color="#fff" />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.introLabel}>You selected</Text>
@@ -69,7 +69,7 @@ export function BudgetAmountStep({
             </View>
             {numericAmount > 0 && (
               <View style={styles.checkBadge}>
-                <Ionicons name="checkmark" size={14} color={colors.success} />
+                <Ionicons name="checkmark" size={12} color={colors.success} />
               </View>
             )}
           </View>
@@ -96,7 +96,7 @@ export function BudgetAmountStep({
         </View>
 
         <View style={styles.tipRow}>
-          <Ionicons name="bulb-outline" size={14} color={colors.primaryLight} />
+          <Ionicons name="bulb-outline" size={12} color={colors.primaryLight} />
           <Text style={styles.tipText}>
             Tip: Your average monthly spending on {category.label} is {symbol}{category.avgLastMonth.toLocaleString()}. Setting a budget helps you stay in control.
           </Text>
@@ -131,7 +131,7 @@ export function BudgetAmountStep({
 
         <View style={styles.notifyRow}>
           <View style={[styles.notifyIcon, { backgroundColor: 'rgba(139,92,246,0.15)' }]}>
-            <Ionicons name="notifications" size={14} color={colors.primaryLight} />
+            <Ionicons name="notifications" size={12} color={colors.primaryLight} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.notifyItemTitle}>80% of your budget is used</Text>
@@ -147,7 +147,7 @@ export function BudgetAmountStep({
 
         <View style={styles.notifyRow}>
           <View style={[styles.notifyIcon, { backgroundColor: 'rgba(255,59,48,0.15)' }]}>
-            <Ionicons name="notifications" size={14} color={colors.danger} />
+            <Ionicons name="notifications" size={12} color={colors.danger} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.notifyItemTitle}>100% of your budget is reached</Text>
@@ -168,7 +168,7 @@ export function BudgetAmountStep({
         disabled={numericAmount <= 0}
       >
         <Text style={styles.continueText}>Continue</Text>
-        <Ionicons name="chevron-forward" size={16} color="#fff" />
+        <Ionicons name="chevron-forward" size={14} color="#fff" />
       </TouchableOpacity>
     </View>
   );
@@ -176,75 +176,75 @@ export function BudgetAmountStep({
 
 const styles = StyleSheet.create({
   introCard: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 12,
+    flexDirection: 'row', alignItems: 'flex-start', gap: 10,
     backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 14,
+    borderRadius: 14,
+    padding: 12,
     borderWidth: 1,
     borderColor: 'rgba(139,92,246,0.25)',
   },
   introIconBox: {
-    width: 36, height: 36, borderRadius: 18,
+    width: 30, height: 30, borderRadius: 15,
     backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
   },
-  introLabel: { color: colors.textSecondary, fontSize: 10.5 },
-  introTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700', marginTop: 2 },
-  introSub: { color: colors.textSecondary, fontSize: 10.5, marginTop: 4, lineHeight: 14 },
-  sectionTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', marginBottom: 3 },
-  sectionSub: { color: colors.textSecondary, fontSize: 11, marginBottom: 10 },
-  amountCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 14 },
+  introLabel: { color: colors.textSecondary, fontSize: 9.5 },
+  introTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', marginTop: 2 },
+  introSub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 3, lineHeight: 13 },
+  sectionTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 2 },
+  sectionSub: { color: colors.textSecondary, fontSize: 9.5, marginBottom: 9 },
+  amountCard: { backgroundColor: colors.surface, borderRadius: 14, padding: 12 },
   amountRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  amountLabel: { color: colors.textSecondary, fontSize: 10.5, marginBottom: 4 },
-  amountInputRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  currencySymbol: { color: colors.textPrimary, fontSize: 24, fontWeight: '800' },
-  amountInput: { color: colors.textPrimary, fontSize: 24, fontWeight: '800', minWidth: 100, padding: 0 },
+  amountLabel: { color: colors.textSecondary, fontSize: 9.5, marginBottom: 3 },
+  amountInputRow: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  currencySymbol: { color: colors.textPrimary, fontSize: 21, fontWeight: '800' },
+  amountInput: { color: colors.textPrimary, fontSize: 21, fontWeight: '800', minWidth: 90, padding: 0 },
   checkBadge: {
-    width: 26, height: 26, borderRadius: 13,
+    width: 23, height: 23, borderRadius: 11.5,
     backgroundColor: 'rgba(52,199,89,0.15)',
     justifyContent: 'center', alignItems: 'center',
   },
   chipsRow: {
-    flexDirection: 'row', flexWrap: 'wrap', gap: 8,
-    marginTop: 14, paddingTop: 14,
+    flexDirection: 'row', flexWrap: 'wrap', gap: 7,
+    marginTop: 12, paddingTop: 12,
     borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border,
   },
   chip: {
     backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderRadius: 18,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
   },
   chipActive: { backgroundColor: colors.primary },
-  chipText: { color: colors.textPrimary, fontSize: 11, fontWeight: '600' },
+  chipText: { color: colors.textPrimary, fontSize: 10, fontWeight: '600' },
   chipTextActive: { color: '#fff' },
-  tipRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, marginTop: 10 },
-  tipText: { flex: 1, color: colors.textSecondary, fontSize: 10.5, lineHeight: 15 },
-  previewCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 14 },
-  previewTitle: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700', marginBottom: 12 },
+  tipRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 7, marginTop: 9 },
+  tipText: { flex: 1, color: colors.textSecondary, fontSize: 9.5, lineHeight: 13 },
+  previewCard: { backgroundColor: colors.surface, borderRadius: 14, padding: 12 },
+  previewTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '700', marginBottom: 10 },
   previewRow: { flexDirection: 'row' },
-  previewLabel: { color: colors.textSecondary, fontSize: 10 },
-  previewValue: { color: colors.textPrimary, fontSize: 15, fontWeight: '700', marginTop: 3 },
-  previewDivider: { width: 1, backgroundColor: colors.border, marginHorizontal: 12 },
+  previewLabel: { color: colors.textSecondary, fontSize: 9 },
+  previewValue: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', marginTop: 2 },
+  previewDivider: { width: 1, backgroundColor: colors.border, marginHorizontal: 10 },
   progressTrack: {
-    height: 6, borderRadius: 3, backgroundColor: colors.border,
-    marginTop: 14, overflow: 'hidden',
+    height: 5, borderRadius: 2.5, backgroundColor: colors.border,
+    marginTop: 12, overflow: 'hidden',
   },
-  progressFill: { height: '100%', borderRadius: 3, backgroundColor: colors.primary },
-  progressLabels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 6 },
-  progressText: { color: colors.textSecondary, fontSize: 9.5 },
-  notifyCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 14, gap: 12 },
-  notifyTitle: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
-  notifyRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  notifyIcon: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
-  notifyItemTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '600' },
-  notifyItemSub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 2 },
+  progressFill: { height: '100%', borderRadius: 2.5, backgroundColor: colors.primary },
+  progressLabels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 },
+  progressText: { color: colors.textSecondary, fontSize: 8.5 },
+  notifyCard: { backgroundColor: colors.surface, borderRadius: 14, padding: 12, gap: 10 },
+  notifyTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '700' },
+  notifyRow: { flexDirection: 'row', alignItems: 'center', gap: 9 },
+  notifyIcon: { width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center' },
+  notifyItemTitle: { color: colors.textPrimary, fontSize: 10, fontWeight: '600' },
+  notifyItemSub: { color: colors.textSecondary, fontSize: 8.5, marginTop: 2 },
   continueBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7,
     backgroundColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 15,
+    borderRadius: 14,
+    paddingVertical: 13,
   },
   continueBtnDisabled: { opacity: 0.5 },
-  continueText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+  continueText: { color: '#fff', fontSize: 12.5, fontWeight: '700' },
 });

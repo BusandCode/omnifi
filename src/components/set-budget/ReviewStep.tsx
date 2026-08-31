@@ -9,7 +9,7 @@ import { CurrencyCode, getCurrency } from '../../constants/currencies';
 function ReviewIllustration() {
   return (
     <View style={illStyles.wrap}>
-      <Svg width={64} height={70} viewBox="0 0 64 70">
+      <Svg width={52} height={57} viewBox="0 0 64 70">
         <Rect x={8} y={4} width={38} height={54} rx={6} fill="#EDE9FE" />
         <Rect x={20} y={0} width={14} height={8} rx={3} fill={colors.primary} />
         {[16, 26, 36, 46].map((y) => (
@@ -25,7 +25,7 @@ function ReviewIllustration() {
   );
 }
 
-const illStyles = StyleSheet.create({ wrap: { width: 72, height: 72, justifyContent: 'center', alignItems: 'center' } });
+const illStyles = StyleSheet.create({ wrap: { width: 58, height: 58, justifyContent: 'center', alignItems: 'center' } });
 
 type Props = {
   currency: CurrencyCode;
@@ -61,10 +61,10 @@ export function ReviewStep({
   const bars = [0.6, 0.75, 1, 0.5, 0.65];
 
   return (
-    <View style={{ gap: 16 }}>
+    <View style={{ gap: 13 }}>
       <View style={styles.introCard}>
         <View style={styles.introIcon}>
-          <Feather name="clipboard" size={16} color="#fff" />
+          <Feather name="clipboard" size={14} color="#fff" />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.introTitle}>Review Your Budget</Text>
@@ -107,7 +107,7 @@ export function ReviewStep({
 
             <View style={styles.barsWrap}>
               {bars.map((h, i) => (
-                <View key={i} style={[styles.bar, { height: 34 * h }]} />
+                <View key={i} style={[styles.bar, { height: 28 * h }]} />
               ))}
             </View>
             <View style={styles.barsLabelsRow}>
@@ -124,7 +124,7 @@ export function ReviewStep({
 
         <View style={styles.notifyRow}>
           <View style={[styles.notifyIcon, { backgroundColor: 'rgba(139,92,246,0.15)' }]}>
-            <Ionicons name="notifications" size={14} color={colors.primaryLight} />
+            <Ionicons name="notifications" size={12} color={colors.primaryLight} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.notifyItemTitle}>80% of your budget is used</Text>
@@ -135,7 +135,7 @@ export function ReviewStep({
 
         <View style={styles.notifyRow}>
           <View style={[styles.notifyIcon, { backgroundColor: 'rgba(255,59,48,0.15)' }]}>
-            <Ionicons name="notifications" size={14} color={colors.danger} />
+            <Ionicons name="notifications" size={12} color={colors.danger} />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.notifyItemTitle}>100% of your budget is reached</Text>
@@ -146,16 +146,16 @@ export function ReviewStep({
       </View>
 
       <View style={styles.infoNote}>
-        <Ionicons name="information-circle-outline" size={15} color={colors.textSecondary} />
+        <Ionicons name="information-circle-outline" size={13} color={colors.textSecondary} />
         <Text style={styles.infoText}>
           We'll send you alerts and insights to help you stay on track and avoid overspending.
         </Text>
       </View>
 
       <TouchableOpacity style={styles.createBtn} onPress={onCreate} disabled={loading}>
-        <Ionicons name="shield-checkmark-outline" size={15} color="#fff" />
+        <Ionicons name="shield-checkmark-outline" size={13} color="#fff" />
         <Text style={styles.createText}>{loading ? 'Creating…' : 'Create Budget'}</Text>
-        <Ionicons name="chevron-forward" size={16} color="#fff" />
+        <Ionicons name="chevron-forward" size={14} color="#fff" />
       </TouchableOpacity>
     </View>
   );
@@ -177,7 +177,7 @@ function SummaryRow({
   return (
     <View style={[rowStyles.row, divider && rowStyles.rowDivider]}>
       <View style={rowStyles.iconBox}>
-        <Ionicons name={icon} size={15} color={colors.primaryLight} />
+        <Ionicons name={icon} size={13} color={colors.primaryLight} />
       </View>
       <View style={{ flex: 1 }}>
         <Text style={rowStyles.label}>{label}</Text>
@@ -189,72 +189,72 @@ function SummaryRow({
 }
 
 const rowStyles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 12 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingVertical: 10 },
   rowDivider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   iconBox: {
-    width: 32, height: 32, borderRadius: 10,
+    width: 28, height: 28, borderRadius: 9,
     backgroundColor: 'rgba(167,139,250,0.15)',
     justifyContent: 'center', alignItems: 'center',
   },
-  label: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '600' },
-  sub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 1 },
-  value: { color: colors.primaryLight, fontSize: 11.5, fontWeight: '700' },
+  label: { color: colors.textPrimary, fontSize: 10, fontWeight: '600' },
+  sub: { color: colors.textSecondary, fontSize: 8.5, marginTop: 1 },
+  value: { color: colors.primaryLight, fontSize: 10, fontWeight: '700' },
 });
 
 const styles = StyleSheet.create({
   introCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
+    flexDirection: 'row', alignItems: 'center', gap: 8,
     backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 16,
+    borderRadius: 16,
+    padding: 13,
     borderWidth: 1,
     borderColor: 'rgba(139,92,246,0.25)',
   },
   introIcon: {
-    width: 30, height: 30, borderRadius: 15,
+    width: 26, height: 26, borderRadius: 13,
     backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
   },
-  introTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
-  introSub: { color: colors.textSecondary, fontSize: 10.5, marginTop: 4, lineHeight: 14 },
-  sectionTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', marginBottom: 8 },
-  summaryCard: { backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 13 },
-  previewRow: { flexDirection: 'row', gap: 10 },
-  previewCard: { flex: 1, backgroundColor: colors.surface, borderRadius: 14, padding: 12 },
-  previewLabel: { color: colors.textSecondary, fontSize: 10 },
-  previewValue: { color: colors.textPrimary, fontSize: 15, fontWeight: '800', marginTop: 3 },
-  previewSub: { color: colors.textSecondary, fontSize: 9, marginTop: 8 },
-  previewSubValue: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '600', marginTop: 2 },
-  miniChartWrap: { height: 30, marginTop: 10, justifyContent: 'flex-end', position: 'relative' },
+  introTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '700' },
+  introSub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 3, lineHeight: 13 },
+  sectionTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 7 },
+  summaryCard: { backgroundColor: colors.surface, borderRadius: 14, paddingHorizontal: 11 },
+  previewRow: { flexDirection: 'row', gap: 9 },
+  previewCard: { flex: 1, backgroundColor: colors.surface, borderRadius: 12, padding: 10 },
+  previewLabel: { color: colors.textSecondary, fontSize: 9 },
+  previewValue: { color: colors.textPrimary, fontSize: 13, fontWeight: '800', marginTop: 2 },
+  previewSub: { color: colors.textSecondary, fontSize: 8, marginTop: 7 },
+  previewSubValue: { color: colors.textPrimary, fontSize: 9.5, fontWeight: '600', marginTop: 2 },
+  miniChartWrap: { height: 26, marginTop: 9, justifyContent: 'flex-end', position: 'relative' },
   miniChartLine: { height: 2, backgroundColor: colors.primary, borderRadius: 1, opacity: 0.6 },
   miniChartTag: {
     position: 'absolute', top: 0, right: 0,
     backgroundColor: colors.primary, borderRadius: 6,
-    paddingHorizontal: 6, paddingVertical: 2,
+    paddingHorizontal: 5, paddingVertical: 2,
   },
-  miniChartTagText: { color: '#fff', fontSize: 8, fontWeight: '700' },
-  barsWrap: { flexDirection: 'row', alignItems: 'flex-end', gap: 5, height: 34, marginTop: 10 },
+  miniChartTagText: { color: '#fff', fontSize: 7.5, fontWeight: '700' },
+  barsWrap: { flexDirection: 'row', alignItems: 'flex-end', gap: 4, height: 28, marginTop: 9 },
   bar: { flex: 1, backgroundColor: colors.primary, borderRadius: 3 },
   barsLabelsRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
-  barLabel: { color: colors.textSecondary, fontSize: 8 },
-  notifyCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 14, gap: 12 },
-  notifyTitle: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
-  notifyRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  notifyIcon: { width: 32, height: 32, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
-  notifyItemTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '600' },
-  notifyItemSub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 2 },
+  barLabel: { color: colors.textSecondary, fontSize: 7.5 },
+  notifyCard: { backgroundColor: colors.surface, borderRadius: 14, padding: 12, gap: 10 },
+  notifyTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '700' },
+  notifyRow: { flexDirection: 'row', alignItems: 'center', gap: 9 },
+  notifyIcon: { width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center' },
+  notifyItemTitle: { color: colors.textPrimary, fontSize: 10, fontWeight: '600' },
+  notifyItemSub: { color: colors.textSecondary, fontSize: 8.5, marginTop: 2 },
   infoNote: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
+    flexDirection: 'row', alignItems: 'flex-start', gap: 7,
     backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 10,
+    padding: 10,
   },
-  infoText: { flex: 1, color: colors.textSecondary, fontSize: 10.5, lineHeight: 15 },
+  infoText: { flex: 1, color: colors.textSecondary, fontSize: 9.5, lineHeight: 13 },
   createBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7,
     backgroundColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
+    borderRadius: 14,
+    paddingVertical: 14,
   },
-  createText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
+  createText: { color: '#fff', fontSize: 12.5, fontWeight: '700' },
 });

@@ -21,46 +21,46 @@ function SuccessBadge() {
       ))}
       <View style={illStyles.glow} />
       <View style={illStyles.circle}>
-        <Ionicons name="checkmark" size={40} color="#fff" />
+        <Ionicons name="checkmark" size={34} color="#fff" />
       </View>
     </View>
   );
 }
 
 const illStyles = StyleSheet.create({
-  wrap: { width: 200, height: 120, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', position: 'relative' },
-  glow: { position: 'absolute', width: 110, height: 110, borderRadius: 55, backgroundColor: colors.primary, opacity: 0.25 },
+  wrap: { width: 170, height: 102, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', position: 'relative' },
+  glow: { position: 'absolute', width: 94, height: 94, borderRadius: 47, backgroundColor: colors.primary, opacity: 0.25 },
   circle: {
-    width: 88, height: 88, borderRadius: 44,
+    width: 75, height: 75, borderRadius: 37.5,
     backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
     shadowColor: colors.primary, shadowOpacity: 0.6, shadowRadius: 18, shadowOffset: { width: 0, height: 0 }, elevation: 8,
   },
-  confetti: { position: 'absolute', width: 8, height: 8, borderRadius: 2 },
+  confetti: { position: 'absolute', width: 7, height: 7, borderRadius: 2 },
 });
 
 function WalletIllustration() {
   return (
     <View style={walletStyles.wrap}>
-      <Svg width={70} height={60} viewBox="0 0 70 60">
+      <Svg width={60} height={51} viewBox="0 0 70 60">
         <Path d="M6 20 h48 a6 6 0 0 1 6 6 v26 a6 6 0 0 1 -6 6 h-48 a6 6 0 0 1 -6 -6 v-26 a6 6 0 0 1 6 -6 Z" fill="#7C3AED" />
         <Path d="M6 10 h40 a6 6 0 0 1 6 6 v4 h-52 v-4 a6 6 0 0 1 6 -6 Z" fill="#A78BFA" />
         <Circle cx={48} cy={40} r={6} fill="#4C1D95" />
       </Svg>
       <View style={walletStyles.coinStack}>
         <View style={[walletStyles.coin, { bottom: 0 }]} />
-        <View style={[walletStyles.coin, { bottom: 7 }]} />
-        <View style={[walletStyles.coin, { bottom: 14 }]} />
+        <View style={[walletStyles.coin, { bottom: 6 }]} />
+        <View style={[walletStyles.coin, { bottom: 12 }]} />
       </View>
     </View>
   );
 }
 
 const walletStyles = StyleSheet.create({
-  wrap: { width: 90, height: 70, position: 'relative' },
-  coinStack: { position: 'absolute', right: -6, bottom: 0 },
+  wrap: { width: 76, height: 60, position: 'relative' },
+  coinStack: { position: 'absolute', right: -5, bottom: 0 },
   coin: {
-    position: 'absolute', width: 22, height: 22, borderRadius: 11,
+    position: 'absolute', width: 19, height: 19, borderRadius: 9.5,
     backgroundColor: '#8B5CF6', borderWidth: 1.5, borderColor: colors.background,
   },
 });
@@ -82,7 +82,7 @@ export function BudgetCreatedContent({ currency, category, amount, duration, sta
   const alertsLabel = [alert80 && '80%', alert100 && '100%'].filter(Boolean).join(' & ') || 'None';
 
   return (
-    <View style={{ gap: 16 }}>
+    <View style={{ gap: 13 }}>
       <View style={{ alignItems: 'center' }}>
         <SuccessBadge />
         <Text style={styles.successTitle}>Budget Created Successfully! 🎉</Text>
@@ -92,7 +92,7 @@ export function BudgetCreatedContent({ currency, category, amount, duration, sta
       <View style={styles.heroCard}>
         <View style={styles.heroTopRow}>
           <View style={styles.heroIcon}>
-            <Ionicons name="swap-horizontal" size={16} color="#fff" />
+            <Ionicons name="swap-horizontal" size={14} color="#fff" />
           </View>
           <Text style={styles.heroCategoryText}>{category.label}</Text>
           <View style={styles.durationPill}>
@@ -125,7 +125,7 @@ export function BudgetCreatedContent({ currency, category, amount, duration, sta
       <View style={styles.nextCard}>
         <View style={styles.nextRow}>
           <View style={styles.nextIcon}>
-            <Ionicons name="notifications" size={14} color="#fff" />
+            <Ionicons name="notifications" size={12} color="#fff" />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.nextTitle}>Smart Alerts</Text>
@@ -135,7 +135,7 @@ export function BudgetCreatedContent({ currency, category, amount, duration, sta
 
         <View style={styles.nextRow}>
           <View style={styles.nextIcon}>
-            <Feather name="trending-up" size={13} color="#fff" />
+            <Feather name="trending-up" size={11} color="#fff" />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.nextTitle}>Real-time Tracking</Text>
@@ -145,7 +145,7 @@ export function BudgetCreatedContent({ currency, category, amount, duration, sta
 
         <View style={styles.nextRow}>
           <View style={styles.nextIcon}>
-            <Feather name="bar-chart-2" size={13} color="#fff" />
+            <Feather name="bar-chart-2" size={11} color="#fff" />
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.nextTitle}>Helpful Insights</Text>
@@ -156,7 +156,7 @@ export function BudgetCreatedContent({ currency, category, amount, duration, sta
         <View style={styles.chartCard}>
           <View style={styles.miniTrend}>
             {[0.3, 0.5, 0.4, 0.7, 0.55, 0.85, 1].map((h, i) => (
-              <View key={i} style={[styles.trendDot, { bottom: 40 * h }]} />
+              <View key={i} style={[styles.trendDot, { bottom: 34 * h }]} />
             ))}
           </View>
           <Text style={styles.chartTitle}>You're in control!</Text>
@@ -172,7 +172,7 @@ function DetailRow({ icon, label, value, divider }: { icon: keyof typeof Ionicon
   return (
     <View style={[detailStyles.row, divider && detailStyles.rowDivider]}>
       <View style={detailStyles.iconBox}>
-        <Ionicons name={icon} size={14} color={colors.primaryLight} />
+        <Ionicons name={icon} size={12} color={colors.primaryLight} />
       </View>
       <Text style={detailStyles.label}>{label}</Text>
       <Text style={detailStyles.value}>{value}</Text>
@@ -181,63 +181,63 @@ function DetailRow({ icon, label, value, divider }: { icon: keyof typeof Ionicon
 }
 
 const detailStyles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 12 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingVertical: 10 },
   rowDivider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
   iconBox: {
-    width: 28, height: 28, borderRadius: 9,
+    width: 24, height: 24, borderRadius: 8,
     backgroundColor: 'rgba(167,139,250,0.15)',
     justifyContent: 'center', alignItems: 'center',
   },
-  label: { flex: 1, color: colors.textPrimary, fontSize: 11.5, fontWeight: '600' },
-  value: { color: colors.primaryLight, fontSize: 11.5, fontWeight: '700' },
+  label: { flex: 1, color: colors.textPrimary, fontSize: 10, fontWeight: '600' },
+  value: { color: colors.primaryLight, fontSize: 10, fontWeight: '700' },
 });
 
 const styles = StyleSheet.create({
-  successTitle: { color: colors.textPrimary, fontSize: 17, fontWeight: '700', marginTop: 4, textAlign: 'center' },
-  successSub: { color: colors.textSecondary, fontSize: 11.5, marginTop: 4, textAlign: 'center' },
+  successTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700', marginTop: 3, textAlign: 'center' },
+  successSub: { color: colors.textSecondary, fontSize: 10, marginTop: 3, textAlign: 'center' },
   heroCard: {
     backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 15,
+    borderRadius: 16,
+    padding: 13,
     borderWidth: 1,
     borderColor: 'rgba(139,92,246,0.25)',
   },
-  heroTopRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  heroTopRow: { flexDirection: 'row', alignItems: 'center', gap: 9 },
   heroIcon: {
-    width: 32, height: 32, borderRadius: 16,
+    width: 28, height: 28, borderRadius: 14,
     backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
   },
-  heroCategoryText: { flex: 1, color: colors.textPrimary, fontSize: 14, fontWeight: '700' },
-  durationPill: { backgroundColor: 'rgba(167,139,250,0.15)', borderRadius: 8, paddingHorizontal: 9, paddingVertical: 4 },
-  durationPillText: { color: colors.primaryLight, fontSize: 10, fontWeight: '700' },
-  heroBodyRow: { flexDirection: 'row', alignItems: 'flex-end', marginTop: 12 },
-  heroLabel: { color: colors.textSecondary, fontSize: 10.5 },
-  heroAmount: { color: colors.textPrimary, fontSize: 22, fontWeight: '800', marginTop: 4 },
-  heroSub: { color: colors.textPrimary, fontSize: 12, fontWeight: '600', marginTop: 8 },
-  heroSubLabel: { color: colors.textSecondary, fontSize: 9.5, marginTop: 1 },
-  sectionTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', marginBottom: 8 },
-  detailsCard: { backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 13 },
-  nextCard: { backgroundColor: colors.surface, borderRadius: 18, padding: 15, gap: 14 },
-  nextRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
+  heroCategoryText: { flex: 1, color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
+  durationPill: { backgroundColor: 'rgba(167,139,250,0.15)', borderRadius: 7, paddingHorizontal: 8, paddingVertical: 3 },
+  durationPillText: { color: colors.primaryLight, fontSize: 9, fontWeight: '700' },
+  heroBodyRow: { flexDirection: 'row', alignItems: 'flex-end', marginTop: 10 },
+  heroLabel: { color: colors.textSecondary, fontSize: 9.5 },
+  heroAmount: { color: colors.textPrimary, fontSize: 19, fontWeight: '800', marginTop: 3 },
+  heroSub: { color: colors.textPrimary, fontSize: 11, fontWeight: '600', marginTop: 7 },
+  heroSubLabel: { color: colors.textSecondary, fontSize: 8.5, marginTop: 1 },
+  sectionTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 7 },
+  detailsCard: { backgroundColor: colors.surface, borderRadius: 14, paddingHorizontal: 11 },
+  nextCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 13, gap: 12 },
+  nextRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 9 },
   nextIcon: {
-    width: 30, height: 30, borderRadius: 15,
+    width: 26, height: 26, borderRadius: 13,
     backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
   },
-  nextTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
-  nextSub: { color: colors.textSecondary, fontSize: 10, marginTop: 2, lineHeight: 14 },
+  nextTitle: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '700' },
+  nextSub: { color: colors.textSecondary, fontSize: 9, marginTop: 2, lineHeight: 13 },
   chartCard: {
     backgroundColor: 'rgba(139,92,246,0.1)',
-    borderRadius: 14,
-    padding: 14,
+    borderRadius: 12,
+    padding: 12,
     position: 'relative',
     overflow: 'hidden',
-    minHeight: 90,
+    minHeight: 78,
   },
-  miniTrend: { position: 'absolute', right: 10, top: 10, width: 60, height: 44 },
-  trendDot: { position: 'absolute', width: 5, height: 5, borderRadius: 2.5, backgroundColor: colors.primary },
-  chartTitle: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700', maxWidth: '65%' },
-  chartSub: { color: colors.textSecondary, fontSize: 10, marginTop: 4, maxWidth: '65%', lineHeight: 14 },
-  chartHeart: { color: colors.primary, fontSize: 13, marginTop: 6 },
+  miniTrend: { position: 'absolute', right: 9, top: 9, width: 52, height: 38 },
+  trendDot: { position: 'absolute', width: 4.5, height: 4.5, borderRadius: 2.25, backgroundColor: colors.primary },
+  chartTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '700', maxWidth: '65%' },
+  chartSub: { color: colors.textSecondary, fontSize: 9, marginTop: 3, maxWidth: '65%', lineHeight: 13 },
+  chartHeart: { color: colors.primary, fontSize: 11, marginTop: 5 },
 });

@@ -19,7 +19,7 @@ const ICON_MAP: Record<string, React.ComponentType<any>> = {
 function TargetIllustration() {
   return (
     <View style={illStyles.wrap}>
-      <Svg width={64} height={64} viewBox="0 0 64 64">
+      <Svg width={52} height={52} viewBox="0 0 64 64">
         <Circle cx={30} cy={34} r={24} fill="rgba(167,139,250,0.15)" stroke={colors.primaryLight} strokeWidth={1.8} />
         <Circle cx={30} cy={34} r={15} fill="rgba(167,139,250,0.15)" stroke={colors.primaryLight} strokeWidth={1.8} />
         <Circle cx={30} cy={34} r={5} fill={colors.primary} />
@@ -31,7 +31,7 @@ function TargetIllustration() {
 }
 
 const illStyles = StyleSheet.create({
-  wrap: { width: 72, height: 72, justifyContent: 'center', alignItems: 'center' },
+  wrap: { width: 58, height: 58, justifyContent: 'center', alignItems: 'center' },
 });
 
 type Props = {
@@ -46,7 +46,7 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
   const activeCategory = BUDGET_CATEGORIES.find((c) => c.key === selected)!;
 
   return (
-    <View style={{ gap: 16 }}>
+    <View style={{ gap: 13 }}>
       <View style={styles.introCard}>
         <View style={{ flex: 1 }}>
           <Text style={styles.introTitle}>Create a Budget</Text>
@@ -72,10 +72,10 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
                 onPress={() => onSelect(c.key)}
               >
                 <View style={[styles.iconCircle, { backgroundColor: c.color }]}>
-                  <Icon name={c.icon} size={18} color="#fff" />
+                  <Icon name={c.icon} size={15} color="#fff" />
                   {active && (
                     <View style={styles.checkBadge}>
-                      <Ionicons name="checkmark" size={9} color="#fff" />
+                      <Ionicons name="checkmark" size={8} color="#fff" />
                     </View>
                   )}
                 </View>
@@ -87,7 +87,7 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
       </View>
 
       <View style={styles.infoNote}>
-        <Ionicons name="information-circle-outline" size={15} color={colors.primaryLight} />
+        <Ionicons name="information-circle-outline" size={13} color={colors.primaryLight} />
         <Text style={styles.infoText}>
           Budgets help you track spending and avoid overspending. You'll receive alerts when you're close to your limit.
         </Text>
@@ -96,7 +96,7 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
       <View style={styles.insightCard}>
         <View style={styles.insightHeaderRow}>
           <View style={styles.insightIconBox}>
-            <MaterialCommunityIcons name="chart-bar" size={14} color={colors.primaryLight} />
+            <MaterialCommunityIcons name="chart-bar" size={12} color={colors.primaryLight} />
           </View>
           <Text style={styles.insightTitle}>Your Insight</Text>
           <Text style={styles.insightAmount}>{symbol}{activeCategory.avgLastMonth.toLocaleString()}</Text>
@@ -108,7 +108,7 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
 
       <View style={styles.tipCard}>
         <View style={styles.tipIconBox}>
-          <Ionicons name="bulb-outline" size={15} color={colors.primaryLight} />
+          <Ionicons name="bulb-outline" size={13} color={colors.primaryLight} />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.tipTitle}>Budgeting Tip</Text>
@@ -116,12 +116,12 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
             Start with a realistic amount based on your past spending to set yourself up for success.
           </Text>
         </View>
-        <Feather name="chevron-right" size={15} color={colors.textSecondary} />
+        <Feather name="chevron-right" size={13} color={colors.textSecondary} />
       </View>
 
       <TouchableOpacity style={styles.continueBtn} onPress={onContinue}>
         <Text style={styles.continueText}>Continue</Text>
-        <Ionicons name="chevron-forward" size={16} color="#fff" />
+        <Ionicons name="chevron-forward" size={14} color="#fff" />
       </TouchableOpacity>
     </View>
   );
@@ -129,74 +129,74 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
 
 const styles = StyleSheet.create({
   introCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
+    flexDirection: 'row', alignItems: 'center', gap: 8,
     backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 16,
+    borderRadius: 16,
+    padding: 13,
     borderWidth: 1,
     borderColor: 'rgba(139,92,246,0.25)',
   },
-  introTitle: { color: colors.textPrimary, fontSize: 16, fontWeight: '700' },
-  introSub: { color: colors.textSecondary, fontSize: 11, marginTop: 5, lineHeight: 15 },
-  sectionTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', marginBottom: 3 },
-  sectionSub: { color: colors.textSecondary, fontSize: 11, marginBottom: 12 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  introTitle: { color: colors.textPrimary, fontSize: 14, fontWeight: '700' },
+  introSub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 4, lineHeight: 13 },
+  sectionTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 2 },
+  sectionSub: { color: colors.textSecondary, fontSize: 9.5, marginBottom: 10 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   item: {
     width: '22.5%',
-    alignItems: 'center', gap: 6,
-    paddingVertical: 8,
-    borderRadius: 12,
+    alignItems: 'center', gap: 5,
+    paddingVertical: 6,
+    borderRadius: 10,
     borderWidth: 1.5, borderColor: 'transparent',
   },
   itemActive: { borderColor: colors.primary },
   iconCircle: {
-    width: 46, height: 46, borderRadius: 23,
+    width: 38, height: 38, borderRadius: 19,
     justifyContent: 'center', alignItems: 'center',
     position: 'relative',
   },
   checkBadge: {
     position: 'absolute', top: -3, right: -3,
-    width: 15, height: 15, borderRadius: 7.5,
+    width: 13, height: 13, borderRadius: 6.5,
     backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
     borderWidth: 2, borderColor: colors.background,
   },
-  itemLabel: { color: colors.textSecondary, fontSize: 8.5, textAlign: 'center' },
+  itemLabel: { color: colors.textSecondary, fontSize: 7.5, textAlign: 'center' },
   infoNote: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
+    flexDirection: 'row', alignItems: 'flex-start', gap: 7,
     backgroundColor: 'rgba(167,139,250,0.08)',
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 10,
+    padding: 10,
   },
-  infoText: { flex: 1, color: colors.textSecondary, fontSize: 10.5, lineHeight: 15 },
-  insightCard: { backgroundColor: colors.surface, borderRadius: 14, padding: 13 },
-  insightHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  infoText: { flex: 1, color: colors.textSecondary, fontSize: 9.5, lineHeight: 13 },
+  insightCard: { backgroundColor: colors.surface, borderRadius: 12, padding: 11 },
+  insightHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
   insightIconBox: {
-    width: 26, height: 26, borderRadius: 13,
+    width: 22, height: 22, borderRadius: 11,
     backgroundColor: 'rgba(167,139,250,0.15)',
     justifyContent: 'center', alignItems: 'center',
   },
-  insightTitle: { flex: 1, color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
-  insightAmount: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
-  insightText: { color: colors.textSecondary, fontSize: 10.5, marginTop: 8, lineHeight: 15 },
+  insightTitle: { flex: 1, color: colors.textPrimary, fontSize: 10.5, fontWeight: '700' },
+  insightAmount: { color: colors.textPrimary, fontSize: 11, fontWeight: '700' },
+  insightText: { color: colors.textSecondary, fontSize: 9.5, marginTop: 7, lineHeight: 13 },
   tipCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
+    flexDirection: 'row', alignItems: 'center', gap: 8,
     backgroundColor: colors.surface,
-    borderRadius: 14,
-    padding: 13,
+    borderRadius: 12,
+    padding: 11,
   },
   tipIconBox: {
-    width: 28, height: 28, borderRadius: 14,
+    width: 24, height: 24, borderRadius: 12,
     backgroundColor: 'rgba(167,139,250,0.15)',
     justifyContent: 'center', alignItems: 'center',
   },
-  tipTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
-  tipText: { color: colors.textSecondary, fontSize: 10, marginTop: 2, lineHeight: 14 },
+  tipTitle: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '700' },
+  tipText: { color: colors.textSecondary, fontSize: 9, marginTop: 2, lineHeight: 13 },
   continueBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7,
     backgroundColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 15,
+    borderRadius: 14,
+    paddingVertical: 13,
   },
-  continueText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+  continueText: { color: '#fff', fontSize: 12.5, fontWeight: '700' },
 });
