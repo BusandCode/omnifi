@@ -84,7 +84,13 @@ export default function KycUpgradeScreen() {
           </Text>
         </Pressable>
 
-        <Pressable disabled={!acknowledged} onPress={() => { /* TODO: navigate into document capture flow */ }}>
+        <Pressable
+          disabled={!acknowledged}
+          onPress={() => {
+            if (!acknowledged) return;
+            router.replace({ pathname: '/account-limits', params: { tier: targetKey } });
+          }}
+        >
           <LinearGradient
             colors={[colors.primary, colors.primary]}
             start={{ x: 0, y: 0 }}

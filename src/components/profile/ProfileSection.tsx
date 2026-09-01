@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
-
 import { colors } from "../../theme/colors";
 
 type Item = {
@@ -18,7 +17,7 @@ type Props = {
   danger?: boolean;
 };
 
-export function MoreSection({ title, items, danger }: Props) {
+export function ProfileSection({ title, items, danger }: Props) {
   const handlePress = (item: Item) => {
     // Handle logout separately
     if (item.action === "logout") {
@@ -34,11 +33,7 @@ export function MoreSection({ title, items, danger }: Props) {
 
   return (
     <View>
-      {title && (
-        <Text style={styles.sectionTitle}>
-          {title}
-        </Text>
-      )}
+      {title && <Text style={styles.sectionTitle}>{title}</Text>}
 
       <View style={styles.card}>
         {items.map((item, i) => (
@@ -51,7 +46,6 @@ export function MoreSection({ title, items, danger }: Props) {
             activeOpacity={0.7}
             onPress={() => handlePress(item)}
           >
-            {/* Icon */}
             <View
               style={[
                 styles.iconBox,
@@ -69,7 +63,6 @@ export function MoreSection({ title, items, danger }: Props) {
               />
             </View>
 
-            {/* Text */}
             <View style={styles.textContainer}>
               <Text
                 style={[
@@ -81,15 +74,11 @@ export function MoreSection({ title, items, danger }: Props) {
                 {item.title}
               </Text>
 
-              <Text
-                style={styles.sub}
-                numberOfLines={1}
-              >
+              <Text style={styles.sub} numberOfLines={1}>
                 {item.sub}
               </Text>
             </View>
 
-            {/* Arrow */}
             <Feather
               name="chevron-right"
               size={18}
