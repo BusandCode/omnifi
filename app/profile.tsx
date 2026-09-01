@@ -1,15 +1,15 @@
 import { ScrollView, StyleSheet, View } from "react-native";
-import { MoreHeader } from "../src/components/more/MoreHeader";
-import { MoreSection } from "../src/components/more/MoreSection";
-import { QuickActionsGrid } from "../src/components/more/QuickActionsGrid";
-import { SecurityBanner } from "../src/components/more/SecurityBanner";
+import { ProfileHeader } from "../src/components/profile/ProfileHeader";
+import { ProfileSection } from "../src/components/profile/ProfileSection";
+import { QuickActionsGrid } from "../src/components/profile/QuickActionsGrid";
+import { SecurityBanner } from "../src/components/profile/SecurityBanner";
 import { colors } from "../src/theme/colors";
 
-export default function MoreScreen() {
+export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <MoreHeader avatarUri="https://i.pravatar.cc/300" />
+        <ProfileHeader avatarUri="https://i.pravatar.cc/300" />
       </View>
 
       <ScrollView
@@ -20,7 +20,7 @@ export default function MoreScreen() {
         <SecurityBanner />
         <QuickActionsGrid />
 
-        <MoreSection
+        <ProfileSection
           title="Account"
           items={[
             { icon: "user", title: "Personal details", sub: "View and update your information", route: "/personal-details" },
@@ -31,7 +31,7 @@ export default function MoreScreen() {
           ]}
         />
 
-        <MoreSection
+        <ProfileSection
           title="Support"
           items={[
             { icon: "help-circle", title: "Help center", sub: "Get help with common questions", route: "/help" },
@@ -40,7 +40,7 @@ export default function MoreScreen() {
           ]}
         />
 
-        <MoreSection
+        <ProfileSection
           danger
           items={[
             { icon: "log-out", title: "Log out", sub: "Securely log out of your account" },

@@ -6,7 +6,7 @@ import { colors } from '../../theme/colors';
 export function Header({ name, avatarUri }: { name: string; avatarUri: string }) {
   return (
     <View style={styles.row}>
-      <TouchableOpacity style={styles.left} onPress={() => router.push('/more')}>
+      <TouchableOpacity style={styles.left} onPress={() => router.push('/profile')}>
         <Image source={{ uri: avatarUri }} style={styles.avatar} />
         <View>
           <Text style={styles.greeting}>Good morning,</Text>

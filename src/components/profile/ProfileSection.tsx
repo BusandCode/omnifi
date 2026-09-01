@@ -16,7 +16,7 @@ type Props = {
   danger?: boolean;
 };
 
-export function MoreSection({ title, items, danger }: Props) {
+export function ProfileSection({ title, items, danger }: Props) {
   return (
     <View>
       {title && <Text style={styles.sectionTitle}>{title}</Text>}

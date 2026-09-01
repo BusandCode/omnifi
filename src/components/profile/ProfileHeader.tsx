@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
 
-export function MoreHeader({ avatarUri }: { avatarUri: string }) {
+export function ProfileHeader({ avatarUri }: { avatarUri: string }) {
   return (
     <View style={styles.row}>
       <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
