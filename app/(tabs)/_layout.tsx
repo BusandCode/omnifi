@@ -1,9 +1,11 @@
 // app/(tabs)/_layout.tsx
-import { View, StyleSheet, Platform } from 'react-native';
-import { Tabs } from 'expo-router';
+import { View, StyleSheet, Platform, AppState } from 'react-native';
+import { Tabs, useRouter, useSegments } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../../src/theme/colors';
+import { useAuthStore } from '../../src/store/authStore';
+import { useEffect, useRef } from 'react';
 
 type IoniconName = keyof typeof Ionicons.glyphMap;
 
@@ -47,6 +49,61 @@ function PayButton({ focused }: { focused: boolean }) {
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const segments = useSegments();
+  const { checkLockStatus, setLastActivity, isAuthenticated } = useAuthStore();
+  const appStateRef = useRef(AppState.currentState);
+  const lastActivityUpdateRef = useRef<number>(Date.now());
+
+  // Update activity timestamp when user interacts with the app
+  const updateActivity = () => {
+    const now = Date.now();
+    // Throttle updates to prevent excessive writes
+    if (now - lastActivityUpdateRef.current > 5000) {
+      setLastActivity();
+      lastActivityUpdateRef.current = now;
+    }
+  };
+
+  // Monitor app state for background/foreground transitions
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      // App came to foreground
+      if (
+        appStateRef.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        // Check if lock screen is needed
+        if (isAuthenticated) {
+          const needsLock = checkLockStatus();
+          if (needsLock) {
+            // Navigate to lock screen
+            router.replace('/(auth)/lock');
+            return;
+          }
+        }
+        // Update activity timestamp
+        setLastActivity();
+        lastActivityUpdateRef.current = Date.now();
+      }
+
+      appStateRef.current = nextAppState;
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [isAuthenticated]);
+
+  // Check for lock when segment changes (navigation)
+  useEffect(() => {
+    if (isAuthenticated) {
+      const needsLock = checkLockStatus();
+      if (needsLock && segments[0] === '(tabs)') {
+        router.replace('/(auth)/lock');
+      }
+    }
+  }, [segments, isAuthenticated]);
 
   return (
     <Tabs
@@ -84,8 +141,6 @@ export default function TabLayout() {
         options={{
           title: 'Pay',
           tabBarIcon: ({ focused }) => <PayButton focused={focused} />,
-          tabBarLabelStyle: styles.label,
-          tabBarItemStyle: styles.item,
         }}
       />
       <Tabs.Screen
@@ -102,12 +157,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => <TabIcon tab="lifestyle" color={color} focused={focused} />,
         }}
       />
-      {/* <Tabs.Screen
-        name="notifications"
-        options={{
-          href: null,
-        }}
-      /> */}
     </Tabs>
   );
 }

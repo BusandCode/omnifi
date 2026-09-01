@@ -6,7 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from '../src/theme/colors';
 import { BalanceProvider } from '../src/store/BalanceContext';
 
-
+// Default props for Text and TextInput
 (Text as any).defaultProps = (Text as any).defaultProps || {};
 (Text as any).defaultProps.style = [
   { includeFontPadding: false },

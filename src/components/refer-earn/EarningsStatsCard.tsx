@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { colors } from '../../theme/colors';
+import { router } from 'expo-router';
 
 type Props = {
   totalEarnings: number;
@@ -20,6 +21,16 @@ export function EarningsStatsCard({
   pendingBalance,
 }: Props) {
   const fmt = (n: number) => `₦${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+
+  const handleAvailableBalancePress = () => {
+    router.push('/balance');
+  };
+
+  const handlePendingBalancePress = () => {
+    // You can navigate to pending balance screen or show a modal
+    // For now, we'll just show an alert or navigate to balance
+    router.push('/balance');
+  };
 
   return (
     <View style={styles.card}>
@@ -45,7 +56,11 @@ export function EarningsStatsCard({
       <View style={styles.hDivider} />
 
       <View style={styles.bottomRow}>
-        <TouchableOpacity style={styles.balanceItem}>
+        <TouchableOpacity 
+          style={styles.balanceItem}
+          onPress={handleAvailableBalancePress}
+          activeOpacity={0.7}
+        >
           <View style={styles.iconCircle}>
             <Ionicons name="wallet" size={14} color={colors.primaryLight} />
           </View>
@@ -56,7 +71,11 @@ export function EarningsStatsCard({
           <Feather name="chevron-right" size={14} color={colors.textSecondary} />
         </TouchableOpacity>
 
-        <View style={styles.balanceItem}>
+        <TouchableOpacity 
+          style={styles.balanceItem}
+          // onPress={handlePendingBalancePress}
+          activeOpacity={0.7}
+        >
           <View style={styles.iconCircle}>
             <Feather name="clock" size={14} color={colors.primaryLight} />
           </View>
@@ -67,7 +86,7 @@ export function EarningsStatsCard({
             </View>
             <Text style={styles.balanceValue}>{fmt(pendingBalance)}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -85,11 +104,22 @@ const styles = StyleSheet.create({
   deltaBlue: { color: '#60A5FA', fontSize: 10, marginTop: 4, fontWeight: '600' },
   hDivider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: 14 },
   bottomRow: { flexDirection: 'row', gap: 14 },
-  balanceItem: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  balanceItem: { 
+    flex: 1, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+    borderRadius: 8,
+  },
   iconCircle: {
-    width: 30, height: 30, borderRadius: 15,
+    width: 30, 
+    height: 30, 
+    borderRadius: 15,
     backgroundColor: 'rgba(167,139,250,0.15)',
-    justifyContent: 'center', alignItems: 'center',
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
   balanceLabel: { color: colors.textSecondary, fontSize: 10 },
   balanceValue: { color: colors.textPrimary, fontSize: 12, fontWeight: '700', marginTop: 2 },

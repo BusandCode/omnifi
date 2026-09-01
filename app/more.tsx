@@ -39,13 +39,17 @@ export default function MoreScreen() {
             { icon: "shield", title: "Report an issue", sub: "Let us know about a problem" ,route: "/report-issue"},
           ]}
         />
-
-        <MoreSection
-          danger
-          items={[
-            { icon: "log-out", title: "Log out", sub: "Securely log out of your account" },
-          ]}
-        />
+            <MoreSection
+      danger
+      items={[
+        {
+          icon: "log-out",
+          title: "Log out",
+          sub: "Securely log out of your account",
+          action: "logout",
+        },
+      ]}
+    />
       </ScrollView>
     </View>
   );
