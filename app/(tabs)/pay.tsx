@@ -1,18 +1,28 @@
+import { PayHeader } from "@/src/components/pay/PayHeader";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { PayHeader } from "@/src/components/pay/PayHeader";
 import { BillsGrid } from "../../src/components/pay/BillsGrid";
 import { PayAgainRow } from "../../src/components/pay/PayAgainRow";
 import { PayQuickActions } from "../../src/components/pay/PayQuickActions";
 import { PaySearchBar } from "../../src/components/pay/PaySearchBar";
 import { RecentPayments } from "../../src/components/pay/RecentPayments";
 import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function PayScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+          backgroundColor: themeColors.background,
+        },
+      ]}
+    >
       <View style={[styles.fixedTop, { paddingTop: insets.top + 8 }]}>
         <PayHeader />
         <PaySearchBar />

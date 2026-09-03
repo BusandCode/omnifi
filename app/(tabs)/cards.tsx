@@ -14,12 +14,16 @@ import {
 import { CardsTabs } from "../../src/components/cards/CardsTabs";
 import { RecentCardTransactions } from "../../src/components/cards/RecentCardTransactions";
 import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function CardsScreen() {
   const carouselRef = useRef<CardCarouselHandle>(null);
+  const { colors: themeColors } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: themeColors.background }]}
+    >
       <View style={styles.fixedTop}>
         <CardsHeader />
         <CardsTitle />

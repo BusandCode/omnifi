@@ -6,17 +6,29 @@ import { BalanceCard } from "../../src/components/home/BalanceCard";
 import { Header } from "../../src/components/home/Header";
 import { QuickActions } from "../../src/components/home/QuickActions";
 import { RecentTransactions } from "../../src/components/home/RecentTransactions";
-import { colors } from "../../src/theme/colors";
 import { CurrencyCode } from "../../src/constants/currencies";
+import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
   const [balanceVisible, setBalanceVisible] = useState(false);
   const [currency, setCurrency] = useState<CurrencyCode>("NGN");
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.fixedTop, { paddingTop: insets.top + 8 }]}>
+    <View
+      style={[styles.container, { backgroundColor: themeColors.background }]}
+    >
+      <View
+        style={[
+          styles.fixedTop,
+          {
+            paddingTop: insets.top + 8,
+            backgroundColor: themeColors.background,
+          },
+        ]}
+      >
         <Header name="Abdulsalam" avatarUri="https://i.pravatar.cc/300" />
         <BalanceCard
           visible={balanceVisible}

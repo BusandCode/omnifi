@@ -1,24 +1,20 @@
 // app/account-limits.tsx — Expo Router screen composing the account-limits components
-import React, { useMemo } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { colors } from '../src/theme/colors';
-import { TIER_CONFIGS, TierNumber } from '../src/config/tierConfig';
-import AccountLimitsHeader from '../src/components/account-limits/AccountLimitsHeader';
-import VerificationLevelCard from '../src/components/account-limits/VerificationLevelCard';
-import LimitsListCard from '../src/components/account-limits/LimitsListCard';
-import UnlockTierCard from '../src/components/account-limits/UnlockTierCard';
-import AccountLimitsFooter from '../src/components/account-limits/AccountLimitsFooter';
+import { useRouter } from "expo-router";
+import React, { useMemo } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import AccountLimitsFooter from "../src/components/account-limits/AccountLimitsFooter";
+import AccountLimitsHeader from "../src/components/account-limits/AccountLimitsHeader";
+import LimitsListCard from "../src/components/account-limits/LimitsListCard";
+import UnlockTierCard from "../src/components/account-limits/UnlockTierCard";
+import VerificationLevelCard from "../src/components/account-limits/VerificationLevelCard";
+import { TIER_CONFIGS } from "../src/config/tierConfig";
+import { useAuthStore } from "../src/store/authStore";
+import { colors } from "../src/theme/colors";
 
 export default function AccountLimitsScreen() {
   const router = useRouter();
-  const { tier } = useLocalSearchParams<{ tier?: string }>();
-
-  const parsedTier = Number(tier);
-  const activeTier: TierNumber = useMemo(() => {
-    return parsedTier === 1 || parsedTier === 2 || parsedTier === 3 ? parsedTier : 1;
-  }, [parsedTier]);
-  const config = useMemo(() => TIER_CONFIGS[activeTier], [activeTier]);
+  const accountTier = useAuthStore((state) => state.accountTier);
+  const config = useMemo(() => TIER_CONFIGS[accountTier], [accountTier]);
 
   return (
     <View style={styles.screen}>
@@ -27,7 +23,10 @@ export default function AccountLimitsScreen() {
         filledShield={config.tier === 3}
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <VerificationLevelCard config={config} />
         <LimitsListCard title="Transfer Limits" rows={config.transferLimits} />
         <LimitsListCard title="Wallet Limits" rows={config.walletLimits} />
@@ -39,7 +38,7 @@ export default function AccountLimitsScreen() {
             config.tier < 3
               ? () =>
                   router.push({
-                    pathname: '/kyc/upgrade',
+                    pathname: "/kyc/upgrade",
                     params: { target: String(config.tier + 1) },
                   })
               : undefined

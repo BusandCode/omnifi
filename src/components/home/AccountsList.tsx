@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 const accounts = [
   {
@@ -30,12 +31,18 @@ type AccountsListProps = {
 };
 
 export function AccountsList({ visible }: AccountsListProps) {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
       <View style={styles.header}>
-        <Text style={styles.title}>Accounts</Text>
+        <Text style={[styles.title, { color: themeColors.textSecondary }]}>
+          Accounts
+        </Text>
         <TouchableOpacity>
-          <Text style={styles.viewAll}>View all</Text>
+          <Text style={[styles.viewAll, { color: themeColors.primaryLight }]}>
+            View all
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -45,29 +52,59 @@ export function AccountsList({ visible }: AccountsListProps) {
             <Text style={styles.flagIcon}>{acc.flag}</Text>
             <View>
               <View style={styles.nameRow}>
-                <Text style={styles.name}>{acc.name}</Text>
+                <Text style={[styles.name, { color: themeColors.textPrimary }]}>
+                  {acc.name}
+                </Text>
                 {acc.primary && (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeText}>Primary</Text>
+                  <View
+                    style={[
+                      styles.badge,
+                      { backgroundColor: themeColors.surfaceAlt },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.badgeText,
+                        { color: themeColors.textSecondary },
+                      ]}
+                    >
+                      Primary
+                    </Text>
                   </View>
                 )}
               </View>
-              <Text style={styles.code}>{acc.code}</Text>
+              <Text style={[styles.code, { color: themeColors.textSecondary }]}>
+                {acc.code}
+              </Text>
             </View>
           </View>
 
           <View style={{ alignItems: "flex-end" }}>
             {visible ? (
               <>
-                <Text style={styles.amount}>
+                <Text
+                  style={[styles.amount, { color: themeColors.textPrimary }]}
+                >
                   {acc.code === "NGN" ? `NGN ${acc.amount}` : acc.amount}
                 </Text>
-                {acc.sub && <Text style={styles.sub}>{acc.sub}</Text>}
+                {acc.sub && (
+                  <Text
+                    style={[styles.sub, { color: themeColors.textSecondary }]}
+                  >
+                    {acc.sub}
+                  </Text>
+                )}
               </>
             ) : (
               <View style={styles.dotsRow}>
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <View key={i} style={styles.dot} />
+                  <View
+                    key={i}
+                    style={[
+                      styles.dot,
+                      { backgroundColor: themeColors.textPrimary },
+                    ]}
+                  />
                 ))}
               </View>
             )}

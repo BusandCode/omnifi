@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Item = {
   icon: keyof typeof Feather.glyphMap;
@@ -18,6 +19,8 @@ type Props = {
 };
 
 export function ProfileSection({ title, items, danger }: Props) {
+  const { colors: themeColors } = useTheme();
+
   const handlePress = (item: Item) => {
     // Handle logout separately
     if (item.action === "logout") {
@@ -33,15 +36,22 @@ export function ProfileSection({ title, items, danger }: Props) {
 
   return (
     <View>
-      {title && <Text style={styles.sectionTitle}>{title}</Text>}
+      {title && (
+        <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>
+          {title}
+        </Text>
+      )}
 
-      <View style={styles.card}>
+      <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
         {items.map((item, i) => (
           <TouchableOpacity
             key={item.title}
             style={[
               styles.row,
-              i !== items.length - 1 && styles.divider,
+              i !== items.length - 1 && [
+                styles.divider,
+                { borderBottomColor: themeColors.border },
+              ],
             ]}
             activeOpacity={0.7}
             onPress={() => handlePress(item)}
@@ -49,17 +59,14 @@ export function ProfileSection({ title, items, danger }: Props) {
             <View
               style={[
                 styles.iconBox,
+                { backgroundColor: themeColors.surfaceAlt },
                 danger && styles.iconBoxDanger,
               ]}
             >
               <Feather
                 name={item.icon}
                 size={18}
-                color={
-                  danger
-                    ? colors.danger
-                    : colors.textPrimary
-                }
+                color={danger ? themeColors.danger : themeColors.textPrimary}
               />
             </View>
 
@@ -67,6 +74,7 @@ export function ProfileSection({ title, items, danger }: Props) {
               <Text
                 style={[
                   styles.title,
+                  { color: themeColors.textPrimary },
                   danger && styles.titleDanger,
                 ]}
                 numberOfLines={1}
@@ -74,7 +82,10 @@ export function ProfileSection({ title, items, danger }: Props) {
                 {item.title}
               </Text>
 
-              <Text style={styles.sub} numberOfLines={1}>
+              <Text
+                style={[styles.sub, { color: themeColors.textSecondary }]}
+                numberOfLines={1}
+              >
                 {item.sub}
               </Text>
             </View>
@@ -82,7 +93,7 @@ export function ProfileSection({ title, items, danger }: Props) {
             <Feather
               name="chevron-right"
               size={18}
-              color={colors.textSecondary}
+              color={themeColors.textSecondary}
             />
           </TouchableOpacity>
         ))}

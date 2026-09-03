@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { useAuthStore } from "../../src/store/authStore";
 import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 const PIN_LENGTH = 4;
 const KEYPAD_MAX_WIDTH = 280;
@@ -31,6 +32,7 @@ export default function LockScreen() {
   const [isLocked, setIsLocked] = useState(false);
   const [lockTimer, setLockTimer] = useState(0);
   const { setLastActivity } = useAuthStore();
+  const { colors: themeColors } = useTheme();
 
   // Auto-lock after 5 failed attempts
   const MAX_ATTEMPTS = 5;
@@ -199,10 +201,7 @@ export default function LockScreen() {
         disabled={isLocked}
       >
         <Text
-          style={[
-            styles.keypadKeyText,
-            isLocked && styles.keypadKeyDisabled,
-          ]}
+          style={[styles.keypadKeyText, isLocked && styles.keypadKeyDisabled]}
         >
           {item.key}
         </Text>
@@ -222,7 +221,7 @@ export default function LockScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
@@ -363,7 +362,7 @@ export default function LockScreen() {
 
         {/* Sign Up Link */}
         <View style={styles.signupRow}>
-          <Text style={styles.signupText}>Don't have an account? </Text>
+          <Text style={styles.signupText}>Don&apos;t have an account? </Text>
           <Pressable
             onPress={() => router.push("/(auth)/create-account")}
             disabled={isLocked}
@@ -399,7 +398,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 10,
     // marginBottom: 8,
-    marginTop:50,
+    marginTop: 50,
     minHeight: 130,
   },
 
@@ -407,7 +406,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "flex-start",
-    marginLeft:10,
+    marginLeft: 10,
     flex: 1,
   },
 
@@ -450,8 +449,7 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
 
-
-   /* Lock Illustration */
+  /* Lock Illustration */
   illustration: {
     width: 150,
     height: 140,

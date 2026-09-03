@@ -1,15 +1,16 @@
 import { Feather } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import {
-  Dimensions,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    ImageBackground,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width - 40 - 56;
@@ -18,15 +19,46 @@ const AUTOPLAY_INTERVAL = 3500;
 const RESUME_DELAY = 4000;
 
 const featured = [
-  { tag: "20% OFF", title: "Book top hotels", sub: "Enjoy up to 20% off on selected hotels", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600" },
-  { tag: "CASHBACK", title: "Eat out, get back", sub: "Get up to 10% cashback at your favorite spots", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600" },
-  { tag: "15% OFF", title: "Fly out this weekend", sub: "Save 15% on domestic flight bookings", image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600" },
-  { tag: "NEW", title: "Movie night deals", sub: "Buy 1 get 1 free on select cinema tickets", image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600" },
-  { tag: "10% OFF", title: "Shop electronics", sub: "10% off gadgets and accessories this week", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600" },
-  { tag: "FREE RIDE", title: "Ride, then rest", sub: "First ride free with select partners", image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600" },
+  {
+    tag: "20% OFF",
+    title: "Book top hotels",
+    sub: "Enjoy up to 20% off on selected hotels",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600",
+  },
+  {
+    tag: "CASHBACK",
+    title: "Eat out, get back",
+    sub: "Get up to 10% cashback at your favorite spots",
+    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600",
+  },
+  {
+    tag: "15% OFF",
+    title: "Fly out this weekend",
+    sub: "Save 15% on domestic flight bookings",
+    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600",
+  },
+  {
+    tag: "NEW",
+    title: "Movie night deals",
+    sub: "Buy 1 get 1 free on select cinema tickets",
+    image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600",
+  },
+  {
+    tag: "10% OFF",
+    title: "Shop electronics",
+    sub: "10% off gadgets and accessories this week",
+    image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600",
+  },
+  {
+    tag: "FREE RIDE",
+    title: "Ride, then rest",
+    sub: "First ride free with select partners",
+    image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600",
+  },
 ];
 
 export function FeaturedCarousel() {
+  const { colors: themeColors } = useTheme();
   const [active, setActive] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
   const activeRef = useRef(0);
@@ -101,7 +133,9 @@ export function FeaturedCarousel() {
             </View>
             <View style={styles.textBlock}>
               <Text style={styles.cardTitle}>{f.title}</Text>
-              <Text style={styles.cardSub} numberOfLines={1}>{f.sub}</Text>
+              <Text style={styles.cardSub} numberOfLines={1}>
+                {f.sub}
+              </Text>
             </View>
             <TouchableOpacity style={styles.arrowBtn}>
               <Feather name="chevron-right" size={13} color="#fff" />
@@ -112,7 +146,14 @@ export function FeaturedCarousel() {
 
       <View style={styles.dotsRow}>
         {featured.map((_, i) => (
-          <View key={i} style={[styles.dot, i === active && styles.dotActive]} />
+          <View
+            key={i}
+            style={[
+              styles.dot,
+              { backgroundColor: themeColors.surfaceAlt },
+              i === active && { backgroundColor: themeColors.primary },
+            ]}
+          />
         ))}
       </View>
     </View>
@@ -120,20 +161,52 @@ export function FeaturedCarousel() {
 }
 
 const styles = StyleSheet.create({
-  title: { color: colors.textPrimary, fontSize: 11, fontWeight: "600", marginBottom: 8 },
-  card: { height: 150, borderRadius: 14, padding: 9, justifyContent: "space-between", overflow: "hidden" },
-  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(0,0,0,0.25)", borderRadius: 14 },
-  tag: { alignSelf: "flex-start", backgroundColor: colors.primary, paddingHorizontal: 6, paddingVertical: 3, borderRadius: 5 },
+  title: {
+    color: colors.textPrimary,
+    fontSize: 11,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  card: {
+    height: 150,
+    borderRadius: 14,
+    padding: 9,
+    justifyContent: "space-between",
+    overflow: "hidden",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0,0,0,0.25)",
+    borderRadius: 14,
+  },
+  tag: {
+    alignSelf: "flex-start",
+    backgroundColor: colors.primary,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 5,
+  },
   tagText: { color: "#fff", fontSize: 8.5, fontWeight: "700" },
   textBlock: { gap: 2 },
   cardTitle: { color: "#fff", fontSize: 10.5, fontWeight: "700" },
   cardSub: { color: "rgba(255,255,255,0.85)", fontSize: 8.5 },
   arrowBtn: {
-    position: "absolute", bottom: 10, right: 10,
-    width: 24, height: 24, borderRadius: 12, backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center", alignItems: "center",
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  dotsRow: { flexDirection: "row", justifyContent: "center", gap: 5, marginTop: 8 },
+  dotsRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 5,
+    marginTop: 8,
+  },
   dot: { width: 5, height: 5, borderRadius: 2.5, backgroundColor: "#3A3A3C" },
   dotActive: { backgroundColor: colors.primary, width: 12 },
 });

@@ -5,8 +5,9 @@ import {
 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "../../theme/colors";
 import { CurrencyCode } from "../../constants/currencies";
+import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 type QuickAction =
   | {
@@ -45,6 +46,8 @@ type QuickActionsProps = {
 };
 
 export function QuickActions({ currency }: QuickActionsProps) {
+  const { colors: themeColors } = useTheme();
+
   const handlePress = (label: string) => {
     if (NGN_ONLY_LABELS.has(label) && currency !== "NGN") {
       Alert.alert(
@@ -58,11 +61,14 @@ export function QuickActions({ currency }: QuickActionsProps) {
     if (label === "Trade") router.push("/trade");
     if (label === "Airtime") router.push("/airtime");
     if (label === "AI Pay") router.push("/ai-pay");
+    if (label === "More") router.push("/more");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quick Actions</Text>
+      <Text style={[styles.title, { color: themeColors.textSecondary }]}>
+        Quick Actions
+      </Text>
 
       <View style={styles.row}>
         {items.map((it) => (
@@ -72,22 +78,42 @@ export function QuickActions({ currency }: QuickActionsProps) {
             activeOpacity={0.7}
             onPress={() => handlePress(it.label)}
           >
-            <View style={styles.iconBox}>
+            <View
+              style={[styles.iconBox, { backgroundColor: themeColors.surface }]}
+            >
               {it.iconSet === "feather" && (
-                <Feather name={it.icon} size={20} color={colors.primaryLight} />
+                <Feather
+                  name={it.icon}
+                  size={20}
+                  color={themeColors.primaryLight}
+                />
               )}
               {it.iconSet === "mi" && (
-                <MaterialIcons name={it.icon} size={20} color={colors.primaryLight} />
+                <MaterialIcons
+                  name={it.icon}
+                  size={20}
+                  color={themeColors.primaryLight}
+                />
               )}
               {it.iconSet === "mci" && (
                 <MaterialCommunityIcons
                   name={it.icon}
                   size={20}
-                  color={colors.primaryLight}
+                  color={themeColors.primaryLight}
                 />
               )}
-              {it.dot && <View style={styles.dot} />}
-              <Text style={styles.label} numberOfLines={1}>
+              {it.dot && (
+                <View
+                  style={[
+                    styles.dot,
+                    { backgroundColor: themeColors.primaryLight },
+                  ]}
+                />
+              )}
+              <Text
+                style={[styles.label, { color: themeColors.textPrimary }]}
+                numberOfLines={1}
+              >
                 {it.label}
               </Text>
             </View>

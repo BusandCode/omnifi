@@ -2,6 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Props = {
   onShowDetails: () => void;
@@ -9,6 +10,7 @@ type Props = {
 
 export function CardActions({ onShowDetails }: Props) {
   const [detailsVisible, setDetailsVisible] = useState(false);
+  const { colors: themeColors } = useTheme();
 
   const handleDetailsPress = () => {
     setDetailsVisible((current) => !current);
@@ -16,40 +18,58 @@ export function CardActions({ onShowDetails }: Props) {
   };
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
       <TouchableOpacity style={styles.item}>
-        <View style={styles.iconBox}>
-          <Feather name="plus-circle" size={18} color={colors.textPrimary} />
+        <View
+          style={[styles.iconBox, { backgroundColor: themeColors.surfaceAlt }]}
+        >
+          <Feather
+            name="plus-circle"
+            size={18}
+            color={themeColors.textPrimary}
+          />
         </View>
-        <Text style={styles.label}>Top up</Text>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>
+          Top up
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.item}>
-        <View style={styles.iconBox}>
+        <View
+          style={[styles.iconBox, { backgroundColor: themeColors.surfaceAlt }]}
+        >
           <Feather
             name="arrow-down-circle"
             size={18}
-            color={colors.textPrimary}
+            color={themeColors.textPrimary}
           />
         </View>
-        <Text style={styles.label}>Withdraw</Text>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>
+          Withdraw
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.item} onPress={handleDetailsPress}>
-        <View style={styles.iconBox}>
+        <View
+          style={[styles.iconBox, { backgroundColor: themeColors.surfaceAlt }]}
+        >
           <Feather
             name={detailsVisible ? "eye-off" : "eye"}
             size={18}
-            color={colors.textPrimary}
+            color={themeColors.textPrimary}
           />
         </View>
-        <Text style={styles.label}>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>
           {detailsVisible ? "Hide details" : "Show details"}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.item}>
-        <View style={styles.iconBox}>
-          <Feather name="file-text" size={18} color={colors.textPrimary} />
+        <View
+          style={[styles.iconBox, { backgroundColor: themeColors.surfaceAlt }]}
+        >
+          <Feather name="file-text" size={18} color={themeColors.textPrimary} />
         </View>
-        <Text style={styles.label}>Statement</Text>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>
+          Statement
+        </Text>
       </TouchableOpacity>
     </View>
   );

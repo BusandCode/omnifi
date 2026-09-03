@@ -8,8 +8,9 @@ import Svg, {
     Path,
     Stop,
 } from "react-native-svg";
-import { fontScale, moderateScale, verticalScale } from "../../theme/scale";
 import { colors } from "../../theme/colors";
+import { fontScale, moderateScale, verticalScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 const ranges = ["1D", "1W", "1M", "3M", "1Y", "ALL"] as const;
 
@@ -20,12 +21,23 @@ const areaPath = `${linePath} L300,100 L0,100 Z`;
 export function PortfolioChart() {
   const [range, setRange] = useState<(typeof ranges)[number]>("ALL");
   const [visible, setVisible] = useState(true);
+  const { colors: themeColors } = useTheme();
 
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        {
+          backgroundColor: themeColors.surface,
+          borderColor: themeColors.border,
+        },
+      ]}
+    >
       <View style={styles.topRow}>
         <View style={styles.labelRow}>
-          <Text style={styles.label}>Total portfolio value</Text>
+          <Text style={[styles.label, { color: themeColors.textSecondary }]}>
+            Total portfolio value
+          </Text>
           <TouchableOpacity
             onPress={() => setVisible((v) => !v)}
             hitSlop={8}
@@ -34,27 +46,42 @@ export function PortfolioChart() {
             <Ionicons
               name={visible ? "eye-outline" : "eye-off-outline"}
               size={moderateScale(14)}
-              color={colors.textSecondary}
+              color={themeColors.textSecondary}
             />
           </TouchableOpacity>
         </View>
-        <View style={styles.currencyPill}>
+        <View
+          style={[
+            styles.currencyPill,
+            { backgroundColor: themeColors.primaryTint },
+          ]}
+        >
           <Text style={styles.flag}>🇳🇬</Text>
-          <Text style={styles.currencyText}>NGN</Text>
-          <Ionicons name="chevron-down" size={moderateScale(12)} color={colors.textPrimary} />
+          <Text
+            style={[styles.currencyText, { color: themeColors.textPrimary }]}
+          >
+            NGN
+          </Text>
+          <Ionicons
+            name="chevron-down"
+            size={moderateScale(12)}
+            color={themeColors.textPrimary}
+          />
         </View>
       </View>
 
-      <Text style={styles.amount}>
+      <Text style={[styles.amount, { color: themeColors.textPrimary }]}>
         {visible ? "NGN 3,745,220.50" : "NGN ••••••••"}
       </Text>
 
       <View style={styles.changeRow}>
-        <Text style={styles.change}>
+        <Text style={[styles.change, { color: themeColors.success }]}>
           {visible ? "▲ NGN 245,220.50 (7.02%)" : "••••••••"}
         </Text>
       </View>
-      <Text style={styles.period}>All time</Text>
+      <Text style={[styles.period, { color: themeColors.textSecondary }]}>
+        All time
+      </Text>
 
       <View style={styles.chartWrap}>
         <Svg
@@ -65,18 +92,26 @@ export function PortfolioChart() {
         >
           <Defs>
             <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-              <Stop offset="0" stopColor={colors.primary} stopOpacity={0.35} />
-              <Stop offset="1" stopColor={colors.primary} stopOpacity={0} />
+              <Stop
+                offset="0"
+                stopColor={themeColors.primary}
+                stopOpacity={0.35}
+              />
+              <Stop
+                offset="1"
+                stopColor={themeColors.primary}
+                stopOpacity={0}
+              />
             </LinearGradient>
           </Defs>
           <Path d={areaPath} fill="url(#grad)" stroke="none" />
           <Path
             d={linePath}
             fill="none"
-            stroke={colors.primaryLight}
+            stroke={themeColors.primaryLight}
             strokeWidth={2}
           />
-          <Circle cx={300} cy={2} r={4} fill="#fff" />
+          <Circle cx={300} cy={2} r={4} fill={themeColors.textPrimary} />
         </Svg>
       </View>
 
@@ -88,7 +123,12 @@ export function PortfolioChart() {
             style={[styles.rangeBtn, r === range && styles.rangeBtnActive]}
           >
             <Text
-              style={[styles.rangeText, r === range && styles.rangeTextActive]}
+              style={[
+                styles.rangeText,
+                { color: themeColors.textSecondary },
+                r === range && styles.rangeTextActive,
+                r === range && { color: "#fff" },
+              ]}
             >
               {r}
             </Text>
@@ -113,7 +153,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: moderateScale(6),
   },
-  labelRow: { flexDirection: "row", alignItems: "center", gap: moderateScale(6) },
+  labelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: moderateScale(6),
+  },
   label: { color: colors.textSecondary, fontSize: fontScale(13) },
   currencyPill: {
     flexDirection: "row",
@@ -125,7 +169,11 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(20),
   },
   flag: { fontSize: fontScale(13) },
-  currencyText: { color: colors.textPrimary, fontSize: fontScale(10), fontWeight: "500" },
+  currencyText: {
+    color: colors.textPrimary,
+    fontSize: fontScale(10),
+    fontWeight: "500",
+  },
   amount: {
     color: colors.textPrimary,
     fontSize: fontScale(15),
@@ -143,8 +191,16 @@ const styles = StyleSheet.create({
   chartWrap: { marginBottom: moderateScale(4) },
   eyeButton: { padding: moderateScale(4) },
   rangeRow: { flexDirection: "row", justifyContent: "space-between" },
-  rangeBtn: { paddingHorizontal: moderateScale(12), paddingVertical: moderateScale(4), borderRadius: moderateScale(14) },
+  rangeBtn: {
+    paddingHorizontal: moderateScale(12),
+    paddingVertical: moderateScale(4),
+    borderRadius: moderateScale(14),
+  },
   rangeBtnActive: { backgroundColor: colors.primary },
-  rangeText: { color: colors.textSecondary, fontSize: fontScale(11), fontWeight: "500" },
+  rangeText: {
+    color: colors.textSecondary,
+    fontSize: fontScale(11),
+    fontWeight: "500",
+  },
   rangeTextActive: { color: "#fff" },
 });

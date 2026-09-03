@@ -6,10 +6,15 @@ import { LifestyleBalanceCard } from "../../src/components/lifestyle/LifestyleBa
 import { LifestyleHeader } from "../../src/components/lifestyle/LifestyleHeader";
 import { ReferEarnCard } from "../../src/components/lifestyle/ReferEarnCard";
 import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function LifestyleScreen() {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: themeColors.background }]}
+    >
       <View style={styles.header}>
         <LifestyleHeader />
       </View>

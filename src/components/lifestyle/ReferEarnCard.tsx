@@ -1,29 +1,34 @@
 import { Feather } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 export function ReferEarnCard() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View>
-      <Text style={styles.title}>Continue exploring</Text>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>
+        Continue exploring
+      </Text>
 
       <TouchableOpacity
-        style={styles.card}
+        style={[styles.card, { backgroundColor: themeColors.surface }]}
         activeOpacity={0.7}
         onPress={() => router.push("/refer-earn")}
       >
-        <View style={styles.iconBox}>
-          <Feather
-            name="gift"
-            size={18}
-            color={colors.primaryLight}
-          />
+        <View
+          style={[styles.iconBox, { backgroundColor: themeColors.primaryTint }]}
+        >
+          <Feather name="gift" size={18} color={themeColors.primaryLight} />
         </View>
 
         <View style={styles.textBlock}>
-          <Text style={styles.cardTitle}>Refer & earn</Text>
-          <Text style={styles.sub}>
+          <Text style={[styles.cardTitle, { color: themeColors.textPrimary }]}>
+            Refer & earn
+          </Text>
+          <Text style={[styles.sub, { color: themeColors.textSecondary }]}>
             Invite friends and earn rewards
           </Text>
         </View>
@@ -31,7 +36,7 @@ export function ReferEarnCard() {
         <Feather
           name="chevron-right"
           size={18}
-          color={colors.textSecondary}
+          color={themeColors.textSecondary}
         />
       </TouchableOpacity>
     </View>

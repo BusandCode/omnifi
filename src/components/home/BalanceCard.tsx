@@ -18,9 +18,14 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { colors } from "../../theme/colors";
-import { CURRENCIES, CurrencyCode, getCurrency } from "../../constants/currencies";
+import {
+  CURRENCIES,
+  CurrencyCode,
+  getCurrency,
+} from "../../constants/currencies";
 import { useBalances } from "../../store/BalanceContext";
+import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 const actions = [
   { icon: "plus", label: "Add money", primary: true },
@@ -50,6 +55,7 @@ export const BalanceCard = forwardRef<BalanceCardHandle, BalanceCardProps>(
     const scrollRef = useRef<ScrollView>(null);
     const insets = useSafeAreaInsets();
     const { balances } = useBalances();
+    const { colors: themeColors } = useTheme();
 
     const activeCurrency = getCurrency(currency);
 
@@ -77,23 +83,36 @@ export const BalanceCard = forwardRef<BalanceCardHandle, BalanceCardProps>(
       <View style={styles.wrapper}>
         <View style={styles.labelRow}>
           <View style={styles.labelGroup}>
-            <Text style={styles.label}>Total balance</Text>
+            <Text style={[styles.label, { color: themeColors.textSecondary }]}>
+              Total balance
+            </Text>
             <TouchableOpacity onPress={onToggleVisible} hitSlop={8}>
               <Ionicons
                 name={visible ? "eye-outline" : "eye-off-outline"}
                 size={16}
-                color={colors.textSecondary}
+                color={themeColors.textSecondary}
               />
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            style={styles.currencyPill}
+            style={[
+              styles.currencyPill,
+              { backgroundColor: themeColors.surface },
+            ]}
             onPress={() => setCurrencyOpen(true)}
           >
             <Text style={styles.flag}>{activeCurrency.flag}</Text>
-            <Text style={styles.currencyText}>{activeCurrency.code}</Text>
-            <Ionicons name="chevron-down" size={14} color={colors.textPrimary} />
+            <Text
+              style={[styles.currencyText, { color: themeColors.textPrimary }]}
+            >
+              {activeCurrency.code}
+            </Text>
+            <Ionicons
+              name="chevron-down"
+              size={14}
+              color={themeColors.textPrimary}
+            />
           </TouchableOpacity>
 
           <Modal
@@ -109,7 +128,12 @@ export const BalanceCard = forwardRef<BalanceCardHandle, BalanceCardProps>(
               ]}
               onPress={() => setCurrencyOpen(false)}
             >
-              <View style={styles.dropdown}>
+              <View
+                style={[
+                  styles.dropdown,
+                  { backgroundColor: themeColors.surface },
+                ]}
+              >
                 {CURRENCIES.map((c) => (
                   <TouchableOpacity
                     key={c.code}
@@ -124,14 +148,28 @@ export const BalanceCard = forwardRef<BalanceCardHandle, BalanceCardProps>(
                   >
                     <Text style={styles.flag}>{c.flag}</Text>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.dropdownCode}>{c.code}</Text>
-                      <Text style={styles.dropdownLabel}>{c.label}</Text>
+                      <Text
+                        style={[
+                          styles.dropdownCode,
+                          { color: themeColors.textPrimary },
+                        ]}
+                      >
+                        {c.code}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.dropdownLabel,
+                          { color: themeColors.textSecondary },
+                        ]}
+                      >
+                        {c.label}
+                      </Text>
                     </View>
                     {c.code === currency && (
                       <Ionicons
                         name="checkmark"
                         size={16}
-                        color={colors.primaryLight}
+                        color={themeColors.primaryLight}
                       />
                     )}
                   </TouchableOpacity>
@@ -143,13 +181,23 @@ export const BalanceCard = forwardRef<BalanceCardHandle, BalanceCardProps>(
 
         <View style={styles.balanceRow}>
           <View style={styles.amountGroup}>
-            <Text style={styles.amount}>{activeCurrency.code}</Text>
+            <Text style={[styles.amount, { color: themeColors.textPrimary }]}>
+              {activeCurrency.code}
+            </Text>
             {visible ? (
-              <Text style={styles.amount}>{convertedBalance}</Text>
+              <Text style={[styles.amount, { color: themeColors.textPrimary }]}>
+                {convertedBalance}
+              </Text>
             ) : (
               <View style={styles.dotsRow}>
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <View key={i} style={styles.dot} />
+                  <View
+                    key={i}
+                    style={[
+                      styles.dot,
+                      { backgroundColor: themeColors.textPrimary },
+                    ]}
+                  />
                 ))}
               </View>
             )}
@@ -170,10 +218,16 @@ export const BalanceCard = forwardRef<BalanceCardHandle, BalanceCardProps>(
               {actions.map((a) => (
                 <TouchableOpacity
                   key={a.label}
-                  style={[styles.actionBtn, { width: itemWidth }]}
+                  style={[
+                    styles.actionBtn,
+                    { width: itemWidth, backgroundColor: themeColors.surface },
+                  ]}
                   onPress={() => {
                     if (a.label === "Add money") {
-                      router.push({ pathname: "/add-money", params: { currency } });
+                      router.push({
+                        pathname: "/add-money",
+                        params: { currency },
+                      });
                     }
                     if (a.label === "Send") {
                       router.push({ pathname: "/send", params: { currency } });
@@ -182,8 +236,19 @@ export const BalanceCard = forwardRef<BalanceCardHandle, BalanceCardProps>(
                     if (a.label === "Swap") router.push("/swap");
                   }}
                 >
-                  <Feather name={a.icon} size={18} color={colors.primaryLight} />
-                  <Text style={styles.actionText}>{a.label}</Text>
+                  <Feather
+                    name={a.icon}
+                    size={18}
+                    color={themeColors.primaryLight}
+                  />
+                  <Text
+                    style={[
+                      styles.actionText,
+                      { color: themeColors.textPrimary },
+                    ]}
+                  >
+                    {a.label}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>

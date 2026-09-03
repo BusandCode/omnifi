@@ -1,5 +1,4 @@
-import { StyleSheet, View } from "react-native";
-import { ScrollView } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { InsightsCard } from "../../src/components/invest/InsightsCard";
 import { InvestCategories } from "../../src/components/invest/InvestCategories";
@@ -8,12 +7,16 @@ import { PortfolioChart } from "../../src/components/invest/PortfolioChart";
 import { RecurringBanner } from "../../src/components/invest/RecurringBanner";
 import { Watchlist } from "../../src/components/invest/Watchlist";
 import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function InvestScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[styles.container, { backgroundColor: themeColors.background }]}
+    >
       <View style={[styles.fixedTop, { paddingTop: insets.top + 8 }]}>
         <InvestHeader />
       </View>

@@ -2,6 +2,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Category = { icon: keyof typeof Ionicons.glyphMap; label: string };
 
@@ -15,20 +16,41 @@ const categories: Category[] = [
 ];
 
 export function CategoriesRow() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.title}>Categories</Text>
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>
+          Categories
+        </Text>
         <TouchableOpacity>
-          <Text style={styles.viewAll}>See all</Text>
+          <Text style={[styles.viewAll, { color: themeColors.primaryLight }]}>
+            See all
+          </Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.grid}>
         {categories.map((c) => (
-          <TouchableOpacity key={c.label} style={styles.item}>
-            <Ionicons name={c.icon} size={22} color={colors.primaryLight} />
-            <Text style={styles.label}>{c.label}</Text>
+          <TouchableOpacity
+            key={c.label}
+            style={[
+              styles.item,
+              {
+                backgroundColor: themeColors.surface,
+                borderColor: themeColors.primaryTint,
+              },
+            ]}
+          >
+            <Ionicons
+              name={c.icon}
+              size={22}
+              color={themeColors.primaryLight}
+            />
+            <Text style={[styles.label, { color: themeColors.textPrimary }]}>
+              {c.label}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>

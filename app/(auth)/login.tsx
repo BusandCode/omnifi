@@ -17,6 +17,7 @@ import {
 
 import { colors } from "../../src/theme/colors";
 import { useAuthStore } from "../../src/store/authStore";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setAuthenticated } = useAuthStore();
+  const { colors: themeColors } = useTheme();
 
   const handleLogin = async () => {
     if (!email.trim()) {
@@ -57,11 +59,10 @@ export default function LoginScreen() {
 
       // Navigate to LockScreen
       router.replace("/(auth)/lock");
-
     } catch (error) {
       Alert.alert(
         "Login failed",
-        "Unable to log in. Please check your details and try again."
+        "Unable to log in. Please check your details and try again.",
       );
     } finally {
       setLoading(false);
@@ -70,7 +71,7 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
@@ -120,11 +121,7 @@ export default function LoginScreen() {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email Address</Text>
             <View style={styles.inputContainer}>
-              <Feather
-                name="mail"
-                size={20}
-                color={colors.primaryLight}
-              />
+              <Feather name="mail" size={20} color={colors.primaryLight} />
               <TextInput
                 style={styles.input}
                 placeholder="Enter your email address"
@@ -143,11 +140,7 @@ export default function LoginScreen() {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Password</Text>
             <View style={styles.inputContainer}>
-              <Feather
-                name="lock"
-                size={20}
-                color={colors.primaryLight}
-              />
+              <Feather name="lock" size={20} color={colors.primaryLight} />
               <TextInput
                 style={styles.input}
                 placeholder="Enter your password"
@@ -186,10 +179,7 @@ export default function LoginScreen() {
 
           {/* Login Button */}
           <Pressable
-            style={[
-              styles.loginButton,
-              loading && styles.loginButtonDisabled,
-            ]}
+            style={[styles.loginButton, loading && styles.loginButtonDisabled]}
             onPress={handleLogin}
             disabled={loading}
           >
@@ -206,16 +196,10 @@ export default function LoginScreen() {
           {/* Security Card */}
           <View style={styles.securityCard}>
             <View style={styles.securityIcon}>
-              <Feather
-                name="shield"
-                size={30}
-                color={colors.primaryLight}
-              />
+              <Feather name="shield" size={30} color={colors.primaryLight} />
             </View>
             <View style={styles.securityContent}>
-              <Text style={styles.securityTitle}>
-                Secure & Protected
-              </Text>
+              <Text style={styles.securityTitle}>Secure & Protected</Text>
               <Text style={styles.securityText}>
                 Your data and transactions are protected{"\n"}
                 with bank-level encryption.
@@ -225,9 +209,7 @@ export default function LoginScreen() {
 
           {/* Sign Up */}
           <View style={styles.signupRow}>
-            <Text style={styles.signupText}>
-              Don't have an account?{" "}
-            </Text>
+            <Text style={styles.signupText}>Don&apos;t have an account? </Text>
             <Pressable
               onPress={() => router.push("/create-account")}
               disabled={loading}

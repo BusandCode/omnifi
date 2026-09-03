@@ -1,10 +1,11 @@
 // app/_layout.tsx
-import { Stack } from 'expo-router';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { colors } from '../src/theme/colors';
-import { BalanceProvider } from '../src/store/BalanceContext';
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { BalanceProvider } from "../src/store/BalanceContext";
+import { colors } from "../src/theme/colors";
+import { ThemeProvider, useTheme } from "../src/theme/ThemeContext";
 
 // Default props for Text and TextInput
 (Text as any).defaultProps = (Text as any).defaultProps || {};
@@ -22,18 +23,28 @@ import { BalanceProvider } from '../src/store/BalanceContext';
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <BalanceProvider>
-        <View style={styles.root}>
-          <StatusBar style="light" />
-          <Stack
-            screenOptions={{
-              headerShown: false,
-              contentStyle: { backgroundColor: colors.background },
-            }}
-          />
-        </View>
-      </BalanceProvider>
+      <ThemeProvider>
+        <BalanceProvider>
+          <AppShell />
+        </BalanceProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
+  );
+}
+
+function AppShell() {
+  const { colors, mode } = useTheme();
+
+  return (
+    <View style={[styles.root, { backgroundColor: colors.background }]}>
+      <StatusBar style={mode === "light" ? "dark" : "light"} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+        }}
+      />
+    </View>
   );
 }
 

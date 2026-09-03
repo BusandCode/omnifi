@@ -14,10 +14,12 @@ import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 // import { colors } from "../../theme/colors";
 import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 type AuthMethod = "email" | "phone";
 
 export default function CreateAccountScreen() {
+  const { colors: themeColors } = useTheme();
   const [authMethod, setAuthMethod] = useState<AuthMethod>("email");
 
   const [fullName, setFullName] = useState("");
@@ -57,20 +59,23 @@ export default function CreateAccountScreen() {
     if (password.length < 8) {
       Alert.alert(
         "Weak password",
-        "Your password must be at least 8 characters long."
+        "Your password must be at least 8 characters long.",
       );
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Passwords don't match", "Please make sure your passwords match.");
+      Alert.alert(
+        "Passwords don't match",
+        "Please make sure your passwords match.",
+      );
       return;
     }
 
     if (!agreedToTerms) {
       Alert.alert(
         "Terms required",
-        "Please agree to the Terms of Service and Privacy Policy."
+        "Please agree to the Terms of Service and Privacy Policy.",
       );
       return;
     }
@@ -98,14 +103,14 @@ export default function CreateAccountScreen() {
 
       Alert.alert(
         "Account created",
-        "Your account has been created successfully."
+        "Your account has been created successfully.",
       );
 
       // router.replace("/login");
     } catch (error) {
       Alert.alert(
         "Something went wrong",
-        "We couldn't create your account. Please try again."
+        "We couldn't create your account. Please try again.",
       );
     } finally {
       setLoading(false);
@@ -114,7 +119,7 @@ export default function CreateAccountScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.content}>
@@ -143,11 +148,7 @@ export default function CreateAccountScreen() {
           <View style={styles.illustration}>
             <View style={styles.document}>
               <View style={styles.profileCircle}>
-                <Feather
-                  name="user"
-                  size={22}
-                  color={colors.primaryLight}
-                />
+                <Feather name="user" size={22} color={colors.primaryLight} />
               </View>
 
               <View style={styles.illustrationLine} />
@@ -156,11 +157,7 @@ export default function CreateAccountScreen() {
             </View>
 
             <View style={styles.shield}>
-              <Feather
-                name="check"
-                size={22}
-                color={colors.primaryLight}
-              />
+              <Feather name="check" size={22} color={colors.primaryLight} />
             </View>
           </View>
         </View>
@@ -277,9 +274,7 @@ export default function CreateAccountScreen() {
           onChangeText={setConfirmPassword}
           secureTextEntry={!showConfirmPassword}
           rightIcon={showConfirmPassword ? "eye-off" : "eye"}
-          onRightIconPress={() =>
-            setShowConfirmPassword(!showConfirmPassword)
-          }
+          onRightIconPress={() => setShowConfirmPassword(!showConfirmPassword)}
           autoCapitalize="none"
         />
 
@@ -289,30 +284,21 @@ export default function CreateAccountScreen() {
           onPress={() => setAgreedToTerms(!agreedToTerms)}
         >
           <View
-            style={[
-              styles.checkbox,
-              agreedToTerms && styles.checkboxActive,
-            ]}
+            style={[styles.checkbox, agreedToTerms && styles.checkboxActive]}
           >
-            {agreedToTerms && (
-              <Feather name="check" size={12} color="#fff" />
-            )}
+            {agreedToTerms && <Feather name="check" size={12} color="#fff" />}
           </View>
 
           <Text style={styles.termsText}>
             I agree to the{" "}
-            <Text style={styles.termsLink}>Terms of Service</Text>
-            {" "}and{" "}
+            <Text style={styles.termsLink}>Terms of Service</Text> and{" "}
             <Text style={styles.termsLink}>Privacy Policy</Text>
           </Text>
         </Pressable>
 
         {/* Create Account */}
         <Pressable
-          style={[
-            styles.createButton,
-            loading && styles.createButtonDisabled,
-          ]}
+          style={[styles.createButton, loading && styles.createButtonDisabled]}
           onPress={handleCreateAccount}
           disabled={loading}
         >
@@ -323,9 +309,7 @@ export default function CreateAccountScreen() {
 
         {/* Login */}
         <View style={styles.loginRow}>
-          <Text style={styles.loginText}>
-            Already have an account?{" "}
-          </Text>
+          <Text style={styles.loginText}>Already have an account? </Text>
 
           <Pressable onPress={() => router.push("/login")}>
             <Text style={styles.loginLink}>Login</Text>
@@ -372,11 +356,7 @@ function InputField({
       <Text style={styles.inputLabel}>{label}</Text>
 
       <View style={styles.inputContainer}>
-        <Feather
-          name={icon}
-          size={16}
-          color={colors.textSecondary}
-        />
+        <Feather name={icon} size={16} color={colors.textSecondary} />
 
         <TextInput
           style={styles.input}
@@ -391,15 +371,8 @@ function InputField({
         />
 
         {rightIcon && (
-          <Pressable
-            onPress={onRightIconPress}
-            hitSlop={10}
-          >
-            <Feather
-              name={rightIcon}
-              size={17}
-              color={colors.textSecondary}
-            />
+          <Pressable onPress={onRightIconPress} hitSlop={10}>
+            <Feather name={rightIcon} size={17} color={colors.textSecondary} />
           </Pressable>
         )}
       </View>
@@ -437,7 +410,7 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
 
-   logoContainer: {
+  logoContainer: {
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "flex-start",

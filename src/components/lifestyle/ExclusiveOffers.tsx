@@ -7,6 +7,7 @@ import {
     View,
 } from "react-native";
 import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Offer = {
   brand: string;
@@ -48,12 +49,18 @@ const offers: Offer[] = [
 ];
 
 export function ExclusiveOffers() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.title}>Exclusive offers</Text>
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>
+          Exclusive offers
+        </Text>
         <TouchableOpacity>
-          <Text style={styles.viewAll}>See all</Text>
+          <Text style={[styles.viewAll, { color: themeColors.primaryLight }]}>
+            See all
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -63,25 +70,53 @@ export function ExclusiveOffers() {
         contentContainerStyle={styles.row}
       >
         {offers.map((o) => (
-          <View key={o.title} style={styles.card}>
+          <View
+            key={o.title}
+            style={[styles.card, { backgroundColor: themeColors.surface }]}
+          >
             <Text style={[styles.brand, { color: o.brandColor }]}>
               {o.brand}
             </Text>
-            <View style={styles.discountTag}>
-              <Text style={styles.discountText}>{o.discount}</Text>
+            <View
+              style={[
+                styles.discountTag,
+                { backgroundColor: themeColors.primaryTint },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.discountText,
+                  { color: themeColors.primaryLight },
+                ]}
+              >
+                {o.discount}
+              </Text>
             </View>
-            <Text style={styles.offerTitle} numberOfLines={1}>
+            <Text
+              style={[styles.offerTitle, { color: themeColors.textPrimary }]}
+              numberOfLines={1}
+            >
               {o.title}
             </Text>
-            <Text style={styles.offerSub} numberOfLines={2}>
+            <Text
+              style={[styles.offerSub, { color: themeColors.textSecondary }]}
+              numberOfLines={2}
+            >
               {o.sub}
             </Text>
             <TouchableOpacity style={styles.viewOfferRow}>
-              <Text style={styles.viewOfferText}>View offer</Text>
+              <Text
+                style={[
+                  styles.viewOfferText,
+                  { color: themeColors.primaryLight },
+                ]}
+              >
+                View offer
+              </Text>
               <Feather
                 name="chevron-right"
                 size={10}
-                color={colors.primaryLight}
+                color={themeColors.primaryLight}
               />
             </TouchableOpacity>
           </View>
@@ -101,7 +136,13 @@ const styles = StyleSheet.create({
   },
   title: { color: colors.textPrimary, fontSize: 11.5, fontWeight: "600" },
   viewAll: { color: colors.primaryLight, fontSize: 11, fontWeight: "600" },
-  row: { gap: 3, flexDirection: "row", paddingBottom: 12, justifyContent: "space-between", flex: 1 },
+  row: {
+    gap: 3,
+    flexDirection: "row",
+    paddingBottom: 12,
+    justifyContent: "space-between",
+    flex: 1,
+  },
   card: {
     width: 89,
     backgroundColor: colors.surface,

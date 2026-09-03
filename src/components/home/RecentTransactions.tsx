@@ -5,8 +5,9 @@ import {
 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "../../theme/colors";
 import { CurrencyCode, formatAmount } from "../../constants/currencies";
+import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Transaction = {
   id: string;
@@ -62,27 +63,42 @@ type RecentTransactionsProps = {
 };
 
 export function RecentTransactions({ currency }: RecentTransactionsProps) {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.title}>Recent transactions</Text>
+        <Text style={[styles.title, { color: themeColors.textSecondary }]}>
+          Recent transactions
+        </Text>
         <TouchableOpacity onPress={() => router.push("/transaction-history")}>
-          <Text style={styles.viewAll}>View all</Text>
+          <Text style={[styles.viewAll, { color: themeColors.primaryLight }]}>
+            View all
+          </Text>
         </TouchableOpacity>
       </View>
 
       {transactions.length === 0 ? (
-        <View style={styles.emptyCard}>
-          <Text style={styles.emptyText}>No recent transactions</Text>
+        <View
+          style={[styles.emptyCard, { backgroundColor: themeColors.surface }]}
+        >
+          <Text
+            style={[styles.emptyText, { color: themeColors.textSecondary }]}
+          >
+            No recent transactions
+          </Text>
         </View>
       ) : (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
           {transactions.map((t, index) => (
             <View
               key={t.id}
               style={[
                 styles.row,
-                index !== transactions.length - 1 && styles.rowDivider,
+                index !== transactions.length - 1 && [
+                  styles.rowDivider,
+                  { borderBottomColor: themeColors.border },
+                ],
               ]}
             >
               <View style={styles.left}>
@@ -90,20 +106,37 @@ export function RecentTransactions({ currency }: RecentTransactionsProps) {
                   {t.icon}
                 </View>
                 <View>
-                  <Text style={styles.name}>{t.name}</Text>
-                  <Text style={styles.sub}>{t.sub}</Text>
+                  <Text
+                    style={[styles.name, { color: themeColors.textPrimary }]}
+                  >
+                    {t.name}
+                  </Text>
+                  <Text
+                    style={[styles.sub, { color: themeColors.textSecondary }]}
+                  >
+                    {t.sub}
+                  </Text>
                 </View>
               </View>
               <View style={styles.right}>
                 <Text
                   style={[
                     styles.amount,
-                    { color: t.amountNGN < 0 ? colors.textPrimary : colors.success },
+                    {
+                      color:
+                        t.amountNGN < 0
+                          ? themeColors.textPrimary
+                          : themeColors.success,
+                    },
                   ]}
                 >
                   {formatAmount(t.amountNGN, currency)}
                 </Text>
-                <Text style={styles.time}>{t.time}</Text>
+                <Text
+                  style={[styles.time, { color: themeColors.textSecondary }]}
+                >
+                  {t.time}
+                </Text>
               </View>
             </View>
           ))}

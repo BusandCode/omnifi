@@ -1,6 +1,7 @@
 // AccountLimitsHeader.tsx — back button, title, shield status icon
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft, ShieldCheck } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 
@@ -10,8 +11,10 @@ interface Props {
 }
 
 export default function AccountLimitsHeader({ onBack, filledShield }: Props) {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
       <Pressable style={styles.iconBtn} onPress={onBack} hitSlop={10}>
         <ChevronLeft color={colors.textPrimary} size={22} />
       </Pressable>
@@ -33,7 +36,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: Platform.OS === 'ios' ? 54 : 24,
     paddingBottom: 12,
   },
   iconBtn: {

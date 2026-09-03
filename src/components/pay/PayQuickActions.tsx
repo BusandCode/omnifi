@@ -1,29 +1,53 @@
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Href, useRouter } from 'expo-router';
-import { useMemo } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { colors } from '../../theme/colors';
-import { applyLayoutScale, useLayoutScale } from '../../theme/ScaleContext';
-import { fontScale, moderateScale } from '../../theme/scale';
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Href, useRouter } from "expo-router";
+import { useMemo } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { fontScale, moderateScale } from "../../theme/scale";
+import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Action = {
-  iconSet: 'feather' | 'mci';
-  icon: keyof typeof Feather.glyphMap | keyof typeof MaterialCommunityIcons.glyphMap;
+  iconSet: "feather" | "mci";
+  icon:
+    | keyof typeof Feather.glyphMap
+    | keyof typeof MaterialCommunityIcons.glyphMap;
   title: string;
   sub: string;
   route?: Href;
 };
 
 const actions: Action[] = [
-  { iconSet: 'feather', icon: 'arrow-up-right', title: 'Send money', sub: 'To bank or mobile', route: '/send' },
-  { iconSet: 'feather', icon: 'arrow-down-left', title: 'Request money', sub: 'From anyone' },
-  { iconSet: 'mci', icon: 'qrcode-scan', title: 'Scan to pay', sub: 'Instantly' },
-  { iconSet: 'feather', icon: 'file-text', title: 'Pay bill', sub: 'Utilities & more' },
+  {
+    iconSet: "feather",
+    icon: "arrow-up-right",
+    title: "Send money",
+    sub: "To bank or mobile",
+    route: "/send",
+  },
+  {
+    iconSet: "feather",
+    icon: "arrow-down-left",
+    title: "Request money",
+    sub: "From anyone",
+  },
+  {
+    iconSet: "mci",
+    icon: "qrcode-scan",
+    title: "Scan to pay",
+    sub: "Instantly",
+  },
+  {
+    iconSet: "feather",
+    icon: "file-text",
+    title: "Pay bill",
+    sub: "Utilities & more",
+  },
 ];
 
 export function PayQuickActions() {
   const router = useRouter();
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles, iconSize } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -32,22 +56,36 @@ export function PayQuickActions() {
     return {
       iconSize: s(20),
       styles: StyleSheet.create({
-        row: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: s(13) },
-        item: { flex: 1, alignItems: 'center' },
+        row: {
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: s(13),
+        },
+        item: { flex: 1, alignItems: "center" },
         iconBox: {
           width: s(52),
           height: s(52),
           borderRadius: s(26),
-          backgroundColor: 'rgba(167,139,250,0.15)',
-          justifyContent: 'center',
-          alignItems: 'center',
+          backgroundColor: themeColors.primaryTint,
+          justifyContent: "center",
+          alignItems: "center",
           marginBottom: s(8),
         },
-        title: { color: colors.textPrimary, fontSize: f(11), fontWeight: '600', textAlign: 'center' },
-        sub: { color: colors.textSecondary, fontSize: f(9), textAlign: 'center', marginTop: s(2) },
+        title: {
+          color: themeColors.textPrimary,
+          fontSize: f(11),
+          fontWeight: "600",
+          textAlign: "center",
+        },
+        sub: {
+          color: themeColors.textSecondary,
+          fontSize: f(9),
+          textAlign: "center",
+          marginTop: s(2),
+        },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   const handlePress = (action: Action) => {
     if (action.route) {
@@ -59,15 +97,23 @@ export function PayQuickActions() {
   return (
     <View style={styles.row}>
       {actions.map((a) => (
-        <TouchableOpacity key={a.title} style={styles.item} onPress={() => handlePress(a)}>
+        <TouchableOpacity
+          key={a.title}
+          style={styles.item}
+          onPress={() => handlePress(a)}
+        >
           <View style={styles.iconBox}>
-            {a.iconSet === 'feather' ? (
-              <Feather name={a.icon as keyof typeof Feather.glyphMap} size={iconSize} color={colors.primaryLight} />
+            {a.iconSet === "feather" ? (
+              <Feather
+                name={a.icon as keyof typeof Feather.glyphMap}
+                size={iconSize}
+                color={themeColors.primaryLight}
+              />
             ) : (
               <MaterialCommunityIcons
                 name={a.icon as keyof typeof MaterialCommunityIcons.glyphMap}
                 size={iconSize}
-                color={colors.primaryLight}
+                color={themeColors.primaryLight}
               />
             )}
           </View>

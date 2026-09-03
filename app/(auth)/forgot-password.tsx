@@ -1,7 +1,7 @@
 // app/(auth)/forgot-password.tsx
-import { Feather } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { useState } from 'react';
+import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -12,25 +12,27 @@ import {
   Text,
   TextInput,
   View,
-} from 'react-native';
-import { colors } from '../../src/theme/colors';
+} from "react-native";
+import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function ForgotPasswordScreen() {
-  const [email, setEmail] = useState('');
+  const { colors: themeColors } = useTheme();
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [emailError, setEmailError] = useState("");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
-      setEmailError('Email address is required');
+      setEmailError("Email address is required");
       return false;
     }
     if (!emailRegex.test(email)) {
-      setEmailError('Please enter a valid email address');
+      setEmailError("Please enter a valid email address");
       return false;
     }
-    setEmailError('');
+    setEmailError("");
     return true;
   };
 
@@ -41,24 +43,24 @@ export default function ForgotPasswordScreen() {
 
     try {
       setLoading(true);
-      
+
       // TODO: Implement actual reset link sending
       // await sendResetLink({ email });
-      
+
       Alert.alert(
-        'Reset Link Sent',
-        'We\'ve sent a password reset link to your email address. Please check your inbox.',
+        "Reset Link Sent",
+        "We've sent a password reset link to your email address. Please check your inbox.",
         [
           {
-            text: 'OK',
-            onPress: () => router.push('/(auth)/reset-password'),
+            text: "OK",
+            onPress: () => router.push("/(auth)/reset-password"),
           },
-        ]
+        ],
       );
     } catch (error) {
       Alert.alert(
-        'Error',
-        'Unable to send reset link. Please try again later.'
+        "Error",
+        "Unable to send reset link. Please try again later.",
       );
     } finally {
       setLoading(false);
@@ -67,18 +69,21 @@ export default function ForgotPasswordScreen() {
 
   const handleResetWithPhone = () => {
     // Navigate to phone reset
-    Alert.alert('Coming Soon', 'Phone number reset will be available soon.');
+    Alert.alert("Coming Soon", "Phone number reset will be available soon.");
   };
 
   const handleContactSupport = () => {
     // Navigate to support or open email
-    Alert.alert('Contact Support', 'Support contact information will be available soon.');
+    Alert.alert(
+      "Contact Support",
+      "Support contact information will be available soon.",
+    );
   };
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -87,10 +92,7 @@ export default function ForgotPasswordScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Pressable
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
+          <Pressable style={styles.backButton} onPress={() => router.back()}>
             <Feather name="arrow-left" size={24} color={colors.textPrimary} />
           </Pressable>
           <Text style={styles.title}>Forgot Password</Text>
@@ -102,21 +104,24 @@ export default function ForgotPasswordScreen() {
             Reset your password securely 🛡️
           </Text>
           <Text style={styles.subDescription}>
-            No worries! Enter the email address linked to your Aurelius account and we'll send you a link to reset your password.
+            No worries! Enter the email address linked to your Aurelius account
+            and we&apos;ll send you a link to reset your password.
           </Text>
         </View>
 
         {/* Email Input */}
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Email Address</Text>
-          <View style={[
-            styles.inputContainer,
-            emailError && styles.inputContainerError,
-          ]}>
+          <View
+            style={[
+              styles.inputContainer,
+              emailError && styles.inputContainerError,
+            ]}
+          >
             <Feather
               name="mail"
               size={20}
-              color={emailError ? '#FF3B30' : colors.primaryLight}
+              color={emailError ? "#FF3B30" : colors.primaryLight}
             />
             <TextInput
               style={styles.input}
@@ -134,9 +139,7 @@ export default function ForgotPasswordScreen() {
               onSubmitEditing={handleSendResetLink}
             />
           </View>
-          {emailError && (
-            <Text style={styles.errorText}>{emailError}</Text>
-          )}
+          {emailError && <Text style={styles.errorText}>{emailError}</Text>}
         </View>
 
         {/* Security Card */}
@@ -149,7 +152,8 @@ export default function ForgotPasswordScreen() {
               Your security is our priority
             </Text>
             <Text style={styles.securityText}>
-              We'll send a secure password reset link to help you regain access to your account.
+              We&apos;ll send a secure password reset link to help you regain
+              access to your account.
             </Text>
           </View>
         </View>
@@ -165,7 +169,7 @@ export default function ForgotPasswordScreen() {
           disabled={loading || !email}
         >
           <Text style={styles.sendButtonText}>
-            {loading ? 'Sending...' : 'Send Reset Link'}
+            {loading ? "Sending..." : "Send Reset Link"}
           </Text>
         </Pressable>
 
@@ -190,9 +194,15 @@ export default function ForgotPasswordScreen() {
             </View>
             <View style={styles.optionContent}>
               <Text style={styles.optionTitle}>Reset using Phone Number</Text>
-              <Text style={styles.optionSubtext}>Receive a reset link via SMS</Text>
+              <Text style={styles.optionSubtext}>
+                Receive a reset link via SMS
+              </Text>
             </View>
-            <Feather name="chevron-right" size={20} color={colors.textSecondary} />
+            <Feather
+              name="chevron-right"
+              size={20}
+              color={colors.textSecondary}
+            />
           </Pressable>
 
           <Pressable
@@ -207,16 +217,22 @@ export default function ForgotPasswordScreen() {
             </View>
             <View style={styles.optionContent}>
               <Text style={styles.optionTitle}>Contact Support</Text>
-              <Text style={styles.optionSubtext}>Get help from our support team</Text>
+              <Text style={styles.optionSubtext}>
+                Get help from our support team
+              </Text>
             </View>
-            <Feather name="chevron-right" size={20} color={colors.textSecondary} />
+            <Feather
+              name="chevron-right"
+              size={20}
+              color={colors.textSecondary}
+            />
           </Pressable>
         </View>
 
         {/* Back to Login */}
         <View style={styles.loginRow}>
           <Text style={styles.loginText}>Remember your password? </Text>
-          <Pressable onPress={() => router.replace('/(auth)/login')}>
+          <Pressable onPress={() => router.replace("/(auth)/login")}>
             <Text style={styles.loginLink}>Login</Text>
           </Pressable>
         </View>
@@ -234,14 +250,14 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     paddingHorizontal: 24,
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    paddingTop: Platform.OS === "ios" ? 50 : 30,
     paddingBottom: 30,
   },
 
   /* Header */
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 24,
   },
 
@@ -253,7 +269,7 @@ const styles = StyleSheet.create({
   title: {
     color: colors.textPrimary,
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 
   /* Description */
@@ -264,7 +280,7 @@ const styles = StyleSheet.create({
   description: {
     color: colors.textPrimary,
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 10,
     lineHeight: 26,
   },
@@ -283,14 +299,14 @@ const styles = StyleSheet.create({
   label: {
     color: colors.textPrimary,
     fontSize: 13,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: 8,
   },
 
   inputContainer: {
     height: 56,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 12,
     backgroundColor: colors.surface,
     borderWidth: 1,
@@ -300,7 +316,7 @@ const styles = StyleSheet.create({
   },
 
   inputContainerError: {
-    borderColor: '#FF3B30',
+    borderColor: "#FF3B30",
   },
 
   input: {
@@ -311,18 +327,18 @@ const styles = StyleSheet.create({
   },
 
   errorText: {
-    color: '#FF3B30',
+    color: "#FF3B30",
     fontSize: 12,
     marginTop: 4,
   },
 
   /* Security Card */
   securityCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(91, 33, 182, 0.05)',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(91, 33, 182, 0.05)",
     borderWidth: 1,
-    borderColor: 'rgba(91, 33, 182, 0.1)',
+    borderColor: "rgba(91, 33, 182, 0.1)",
     borderRadius: 14,
     padding: 16,
     marginBottom: 24,
@@ -332,9 +348,9 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: 'rgba(91, 33, 182, 0.08)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(91, 33, 182, 0.08)",
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 14,
   },
 
@@ -345,7 +361,7 @@ const styles = StyleSheet.create({
   securityTitle: {
     color: colors.textPrimary,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 2,
   },
 
@@ -360,8 +376,8 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 13,
     backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 24,
   },
 
@@ -375,15 +391,15 @@ const styles = StyleSheet.create({
   },
 
   sendButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: "700",
   },
 
   /* Divider */
   dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 24,
   },
 
@@ -396,7 +412,7 @@ const styles = StyleSheet.create({
   dividerText: {
     color: colors.textSecondary,
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
     paddingHorizontal: 16,
   },
 
@@ -407,8 +423,8 @@ const styles = StyleSheet.create({
   },
 
   optionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
@@ -425,9 +441,9 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 11,
-    backgroundColor: 'rgba(91, 33, 182, 0.08)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(91, 33, 182, 0.08)",
+    alignItems: "center",
+    justifyContent: "center",
     marginRight: 14,
   },
 
@@ -438,7 +454,7 @@ const styles = StyleSheet.create({
   optionTitle: {
     color: colors.textPrimary,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 2,
   },
 
@@ -449,10 +465,10 @@ const styles = StyleSheet.create({
 
   /* Login */
   loginRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 'auto',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "auto",
   },
 
   loginText: {
@@ -463,6 +479,6 @@ const styles = StyleSheet.create({
   loginLink: {
     color: colors.primaryLight,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

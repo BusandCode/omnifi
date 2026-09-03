@@ -1,19 +1,20 @@
 // app/(tabs)/_layout.tsx
-import { View, StyleSheet, Platform, AppState } from 'react-native';
-import { Tabs, useRouter, useSegments } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from '../../src/theme/colors';
-import { useAuthStore } from '../../src/store/authStore';
-import { useEffect, useRef } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs, useRouter, useSegments } from "expo-router";
+import { useEffect, useRef } from "react";
+import { AppState, Platform, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useAuthStore } from "../../src/store/authStore";
+import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 type IoniconName = keyof typeof Ionicons.glyphMap;
 
 const ICONS: Record<string, { outline: IoniconName; filled: IoniconName }> = {
-  home: { outline: 'home-outline', filled: 'home' },
-  invest: { outline: 'bar-chart-outline', filled: 'bar-chart' },
-  cards: { outline: 'card-outline', filled: 'card' },
-  lifestyle: { outline: 'grid-outline', filled: 'grid' },
+  home: { outline: "home-outline", filled: "home" },
+  invest: { outline: "bar-chart-outline", filled: "bar-chart" },
+  cards: { outline: "card-outline", filled: "card" },
+  lifestyle: { outline: "grid-outline", filled: "grid" },
 };
 
 function TabIcon({
@@ -35,19 +36,22 @@ function TabIcon({
 }
 
 function PayButton({ focused }: { focused: boolean }) {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View style={styles.payWrap}>
       {focused && <View style={styles.payGlow} />}
       <Ionicons
-        name={focused ? 'arrow-up-circle' : 'arrow-up-circle-outline'}
+        name={focused ? "arrow-up-circle" : "arrow-up-circle-outline"}
         size={24}
-        color={focused ? colors.primaryLight : colors.textSecondary}
+        color={focused ? themeColors.primaryLight : themeColors.textSecondary}
       />
     </View>
   );
 }
 
 export default function TabLayout() {
+  const { colors: themeColors } = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const segments = useSegments();
@@ -67,18 +71,18 @@ export default function TabLayout() {
 
   // Monitor app state for background/foreground transitions
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextAppState) => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
       // App came to foreground
       if (
         appStateRef.current.match(/inactive|background/) &&
-        nextAppState === 'active'
+        nextAppState === "active"
       ) {
         // Check if lock screen is needed
         if (isAuthenticated) {
           const needsLock = checkLockStatus();
           if (needsLock) {
             // Navigate to lock screen
-            router.replace('/(auth)/lock');
+            router.replace("/(auth)/lock");
             return;
           }
         }
@@ -99,8 +103,8 @@ export default function TabLayout() {
   useEffect(() => {
     if (isAuthenticated) {
       const needsLock = checkLockStatus();
-      if (needsLock && segments[0] === '(tabs)') {
-        router.replace('/(auth)/lock');
+      if (needsLock && segments[0] === "(tabs)") {
+        router.replace("/(auth)/lock");
       }
     }
   }, [segments, isAuthenticated]);
@@ -112,12 +116,16 @@ export default function TabLayout() {
         tabBarStyle: [
           styles.tabBar,
           {
-            height: 56 + (Platform.OS === 'ios' ? insets.bottom : insets.bottom + 12),
-            paddingBottom: Platform.OS === 'ios' ? insets.bottom : insets.bottom + 8,
+            height:
+              56 + (Platform.OS === "ios" ? insets.bottom : insets.bottom + 12),
+            paddingBottom:
+              Platform.OS === "ios" ? insets.bottom : insets.bottom + 8,
+            backgroundColor: themeColors.surface,
+            borderTopColor: themeColors.border,
           },
         ],
-        tabBarActiveTintColor: colors.primaryLight,
-        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarActiveTintColor: themeColors.primaryLight,
+        tabBarInactiveTintColor: themeColors.textSecondary,
         tabBarLabelStyle: styles.label,
         tabBarItemStyle: styles.item,
       }}
@@ -125,36 +133,44 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => <TabIcon tab="home" color={color} focused={focused} />,
+          title: "Home",
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon tab="home" color={color} focused={focused} />
+          ),
         }}
       />
       <Tabs.Screen
         name="invest"
         options={{
-          title: 'Invest',
-          tabBarIcon: ({ color, focused }) => <TabIcon tab="invest" color={color} focused={focused} />,
+          title: "Invest",
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon tab="invest" color={color} focused={focused} />
+          ),
         }}
       />
       <Tabs.Screen
         name="pay"
         options={{
-          title: 'Pay',
+          title: "Pay",
           tabBarIcon: ({ focused }) => <PayButton focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="cards"
         options={{
-          title: 'Cards',
-          tabBarIcon: ({ color, focused }) => <TabIcon tab="cards" color={color} focused={focused} />,
+          title: "Cards",
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon tab="cards" color={color} focused={focused} />
+          ),
         }}
       />
       <Tabs.Screen
         name="lifestyle"
         options={{
-          title: 'Lifestyle',
-          tabBarIcon: ({ color, focused }) => <TabIcon tab="lifestyle" color={color} focused={focused} />,
+          title: "Lifestyle",
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon tab="lifestyle" color={color} focused={focused} />
+          ),
         }}
       />
     </Tabs>
@@ -171,23 +187,23 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     elevation: 0,
     shadowOpacity: 0,
-    shadowColor: 'transparent',
-    overflow: 'hidden',
+    shadowColor: "transparent",
+    overflow: "hidden",
   },
   item: {
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   label: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: "600",
     marginTop: 2,
   },
   iconWrap: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   iconGlow: {
-    position: 'absolute',
+    position: "absolute",
     width: 44,
     height: 44,
     borderRadius: 22,
@@ -200,11 +216,11 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   payWrap: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   payGlow: {
-    position: 'absolute',
+    position: "absolute",
     width: 46,
     height: 46,
     borderRadius: 23,
