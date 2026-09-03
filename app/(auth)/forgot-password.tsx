@@ -1,9 +1,11 @@
 // app/(auth)/forgot-password.tsx
+
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -13,25 +15,30 @@ import {
   TextInput,
   View,
 } from "react-native";
+
 import { colors } from "../../src/theme/colors";
 import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function ForgotPasswordScreen() {
-  const { colors: themeColors } = useTheme();
+  const { colors: themeColors, mode } = useTheme();
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!email) {
       setEmailError("Email address is required");
       return false;
     }
+
     if (!emailRegex.test(email)) {
       setEmailError("Please enter a valid email address");
       return false;
     }
+
     setEmailError("");
     return true;
   };
@@ -55,12 +62,12 @@ export default function ForgotPasswordScreen() {
             text: "OK",
             onPress: () => router.push("/(auth)/reset-password"),
           },
-        ],
+        ]
       );
     } catch (error) {
       Alert.alert(
         "Error",
-        "Unable to send reset link. Please try again later.",
+        "Unable to send reset link. Please try again later."
       );
     } finally {
       setLoading(false);
@@ -68,21 +75,27 @@ export default function ForgotPasswordScreen() {
   };
 
   const handleResetWithPhone = () => {
-    // Navigate to phone reset
-    Alert.alert("Coming Soon", "Phone number reset will be available soon.");
+    Alert.alert(
+      "Coming Soon",
+      "Phone number reset will be available soon."
+    );
   };
 
   const handleContactSupport = () => {
-    // Navigate to support or open email
     Alert.alert(
       "Contact Support",
-      "Support contact information will be available soon.",
+      "Support contact information will be available soon."
     );
   };
 
   return (
     <KeyboardAvoidingView
-      style={[styles.container, { backgroundColor: themeColors.background }]}
+      style={[
+        styles.container,
+        {
+          backgroundColor: themeColors.background,
+        },
+      ]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
@@ -92,45 +105,111 @@ export default function ForgotPasswordScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color={colors.textPrimary} />
+          <Pressable
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Feather
+              name="arrow-left"
+              size={24}
+              color={themeColors.textPrimary}
+            />
           </Pressable>
-          <Text style={styles.title}>Forgot Password</Text>
+
+          <Text
+            style={[
+              styles.title,
+              { color: themeColors.textPrimary },
+            ]}
+          >
+            Forgot Password
+          </Text>
         </View>
 
-        {/* Description */}
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.description}>
-            Reset your password securely 🛡️
-          </Text>
-          <Text style={styles.subDescription}>
-            No worries! Enter the email address linked to your Aurelius account
-            and we&apos;ll send you a link to reset your password.
-          </Text>
+        {/* Hero Section */}
+        <View style={styles.heroSection}>
+          {/* Text */}
+          <View style={styles.descriptionContainer}>
+            <Text
+              style={[
+                styles.description,
+                { color: themeColors.textPrimary },
+              ]}
+            >
+              Reset your password securely
+            </Text>
+
+            <Text
+              style={[
+                styles.subDescription,
+                { color: themeColors.textSecondary },
+              ]}
+            >
+              No worries! Enter the email address linked to your Aurelius
+              account and we'll send you a link to reset your password.
+            </Text>
+          </View>
+
+          {/* Password Illustration */}
+          <View style={styles.illustration}>
+            <Image
+              source={
+                mode === "light"
+                  ? require("../../assets/password-light.png")
+                  : require("../../assets/password.png")
+              }
+              style={styles.passwordImage}
+              resizeMode="contain"
+            />
+          </View>
         </View>
 
         {/* Email Input */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Email Address</Text>
+          <Text
+            style={[
+              styles.label,
+              { color: themeColors.textPrimary },
+            ]}
+          >
+            Email Address
+          </Text>
+
           <View
             style={[
               styles.inputContainer,
-              emailError && styles.inputContainerError,
+              {
+                backgroundColor: themeColors.surface,
+                borderColor: emailError
+                  ? "#FF3B30"
+                  : themeColors.border,
+              },
             ]}
           >
             <Feather
               name="mail"
               size={20}
-              color={emailError ? "#FF3B30" : colors.primaryLight}
+              color={
+                emailError
+                  ? "#FF3B30"
+                  : themeColors.primaryLight
+              }
             />
+
             <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                { color: themeColors.textPrimary },
+              ]}
               placeholder="Enter your email address"
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.textSecondary}
               value={email}
               onChangeText={(text) => {
                 setEmail(text);
-                if (emailError) validateEmail(text);
+
+                if (emailError) {
+                  validateEmail(text);
+                }
               }}
               keyboardType="email-address"
               autoCapitalize="none"
@@ -139,21 +218,64 @@ export default function ForgotPasswordScreen() {
               onSubmitEditing={handleSendResetLink}
             />
           </View>
-          {emailError && <Text style={styles.errorText}>{emailError}</Text>}
+
+          {emailError && (
+            <Text style={styles.errorText}>
+              {emailError}
+            </Text>
+          )}
         </View>
 
         {/* Security Card */}
-        <View style={styles.securityCard}>
-          <View style={styles.securityIcon}>
-            <Feather name="shield" size={24} color={colors.primaryLight} />
+        <View
+          style={[
+            styles.securityCard,
+            {
+              backgroundColor:
+                mode === "light"
+                  ? "rgba(91, 33, 182, 0.04)"
+                  : "rgba(91, 33, 182, 0.05)",
+              borderColor:
+                mode === "light"
+                  ? "rgba(91, 33, 182, 0.12)"
+                  : "rgba(91, 33, 182, 0.1)",
+            },
+          ]}
+        >
+          <View
+            style={[
+              styles.securityIcon,
+              {
+                backgroundColor:
+                  "rgba(91, 33, 182, 0.08)",
+              },
+            ]}
+          >
+            <Feather
+              name="shield"
+              size={24}
+              color={themeColors.primaryLight}
+            />
           </View>
+
           <View style={styles.securityContent}>
-            <Text style={styles.securityTitle}>
+            <Text
+              style={[
+                styles.securityTitle,
+                { color: themeColors.textPrimary },
+              ]}
+            >
               Your security is our priority
             </Text>
-            <Text style={styles.securityText}>
-              We&apos;ll send a secure password reset link to help you regain
-              access to your account.
+
+            <Text
+              style={[
+                styles.securityText,
+                { color: themeColors.textSecondary },
+              ]}
+            >
+              We'll send a secure password reset link to help you
+              regain access to your account.
             </Text>
           </View>
         </View>
@@ -162,8 +284,14 @@ export default function ForgotPasswordScreen() {
         <Pressable
           style={({ pressed }) => [
             styles.sendButton,
-            (!email || loading) && styles.sendButtonDisabled,
-            pressed && !loading && styles.sendButtonPressed,
+            {
+              backgroundColor: themeColors.primary,
+            },
+            (!email || loading) &&
+              styles.sendButtonDisabled,
+            pressed &&
+              !loading &&
+              styles.sendButtonPressed,
           ]}
           onPress={handleSendResetLink}
           disabled={loading || !email}
@@ -175,65 +303,151 @@ export default function ForgotPasswordScreen() {
 
         {/* OR Divider */}
         <View style={styles.dividerContainer}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>OR</Text>
-          <View style={styles.dividerLine} />
+          <View
+            style={[
+              styles.dividerLine,
+              { backgroundColor: themeColors.border },
+            ]}
+          />
+
+          <Text
+            style={[
+              styles.dividerText,
+              { color: themeColors.textSecondary },
+            ]}
+          >
+            OR
+          </Text>
+
+          <View
+            style={[
+              styles.dividerLine,
+              { backgroundColor: themeColors.border },
+            ]}
+          />
         </View>
 
         {/* Alternative Options */}
         <View style={styles.optionsContainer}>
+          {/* Reset Using Phone */}
           <Pressable
             style={({ pressed }) => [
               styles.optionButton,
+              {
+                backgroundColor: themeColors.surface,
+                borderColor: themeColors.border,
+              },
               pressed && styles.optionButtonPressed,
             ]}
             onPress={handleResetWithPhone}
           >
             <View style={styles.optionIcon}>
-              <Feather name="phone" size={22} color={colors.primary} />
+              <Feather
+                name="phone"
+                size={22}
+                color={themeColors.primary}
+              />
             </View>
+
             <View style={styles.optionContent}>
-              <Text style={styles.optionTitle}>Reset using Phone Number</Text>
-              <Text style={styles.optionSubtext}>
+              <Text
+                style={[
+                  styles.optionTitle,
+                  { color: themeColors.textPrimary },
+                ]}
+              >
+                Reset using Phone Number
+              </Text>
+
+              <Text
+                style={[
+                  styles.optionSubtext,
+                  { color: themeColors.textSecondary },
+                ]}
+              >
                 Receive a reset link via SMS
               </Text>
             </View>
+
             <Feather
               name="chevron-right"
               size={20}
-              color={colors.textSecondary}
+              color={themeColors.textSecondary}
             />
           </Pressable>
 
+          {/* Contact Support */}
           <Pressable
             style={({ pressed }) => [
               styles.optionButton,
+              {
+                backgroundColor: themeColors.surface,
+                borderColor: themeColors.border,
+              },
               pressed && styles.optionButtonPressed,
             ]}
             onPress={handleContactSupport}
           >
             <View style={styles.optionIcon}>
-              <Feather name="headphones" size={22} color={colors.primary} />
+              <Feather
+                name="headphones"
+                size={22}
+                color={themeColors.primary}
+              />
             </View>
+
             <View style={styles.optionContent}>
-              <Text style={styles.optionTitle}>Contact Support</Text>
-              <Text style={styles.optionSubtext}>
+              <Text
+                style={[
+                  styles.optionTitle,
+                  { color: themeColors.textPrimary },
+                ]}
+              >
+                Contact Support
+              </Text>
+
+              <Text
+                style={[
+                  styles.optionSubtext,
+                  { color: themeColors.textSecondary },
+                ]}
+              >
                 Get help from our support team
               </Text>
             </View>
+
             <Feather
               name="chevron-right"
               size={20}
-              color={colors.textSecondary}
+              color={themeColors.textSecondary}
             />
           </Pressable>
         </View>
 
         {/* Back to Login */}
         <View style={styles.loginRow}>
-          <Text style={styles.loginText}>Remember your password? </Text>
-          <Pressable onPress={() => router.replace("/(auth)/login")}>
-            <Text style={styles.loginLink}>Login</Text>
+          <Text
+            style={[
+              styles.loginText,
+              { color: themeColors.textSecondary },
+            ]}
+          >
+            Remember your password?{" "}
+          </Text>
+
+          <Pressable
+            onPress={() =>
+              router.replace("/(auth)/login")
+            }
+          >
+            <Text
+              style={[
+                styles.loginLink,
+                { color: themeColors.primaryLight },
+              ]}
+            >
+              Login
+            </Text>
           </Pressable>
         </View>
       </ScrollView>
@@ -244,7 +458,6 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
 
   content: {
@@ -267,18 +480,24 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: colors.textPrimary,
     fontSize: 24,
     fontWeight: "700",
   },
 
-  /* Description */
+  /* Hero Section */
+  heroSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    minHeight: 150,
+    marginBottom: 24,
+  },
+
   descriptionContainer: {
-    marginBottom: 28,
+    flex: 1,
+    paddingRight: 8,
   },
 
   description: {
-    color: colors.textPrimary,
     fontSize: 20,
     fontWeight: "600",
     marginBottom: 10,
@@ -286,18 +505,29 @@ const styles = StyleSheet.create({
   },
 
   subDescription: {
-    color: colors.textSecondary,
     fontSize: 14,
     lineHeight: 22,
   },
 
-  /* Input */
+  /* Password Illustration */
+  illustration: {
+    width: 145,
+    height: 145,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  passwordImage: {
+    width: 180,
+    height: 165,
+  },
+
+  /* Email Input */
   inputGroup: {
     marginBottom: 20,
   },
 
   label: {
-    color: colors.textPrimary,
     fontSize: 13,
     fontWeight: "500",
     marginBottom: 8,
@@ -308,20 +538,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 16,
   },
 
-  inputContainerError: {
-    borderColor: "#FF3B30",
-  },
-
   input: {
     flex: 1,
-    color: colors.textPrimary,
     fontSize: 14,
     height: 56,
   },
@@ -336,9 +559,7 @@ const styles = StyleSheet.create({
   securityCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(91, 33, 182, 0.05)",
     borderWidth: 1,
-    borderColor: "rgba(91, 33, 182, 0.1)",
     borderRadius: 14,
     padding: 16,
     marginBottom: 24,
@@ -348,7 +569,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: "rgba(91, 33, 182, 0.08)",
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
@@ -359,14 +579,12 @@ const styles = StyleSheet.create({
   },
 
   securityTitle: {
-    color: colors.textPrimary,
     fontSize: 13,
     fontWeight: "600",
     marginBottom: 2,
   },
 
   securityText: {
-    color: colors.textSecondary,
     fontSize: 12,
     lineHeight: 16,
   },
@@ -375,7 +593,6 @@ const styles = StyleSheet.create({
   sendButton: {
     height: 56,
     borderRadius: 13,
-    backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 24,
@@ -406,11 +623,9 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: colors.border,
   },
 
   dividerText: {
-    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: "500",
     paddingHorizontal: 16,
@@ -425,9 +640,7 @@ const styles = StyleSheet.create({
   optionButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: 12,
     padding: 16,
   },
@@ -452,14 +665,12 @@ const styles = StyleSheet.create({
   },
 
   optionTitle: {
-    color: colors.textPrimary,
     fontSize: 14,
     fontWeight: "600",
     marginBottom: 2,
   },
 
   optionSubtext: {
-    color: colors.textSecondary,
     fontSize: 12,
   },
 
@@ -472,12 +683,10 @@ const styles = StyleSheet.create({
   },
 
   loginText: {
-    color: colors.textSecondary,
     fontSize: 14,
   },
 
   loginLink: {
-    color: colors.primaryLight,
     fontSize: 14,
     fontWeight: "600",
   },

@@ -13,14 +13,14 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
-// import { colors } from "../../theme/colors";
-import { colors } from "../../src/theme/colors";
 import { useTheme } from "../../src/theme/ThemeContext";
 
 type AuthMethod = "email" | "phone";
 
 export default function CreateAccountScreen() {
   const { colors: themeColors, mode } = useTheme();
+  const styles = getStyles(themeColors);
+
   const [authMethod, setAuthMethod] = useState<AuthMethod>("email");
 
   const [fullName, setFullName] = useState("");
@@ -131,7 +131,7 @@ export default function CreateAccountScreen() {
       >
         {/* Secure Signup badge */}
         {/* <View style={styles.secureLoginRow}>
-          <Feather name="shield" size={12} color={colors.primary} />
+          <Feather name="shield" size={12} color={themeColors.primary} />
           <Text style={styles.secureLoginText}>Secure Signup</Text>
         </View> */}
 
@@ -192,8 +192,8 @@ export default function CreateAccountScreen() {
               size={15}
               color={
                 authMethod === "email"
-                  ? colors.primaryLight
-                  : colors.textSecondary
+                  ? themeColors.primaryLight
+                  : themeColors.textSecondary
               }
             />
 
@@ -219,8 +219,8 @@ export default function CreateAccountScreen() {
               size={15}
               color={
                 authMethod === "phone"
-                  ? colors.primaryLight
-                  : colors.textSecondary
+                  ? themeColors.primaryLight
+                  : themeColors.textSecondary
               }
             />
 
@@ -237,6 +237,7 @@ export default function CreateAccountScreen() {
 
         {/* Full Name */}
         <InputField
+          themeColors={themeColors}
           label="Full Name"
           icon="user"
           placeholder="Enter your full name"
@@ -248,6 +249,7 @@ export default function CreateAccountScreen() {
         {/* Email / Phone */}
         {authMethod === "email" ? (
           <InputField
+            themeColors={themeColors}
             label="Email Address"
             icon="mail"
             placeholder="Enter your email address"
@@ -259,6 +261,7 @@ export default function CreateAccountScreen() {
           />
         ) : (
           <InputField
+            themeColors={themeColors}
             label="Phone Number"
             icon="phone"
             placeholder="Enter your phone number"
@@ -270,6 +273,7 @@ export default function CreateAccountScreen() {
 
         {/* Password */}
         <InputField
+          themeColors={themeColors}
           label="Create Password"
           icon="lock"
           placeholder="Create a strong password"
@@ -283,6 +287,7 @@ export default function CreateAccountScreen() {
 
         {/* Confirm Password */}
         <InputField
+          themeColors={themeColors}
           label="Confirm Password"
           icon="lock"
           placeholder="Confirm your password"
@@ -341,6 +346,7 @@ export default function CreateAccountScreen() {
 --------------------------------- */
 
 type InputFieldProps = {
+  themeColors: any;
   label: string;
   icon: keyof typeof Feather.glyphMap;
   placeholder: string;
@@ -355,6 +361,7 @@ type InputFieldProps = {
 };
 
 function InputField({
+  themeColors,
   label,
   icon,
   placeholder,
@@ -367,17 +374,19 @@ function InputField({
   autoCapitalize = "sentences",
   autoCorrect = true,
 }: InputFieldProps) {
+  const styles = getStyles(themeColors);
+
   return (
     <View style={styles.inputGroup}>
       <Text style={styles.inputLabel}>{label}</Text>
 
       <View style={styles.inputContainer}>
-        <Feather name={icon} size={16} color={colors.textSecondary} />
+        <Feather name={icon} size={16} color={themeColors.textSecondary} />
 
         <TextInput
           style={styles.input}
           placeholder={placeholder}
-          placeholderTextColor={colors.textSecondary}
+          placeholderTextColor={themeColors.textSecondary}
           value={value}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
@@ -388,7 +397,11 @@ function InputField({
 
         {rightIcon && (
           <Pressable onPress={onRightIconPress} hitSlop={10}>
-            <Feather name={rightIcon} size={17} color={colors.textSecondary} />
+            <Feather
+              name={rightIcon}
+              size={17}
+              color={themeColors.textSecondary}
+            />
           </Pressable>
         )}
       </View>
@@ -400,227 +413,229 @@ function InputField({
    Styles
 --------------------------------- */
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
+function getStyles(themeColors: any) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: themeColors.background,
+    },
 
-  content: {
-    flexGrow: 1,
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === "ios" ? 16 : 14,
-    paddingBottom: Platform.OS === "ios" ? 14 : 12,
-    justifyContent: "center",
-  },
+    content: {
+      flexGrow: 1,
+      paddingHorizontal: 20,
+      paddingTop: Platform.OS === "ios" ? 16 : 14,
+      paddingBottom: Platform.OS === "ios" ? 14 : 12,
+      justifyContent: "center",
+    },
 
-  /* Secure Signup badge */
-  secureLoginRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    alignSelf: "flex-end",
-    marginBottom: 8,
-  },
+    /* Secure Signup badge */
+    secureLoginRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+      alignSelf: "flex-end",
+      marginBottom: 8,
+    },
 
-  secureLoginText: {
-    color: colors.primary,
-    fontSize: 12,
-    fontWeight: "600",
-  },
+    secureLoginText: {
+      color: themeColors.primary,
+      fontSize: 12,
+      fontWeight: "600",
+    },
 
-  hero: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 16,
-  },
+    hero: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 16,
+    },
 
-  heroText: {
-    flex: 1,
-    paddingRight: 10,
-  },
+    heroText: {
+      flex: 1,
+      paddingRight: 10,
+    },
 
-  logoContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 14,
-  },
+    logoContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 14,
+    },
 
-  logoIcon: {
-    width: 50,
-    height: 50,
-  },
+    logoIcon: {
+      width: 50,
+      height: 50,
+    },
 
-  logoText: {
-    width: 124,
-    height: 34,
-    marginLeft: -26,
-    marginTop: 8,
-  },
+    logoText: {
+      width: 124,
+      height: 34,
+      marginLeft: -26,
+      marginTop: 8,
+    },
 
-  heading: {
-    color: colors.textPrimary,
-    fontSize: 23,
-    fontWeight: "700",
-    marginBottom: 6,
-  },
+    heading: {
+      color: themeColors.textPrimary,
+      fontSize: 23,
+      fontWeight: "700",
+      marginBottom: 6,
+    },
 
-  description: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
-  },
+    description: {
+      color: themeColors.textSecondary,
+      fontSize: 13,
+      lineHeight: 18,
+    },
 
-  illustration: {
-    width: 145,
-    height: 155,
-    position: "relative",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    illustration: {
+      width: 145,
+      height: 155,
+      position: "relative",
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  illustrationImage: {
-    width: 145,
-    height: 155,
-  },
+    illustrationImage: {
+      width: 145,
+      height: 155,
+    },
 
-  methodContainer: {
-    flexDirection: "row",
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 2,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
+    methodContainer: {
+      flexDirection: "row",
+      backgroundColor: themeColors.surface,
+      borderRadius: 12,
+      padding: 2,
+      marginBottom: 12,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+    },
 
-  methodButton: {
-    flex: 1,
-    height: 44,
-    borderRadius: 10,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 6,
-  },
+    methodButton: {
+      flex: 1,
+      height: 44,
+      borderRadius: 10,
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: 6,
+    },
 
-  methodButtonActive: {
-    backgroundColor: "rgba(91, 33, 182, 0.22)",
-    borderWidth: 1,
-    borderColor: colors.primaryLight,
-  },
+    methodButtonActive: {
+      backgroundColor: "rgba(91, 33, 182, 0.22)",
+      borderWidth: 1,
+      borderColor: themeColors.primaryLight,
+    },
 
-  methodText: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: "500",
-  },
+    methodText: {
+      color: themeColors.textSecondary,
+      fontSize: 13,
+      fontWeight: "500",
+    },
 
-  methodTextActive: {
-    color: colors.textPrimary,
-    fontWeight: "600",
-  },
+    methodTextActive: {
+      color: themeColors.textPrimary,
+      fontWeight: "600",
+    },
 
-  inputGroup: {
-    marginBottom: 10,
-  },
+    inputGroup: {
+      marginBottom: 10,
+    },
 
-  inputLabel: {
-    color: colors.textPrimary,
-    fontSize: 12,
-    fontWeight: "500",
-    marginBottom: 5,
-  },
+    inputLabel: {
+      color: themeColors.textPrimary,
+      fontSize: 12,
+      fontWeight: "500",
+      marginBottom: 5,
+    },
 
-  inputContainer: {
-    minHeight: 48,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-  },
+    inputContainer: {
+      minHeight: 48,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      backgroundColor: themeColors.surface,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+      borderRadius: 10,
+      paddingHorizontal: 12,
+    },
 
-  input: {
-    flex: 1,
-    color: colors.textPrimary,
-    fontSize: 13.5,
-    minHeight: 46,
-  },
+    input: {
+      flex: 1,
+      color: themeColors.textPrimary,
+      fontSize: 13.5,
+      minHeight: 46,
+    },
 
-  termsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 2,
-    marginBottom: 12,
-  },
+    termsRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: 2,
+      marginBottom: 12,
+    },
 
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 8,
-  },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderRadius: 4,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+      backgroundColor: themeColors.surface,
+      alignItems: "center",
+      justifyContent: "center",
+      marginRight: 8,
+    },
 
-  checkboxActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
+    checkboxActive: {
+      backgroundColor: themeColors.primary,
+      borderColor: themeColors.primary,
+    },
 
-  termsText: {
-    flex: 1,
-    color: colors.textSecondary,
-    fontSize: 11,
-    lineHeight: 16,
-  },
+    termsText: {
+      flex: 1,
+      color: themeColors.textSecondary,
+      fontSize: 11,
+      lineHeight: 16,
+    },
 
-  termsLink: {
-    color: colors.primaryLight,
-    fontWeight: "500",
-  },
+    termsLink: {
+      color: themeColors.primaryLight,
+      fontWeight: "500",
+    },
 
-  createButton: {
-    height: 52,
-    borderRadius: 12,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
+    createButton: {
+      height: 52,
+      borderRadius: 12,
+      backgroundColor: themeColors.primary,
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 12,
+    },
 
-  createButtonDisabled: {
-    opacity: 0.6,
-  },
+    createButtonDisabled: {
+      opacity: 0.6,
+    },
 
-  createButtonText: {
-    color: "#fff",
-    fontSize: 14.5,
-    fontWeight: "700",
-  },
+    createButtonText: {
+      color: "#fff",
+      fontSize: 14.5,
+      fontWeight: "700",
+    },
 
-  loginRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+    loginRow: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+    },
 
-  loginText: {
-    color: colors.textSecondary,
-    fontSize: 12,
-  },
+    loginText: {
+      color: themeColors.textSecondary,
+      fontSize: 12,
+    },
 
-  loginLink: {
-    color: colors.primaryLight,
-    fontSize: 12,
-    fontWeight: "600",
-  },
-});
+    loginLink: {
+      color: themeColors.primaryLight,
+      fontSize: 12,
+      fontWeight: "600",
+    },
+  });
+}

@@ -336,6 +336,7 @@ function getStyles(themeColors: any) {
     lockImage: {
       width: 150,
       height: 140,
+      transform: [{ rotate: "10deg" }],
     },
 
     inputGroup: {

@@ -29,7 +29,7 @@ export default function HomeScreen() {
           },
         ]}
       >
-        <Header name="Abdulsalam" avatarUri="https://i.pravatar.cc/300" />
+        <Header name="Suleiman A." avatarUri="https://i.pravatar.cc/300" />
         <BalanceCard
           visible={balanceVisible}
           onToggleVisible={() => setBalanceVisible((v) => !v)}
