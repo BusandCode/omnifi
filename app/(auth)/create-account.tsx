@@ -166,19 +166,15 @@ export default function CreateAccountScreen() {
           </View>
 
           <View style={styles.illustration}>
-            <View style={styles.document}>
-              <View style={styles.profileCircle}>
-                <Feather name="user" size={22} color={colors.primaryLight} />
-              </View>
-
-              <View style={styles.illustrationLine} />
-              <View style={[styles.illustrationLine, { width: 34 }]} />
-              <View style={[styles.illustrationLine, { width: 25 }]} />
-            </View>
-
-            <View style={styles.shield}>
-              <Feather name="check" size={22} color={colors.primaryLight} />
-            </View>
+            <Image
+              source={
+                mode === "light"
+                  ? require("../../assets/create-light.png")
+                  : require("../../assets/create.png")
+              }
+              style={styles.illustrationImage}
+              resizeMode="contain"
+            />
           </View>
         </View>
 
@@ -484,50 +480,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  document: {
-    width: 98,
-    height: 124,
-    borderRadius: 18,
-    borderWidth: 2,
-    borderColor: colors.primaryLight,
-    backgroundColor: "rgba(91, 33, 182, 0.25)",
-    alignItems: "center",
-    justifyContent: "center",
-    transform: [{ rotate: "5deg" }],
-  },
-
-  profileCircle: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: "rgba(91, 33, 182, 0.15)",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 10,
-  },
-
-  illustrationLine: {
-    width: 56,
-    height: 7,
-    borderRadius: 5,
-    backgroundColor: colors.primaryLight,
-    opacity: 0.8,
-    marginTop: 5,
-  },
-
-  shield: {
-    position: "absolute",
-    right: 0,
-    bottom: 0,
-    width: 66,
-    height: 70,
-    borderRadius: 18,
-    backgroundColor: "rgba(91, 33, 182, 0.9)",
-    borderWidth: 2,
-    borderColor: colors.primaryLight,
-    alignItems: "center",
-    justifyContent: "center",
-    transform: [{ rotate: "5deg" }],
+  illustrationImage: {
+    width: 145,
+    height: 155,
   },
 
   methodContainer: {

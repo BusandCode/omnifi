@@ -123,11 +123,15 @@ export default function LoginScreen() {
 
             {/* Lock Illustration */}
             <View style={styles.illustration}>
-              <View style={styles.lockShackle} />
-              <View style={styles.lockBody}>
-                <View style={styles.keyhole} />
-              </View>
-              <View style={styles.glowCircle} />
+              <Image
+                source={
+                  mode === "light"
+                    ? require("../../assets/lock-light.png")
+                    : require("../../assets/lock.png")
+                }
+                style={styles.lockImage}
+                resizeMode="contain"
+              />
             </View>
           </View>
 
@@ -329,45 +333,9 @@ function getStyles(themeColors: any) {
       position: "relative",
     },
 
-    lockShackle: {
-      position: "absolute",
-      top: 6,
-      width: 64,
-      height: 64,
-      borderRadius: 27,
-      borderWidth: 8,
-      borderColor: themeColors.primaryLight,
-      borderBottomColor: "transparent",
-    },
-
-    lockBody: {
-      width: 90,
-      height: 84,
-      borderRadius: 13,
-      backgroundColor: themeColors.primary,
-      borderWidth: 2,
-      borderColor: themeColors.primaryLight,
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: 34,
-    },
-
-    keyhole: {
-      width: 16,
-      height: 23,
-      borderRadius: 8,
-      backgroundColor: themeColors.background,
-    },
-
-    glowCircle: {
-      position: "absolute",
-      bottom: 2,
-      width: 98,
-      height: 18,
-      borderRadius: 44,
-      borderWidth: 1,
-      borderColor: themeColors.primaryLight,
-      opacity: 0.4,
+    lockImage: {
+      width: 150,
+      height: 140,
     },
 
     inputGroup: {
