@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { TradeHeader } from '../src/components/trade/TradeHeader';
-import { WalletBalanceCard } from '../src/components/trade/WalletBalanceCard';
-import { TradeTabs } from '../src/components/trade/TradeTabs';
-import { CryptoTradeSection } from '../src/components/trade/CryptoTradeSection';
-import { ReceiveCryptoCard } from '../src/components/trade/ReceiveCryptoCard';
-import { GiftCardsSection } from '../src/components/trade/GiftCardsSection';
-import { TrustBadges } from '../src/components/trade/TrustBadges';
-import { colors } from '../src/theme/colors';
-import { clamp } from '../src/theme/scale';
-import { ScaleProvider } from '../src/theme/ScaleContext';
+import { TradeHeader } from "../src/components/trade/TradeHeader";
+import { WalletBalanceCard } from "../src/components/trade/WalletBalanceCard";
+import { TradeTabs } from "../src/components/trade/TradeTabs";
+import { CryptoTradeSection } from "../src/components/trade/CryptoTradeSection";
+import { ReceiveCryptoCard } from "../src/components/trade/ReceiveCryptoCard";
+import { GiftCardsSection } from "../src/components/trade/GiftCardsSection";
+import { TrustBadges } from "../src/components/trade/TrustBadges";
+import { colors } from "../src/theme/colors";
+import { clamp } from "../src/theme/scale";
+import { ScaleProvider } from "../src/theme/ScaleContext";
+import { useTheme } from "../src/theme/ThemeContext";
 
 const BODY_ITEM_KEYS = ["trade", "receive", "giftcards", "trust"] as const;
 type BodyItemKey = (typeof BODY_ITEM_KEYS)[number];
@@ -27,7 +28,8 @@ const CONVERGENCE_EPSILON = 0.02;
 
 export default function TradeScreen() {
   const insets = useSafeAreaInsets();
-  const [tab, setTab] = useState<'crypto' | 'giftcards'>('crypto');
+  const { colors: themeColors } = useTheme();
+  const [tab, setTab] = useState<"crypto" | "giftcards">("crypto");
 
   const [bodyContainerHeight, setBodyContainerHeight] = useState(0);
   const [topHeight, setTopHeight] = useState(0);
@@ -50,7 +52,9 @@ export default function TradeScreen() {
   const makeItemLayoutHandler = useCallback(
     (key: BodyItemKey) => (e: LayoutChangeEvent) => {
       const h = e.nativeEvent.layout.height;
-      setItemHeights((prev) => (prev[key] === h ? prev : { ...prev, [key]: h }));
+      setItemHeights((prev) =>
+        prev[key] === h ? prev : { ...prev, [key]: h },
+      );
     },
     [],
   );
@@ -68,7 +72,7 @@ export default function TradeScreen() {
       (sum, k) => sum + itemHeights[k],
       0,
     );
-    
+
     const totalGaps = MIN_GAP * (BODY_ITEM_KEYS.length - 1);
     const availableForItems = bodyContainerHeight - BOTTOM_GAP - totalGaps;
 
@@ -85,7 +89,7 @@ export default function TradeScreen() {
     (sum, k) => sum + itemHeights[k],
     0,
   );
-  
+
   let gap = MIN_GAP;
   if (bodyContainerHeight > 0) {
     const leftover = bodyContainerHeight - BOTTOM_GAP - totalItemHeight;
@@ -96,9 +100,23 @@ export default function TradeScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          paddingBottom: insets.bottom,
+          backgroundColor: themeColors.background,
+        },
+      ]}
+    >
       <View
-        style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}
+        style={[
+          styles.fixedHeader,
+          {
+            paddingTop: insets.top + 8,
+            backgroundColor: themeColors.background,
+          },
+        ]}
         onLayout={onTopLayout}
       >
         <TradeHeader />
@@ -110,15 +128,15 @@ export default function TradeScreen() {
         <View
           style={[
             styles.content,
-            { 
+            {
               rowGap: gap,
               paddingBottom: BOTTOM_GAP,
               paddingTop: 4,
-            }
+            },
           ]}
           onLayout={onBodyContainerLayout}
         >
-          {tab === 'crypto' ? (
+          {tab === "crypto" ? (
             <>
               <View onLayout={makeItemLayoutHandler("trade")}>
                 <CryptoTradeSection />
@@ -142,9 +160,9 @@ export default function TradeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: colors.background 
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
   },
   fixedHeader: {
     paddingHorizontal: 20,
@@ -152,8 +170,8 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: colors.background,
   },
-  content: { 
-    flex: 1, 
+  content: {
+    flex: 1,
     paddingHorizontal: 20,
   },
 });

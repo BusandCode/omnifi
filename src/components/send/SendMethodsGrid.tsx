@@ -4,6 +4,7 @@ import { Ionicons, Feather } from "@expo/vector-icons";
 import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 export type SendMethod = "bank" | "phone" | "wallet" | "qr";
 
@@ -19,7 +20,9 @@ const methods: MethodDef[] = [
     id: "bank",
     title: "To Bank Account",
     sub: "Send to any\nbank account",
-    render: () => <Ionicons name="business" size={20} color={colors.primaryLight} />,
+    render: () => (
+      <Ionicons name="business" size={20} color={colors.primaryLight} />
+    ),
   },
   {
     id: "phone",
@@ -37,7 +40,9 @@ const methods: MethodDef[] = [
     id: "qr",
     title: "Scan QR Code",
     sub: "Scan and\nsend money",
-    render: () => <Feather name="maximize" size={20} color={colors.primaryLight} />,
+    render: () => (
+      <Feather name="maximize" size={20} color={colors.primaryLight} />
+    ),
   },
 ];
 
@@ -45,49 +50,53 @@ type Props = { onSelect: (method: SendMethod) => void };
 
 export function SendMethodsGrid({ onSelect }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
-  const { styles, iconSize } = useMemo(() => {
+  const { styles } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
     const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
 
     return {
-      iconSize: s(20),
       styles: StyleSheet.create({
         row: { flexDirection: "row", justifyContent: "space-between" },
-        item: { 
-          flex: 1, 
-          alignItems: "center", 
-          gap: s(8), 
-          paddingHorizontal: s(2) 
+        item: {
+          flex: 1,
+          alignItems: "center",
+          gap: s(8),
+          paddingHorizontal: s(2),
         },
         iconBox: {
-          width: s(52), 
-          height: s(52), 
-          borderRadius: s(26), 
-          backgroundColor: colors.surface,
-          justifyContent: "center", 
+          width: s(52),
+          height: s(52),
+          borderRadius: s(26),
+          backgroundColor: themeColors.surface,
+          justifyContent: "center",
           alignItems: "center",
         },
-        title: { 
-          color: colors.textPrimary, 
-          fontSize: f(10.5), 
-          fontWeight: "700", 
-          textAlign: "center" 
+        title: {
+          color: themeColors.textPrimary,
+          fontSize: f(10.5),
+          fontWeight: "700",
+          textAlign: "center",
         },
-        sub: { 
-          color: colors.textSecondary, 
-          fontSize: f(9), 
-          textAlign: "center", 
-          lineHeight: s(12) 
+        sub: {
+          color: themeColors.textSecondary,
+          fontSize: f(9),
+          textAlign: "center",
+          lineHeight: s(12),
         },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   return (
     <View style={styles.row}>
       {methods.map((m) => (
-        <TouchableOpacity key={m.id} style={styles.item} onPress={() => onSelect(m.id)}>
+        <TouchableOpacity
+          key={m.id}
+          style={styles.item}
+          onPress={() => onSelect(m.id)}
+        >
           <View style={styles.iconBox}>{m.render()}</View>
           <Text style={styles.title}>{m.title}</Text>
           <Text style={styles.sub}>{m.sub}</Text>

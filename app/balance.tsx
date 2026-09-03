@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Circle, Path, Rect, Text as SvgText } from "react-native-svg";
+import { useTheme } from "../src/theme/ThemeContext";
 
 // Self-contained palette matched to the target design.
 const palette = {
@@ -105,6 +106,7 @@ function WithdrawIllustration() {
 
 export default function BalanceScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
 
   const handleWithdraw = () => {
     router.push("/withdraw" as any);
@@ -137,48 +139,91 @@ export default function BalanceScreen() {
     <View
       style={[
         styles.container,
-        { paddingTop: insets.top + 6, paddingBottom: insets.bottom + 8 },
+        {
+          paddingTop: insets.top + 6,
+          paddingBottom: insets.bottom + 8,
+          backgroundColor: themeColors.background,
+        },
       ]}
     >
       {/* Header */}
       <View style={styles.headerRow}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <Feather name="chevron-left" size={24} color={palette.textPrimary} />
+          <Feather
+            name="chevron-left"
+            size={24}
+            color={themeColors.textPrimary}
+          />
         </Pressable>
-        <Text style={styles.headerTitle}>Available Balance</Text>
+        <Text style={[styles.headerTitle, { color: themeColors.textPrimary }]}>
+          Available Balance
+        </Text>
         <Pressable style={styles.infoButton}>
-          <Feather name="info" size={14} color={palette.textPrimary} />
+          <Feather name="info" size={14} color={themeColors.textPrimary} />
         </Pressable>
       </View>
 
       {/* Balance Card */}
-      <View style={styles.balanceCard}>
+      <View
+        style={[
+          styles.balanceCard,
+          {
+            backgroundColor: themeColors.surface,
+            borderColor: themeColors.border,
+          },
+        ]}
+      >
         <View style={styles.balanceTopRow}>
           <View style={styles.balanceTextBlock}>
             <View style={styles.balanceLabelRow}>
-              <Text style={styles.balanceLabel}>Available Balance</Text>
+              <Text
+                style={[
+                  styles.balanceLabel,
+                  { color: themeColors.textSecondary },
+                ]}
+              >
+                Available Balance
+              </Text>
               <Feather
                 name="help-circle"
                 size={13}
-                color="rgba(255,255,255,0.55)"
+                color={themeColors.textSecondary}
                 style={{ marginLeft: 4 }}
               />
             </View>
 
-            <Text style={styles.balanceAmount}>₦52,600.00</Text>
+            <Text
+              style={[styles.balanceAmount, { color: themeColors.textPrimary }]}
+            >
+              ₦52,600.00
+            </Text>
 
             <Pressable
               style={styles.totalEarningsRow}
               onPress={handleTransactionHistory}
             >
               <View>
-                <Text style={styles.totalEarningsLabel}>Total Earnings</Text>
-                <Text style={styles.totalEarningsAmount}>₦128,600.00</Text>
+                <Text
+                  style={[
+                    styles.totalEarningsLabel,
+                    { color: themeColors.textSecondary },
+                  ]}
+                >
+                  Total Earnings
+                </Text>
+                <Text
+                  style={[
+                    styles.totalEarningsAmount,
+                    { color: themeColors.textPrimary },
+                  ]}
+                >
+                  ₦128,600.00
+                </Text>
               </View>
               <Feather
                 name="chevron-right"
                 size={14}
-                color="rgba(255,255,255,0.5)"
+                color={themeColors.textSecondary}
               />
             </Pressable>
           </View>
@@ -197,35 +242,71 @@ export default function BalanceScreen() {
 
         <View style={styles.actionButtons}>
           <Pressable style={styles.actionButton} onPress={handleWithdraw}>
-            <Feather name="refresh-cw" size={14} color={palette.purpleIcon} />
-            <Text style={styles.actionButtonText}>Withdraw</Text>
+            <Feather name="refresh-cw" size={14} color={themeColors.primary} />
+            <Text
+              style={[styles.actionButtonText, { color: themeColors.primary }]}
+            >
+              Withdraw
+            </Text>
           </Pressable>
           <Pressable
             style={styles.actionButton}
             onPress={handleTransactionHistory}
           >
-            <Feather name="clock" size={14} color={palette.purpleIcon} />
-            <Text style={styles.actionButtonText}>Transaction History</Text>
+            <Feather name="clock" size={14} color={themeColors.primary} />
+            <Text
+              style={[styles.actionButtonText, { color: themeColors.primary }]}
+            >
+              Transaction History
+            </Text>
           </Pressable>
         </View>
       </View>
 
       {/* Info Banner */}
-      <View style={styles.infoBanner}>
-        <View style={styles.infoIconCircle}>
-          <Feather name="info" size={12} color={palette.purpleIcon} />
+      <View
+        style={[
+          styles.infoBanner,
+          {
+            backgroundColor: themeColors.surface,
+            borderColor: themeColors.border,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.infoIconCircle,
+            { backgroundColor: themeColors.primaryTint },
+          ]}
+        >
+          <Feather name="info" size={12} color={themeColors.primary} />
         </View>
-        <Text style={styles.infoBannerText} numberOfLines={1}>
+        <Text
+          style={[styles.infoBannerText, { color: themeColors.textSecondary }]}
+          numberOfLines={1}
+        >
           Amount you can withdraw to your bank account.
         </Text>
         <Pressable>
-          <Text style={styles.learnMore}>Learn more</Text>
+          <Text style={[styles.learnMore, { color: themeColors.primary }]}>
+            Learn more
+          </Text>
         </Pressable>
       </View>
 
       {/* Balance Breakdown */}
-      <View style={styles.breakdownCard}>
-        <Text style={styles.sectionTitle}>Balance Breakdown</Text>
+      <View
+        style={[
+          styles.breakdownCard,
+          {
+            backgroundColor: themeColors.surface,
+            borderColor: themeColors.border,
+          },
+        ]}
+      >
+        <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>
+          Balance Breakdown
+        </Text>
 
         <View style={styles.breakdownItem}>
           <View
@@ -234,13 +315,33 @@ export default function BalanceScreen() {
             <Feather name="user-plus" size={15} color={palette.green} />
           </View>
           <View style={styles.breakdownTextBlock}>
-            <Text style={styles.breakdownLabel}>Total Earnings</Text>
-            <Text style={styles.breakdownSubtext}>All time earnings</Text>
+            <Text
+              style={[
+                styles.breakdownLabel,
+                { color: themeColors.textPrimary },
+              ]}
+            >
+              Total Earnings
+            </Text>
+            <Text
+              style={[
+                styles.breakdownSubtext,
+                { color: themeColors.textSecondary },
+              ]}
+            >
+              All time earnings
+            </Text>
           </View>
-          <Text style={styles.breakdownAmount}>₦128,600.00</Text>
+          <Text
+            style={[styles.breakdownAmount, { color: themeColors.textPrimary }]}
+          >
+            ₦128,600.00
+          </Text>
         </View>
 
-        <View style={styles.divider} />
+        <View
+          style={[styles.divider, { backgroundColor: themeColors.border }]}
+        />
 
         <View style={styles.breakdownItem}>
           <View
@@ -252,15 +353,31 @@ export default function BalanceScreen() {
             <Feather name="loader" size={15} color={palette.purpleIcon} />
           </View>
           <View style={styles.breakdownTextBlock}>
-            <Text style={styles.breakdownLabel}>Pending Balance</Text>
-            <Text style={styles.breakdownSubtext}>Pending transactions</Text>
+            <Text
+              style={[
+                styles.breakdownLabel,
+                { color: themeColors.textPrimary },
+              ]}
+            >
+              Pending Balance
+            </Text>
+            <Text
+              style={[
+                styles.breakdownSubtext,
+                { color: themeColors.textSecondary },
+              ]}
+            >
+              Pending transactions
+            </Text>
           </View>
           <Text style={[styles.breakdownAmount, { color: palette.amber }]}>
             ₦76,000.00
           </Text>
         </View>
 
-        <View style={styles.divider} />
+        <View
+          style={[styles.divider, { backgroundColor: themeColors.border }]}
+        />
 
         <View style={styles.breakdownItem}>
           <View
@@ -269,8 +386,22 @@ export default function BalanceScreen() {
             <Feather name="credit-card" size={15} color={palette.blue} />
           </View>
           <View style={styles.breakdownTextBlock}>
-            <Text style={styles.breakdownLabel}>Available Balance</Text>
-            <Text style={styles.breakdownSubtext}>Ready to withdraw</Text>
+            <Text
+              style={[
+                styles.breakdownLabel,
+                { color: themeColors.textPrimary },
+              ]}
+            >
+              Available Balance
+            </Text>
+            <Text
+              style={[
+                styles.breakdownSubtext,
+                { color: themeColors.textSecondary },
+              ]}
+            >
+              Ready to withdraw
+            </Text>
           </View>
           <Text style={[styles.breakdownAmount, { color: palette.green }]}>
             ₦52,600.00
@@ -279,8 +410,18 @@ export default function BalanceScreen() {
       </View>
 
       {/* How to withdraw — steps + SVG illustration, side by side */}
-      <View style={styles.howToCard}>
-        <Text style={styles.sectionTitle}>How to withdraw</Text>
+      <View
+        style={[
+          styles.howToCard,
+          {
+            backgroundColor: themeColors.surface,
+            borderColor: themeColors.border,
+          },
+        ]}
+      >
+        <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>
+          How to withdraw
+        </Text>
         <View style={styles.howToRow}>
           <View style={styles.stepsColumn}>
             {steps.map((step, i) => (
@@ -295,8 +436,21 @@ export default function BalanceScreen() {
                   <Text style={styles.stepNumberText}>{step.n}</Text>
                 </View>
                 <View style={styles.stepContent}>
-                  <Text style={styles.stepTitle}>{step.title}</Text>
-                  <Text style={styles.stepDescription} numberOfLines={1}>
+                  <Text
+                    style={[
+                      styles.stepTitle,
+                      { color: themeColors.textPrimary },
+                    ]}
+                  >
+                    {step.title}
+                  </Text>
+                  <Text
+                    style={[
+                      styles.stepDescription,
+                      { color: themeColors.textSecondary },
+                    ]}
+                    numberOfLines={1}
+                  >
                     {step.desc}
                   </Text>
                 </View>
@@ -310,7 +464,13 @@ export default function BalanceScreen() {
         </View>
       </View>
 
-      <Pressable style={styles.withdrawNowButton} onPress={handleWithdraw}>
+      <Pressable
+        style={[
+          styles.withdrawNowButton,
+          { backgroundColor: themeColors.primary },
+        ]}
+        onPress={handleWithdraw}
+      >
         <Ionicons name="business" size={17} color="#fff" />
         <Text style={styles.withdrawNowText}>Withdraw Now</Text>
       </Pressable>
@@ -472,9 +632,9 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     flex: 1,
     gap: 6,
-    backgroundColor: "rgba(255,255,255,0.06)",
+    backgroundColor: palette.surface,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
+    borderColor: palette.surfaceBorder,
   },
   actionButtonText: {
     color: palette.purpleIcon,

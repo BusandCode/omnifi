@@ -1,15 +1,20 @@
 // src/components/lifestyle/CategoriesRow.tsx
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../theme/colors";
 import { useTheme } from "../../theme/ThemeContext";
 
-type Category = { icon: keyof typeof Ionicons.glyphMap; label: string };
+type Category = {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  route?: string;
+};
 
 const categories: Category[] = [
-  { icon: "airplane", label: "Flights" },
+  { icon: "airplane", label: "Flights", route: "/flights" },
   { icon: "business", label: "Hotels" },
-  { icon: "restaurant", label: "Food" },
+  { icon: "restaurant", label: "Food", route: "/food" },
   { icon: "bag", label: "Shopping" },
   { icon: "film", label: "Entertainment" },
   { icon: "car", label: "Transport" },
@@ -17,6 +22,7 @@ const categories: Category[] = [
 
 export function CategoriesRow() {
   const { colors: themeColors } = useTheme();
+  const router = useRouter();
 
   return (
     <View>
@@ -42,6 +48,8 @@ export function CategoriesRow() {
                 borderColor: themeColors.primaryTint,
               },
             ]}
+            onPress={() => c.route && router.push(c.route)}
+            disabled={!c.route}
           >
             <Ionicons
               name={c.icon}

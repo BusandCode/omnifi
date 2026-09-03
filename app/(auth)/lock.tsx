@@ -1,5 +1,5 @@
 // app/(auth)/lock.tsx
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
@@ -15,7 +15,6 @@ import {
   View,
 } from "react-native";
 import { useAuthStore } from "../../src/store/authStore";
-import { colors } from "../../src/theme/colors";
 import { useTheme } from "../../src/theme/ThemeContext";
 
 const PIN_LENGTH = 4;
@@ -32,7 +31,8 @@ export default function LockScreen() {
   const [isLocked, setIsLocked] = useState(false);
   const [lockTimer, setLockTimer] = useState(0);
   const { setLastActivity } = useAuthStore();
-  const { colors: themeColors } = useTheme();
+  const { colors: themeColors, mode } = useTheme();
+  const styles = getStyles(themeColors);
 
   // Auto-lock after 5 failed attempts
   const MAX_ATTEMPTS = 5;
@@ -184,7 +184,7 @@ export default function LockScreen() {
           <Feather
             name="delete"
             size={20}
-            color={isLocked ? colors.textSecondary : colors.textPrimary}
+            color={isLocked ? themeColors.textSecondary : themeColors.textPrimary}
           />
         </Pressable>
       );
@@ -230,23 +230,37 @@ export default function LockScreen() {
         contentContainerStyle={styles.content}
         bounces={false}
       >
+        {/* Secure Login badge */}
+        <View style={styles.secureLoginRow}>
+          <Feather name="shield" size={12} color={themeColors.primary} />
+          <Text style={styles.secureLoginText}>Secure Login</Text>
+        </View>
+
         {/* Logo, Welcome text & Lock Illustration */}
         <View style={styles.header}>
           <View style={styles.headerCol}>
             <View style={styles.logoContainer}>
               <Image
-                source={require("../../assets/logo.png")}
+                source={
+                  mode === "light"
+                    ? require("../../assets/logo-white.png")
+                    : require("../../assets/logo.png")
+                }
                 style={styles.logoIcon}
                 resizeMode="contain"
               />
               <Image
-                source={require("../../assets/logo-text.png")}
+                source={
+                  mode === "light"
+                    ? require("../../assets/logo-text-white.png")
+                    : require("../../assets/logo-text.png")
+                }
                 style={styles.logoText}
                 resizeMode="contain"
               />
             </View>
             <View style={styles.headerText}>
-              <Text style={styles.welcomeText}>Welcome back! 🎉</Text>
+              <Text style={styles.welcomeText}>Welcome back! 👋</Text>
               <Text style={styles.subtitle}>
                 Login securely with your PIN{"\n"}to continue
               </Text>
@@ -255,17 +269,20 @@ export default function LockScreen() {
 
           {/* Lock Illustration */}
           <View style={styles.illustration}>
-            <View style={styles.lockShackle} />
-            <View style={styles.lockBody}>
-              <View style={styles.keyhole} />
-            </View>
-            <View style={styles.glowCircle} />
+            <Image
+              source={
+                mode === "light"
+                  ? require("../../assets/lock-light.png")
+                  : require("../../assets/lock.png")
+              }
+              style={styles.lockImage}
+              resizeMode="contain"
+            />
           </View>
         </View>
 
         {/* PIN Input */}
         <View style={styles.pinContainer}>
-          <View style={styles.pinDotsContainer}>{renderPinDots()}</View>
           {error ? (
             <Text style={styles.errorText}>{error}</Text>
           ) : (
@@ -273,6 +290,7 @@ export default function LockScreen() {
               {isLocked ? `Locked for ${lockTimer}s` : "Enter your 4-digit PIN"}
             </Text>
           )}
+          <View style={styles.pinDotsContainer}>{renderPinDots()}</View>
         </View>
 
         {/* Forgot PIN */}
@@ -336,29 +354,37 @@ export default function LockScreen() {
           }}
           disabled={loading || isLocked}
         >
+          <View style={styles.biometricIconBubble}>
+            <MaterialCommunityIcons
+              name="fingerprint"
+              size={22}
+              color={isLocked ? themeColors.textSecondary : themeColors.primary}
+            />
+          </View>
+          <View style={styles.biometricTextCol}>
+            <Text
+              style={[
+                styles.biometricText,
+                isLocked && styles.biometricTextDisabled,
+              ]}
+            >
+              Login with Biometrics
+            </Text>
+            <Text
+              style={[
+                styles.biometricSubtext,
+                isLocked && styles.biometricTextDisabled,
+              ]}
+            >
+              Use fingerprint or face ID
+            </Text>
+          </View>
           <Feather
-            name="smartphone"
-            size={20}
-            color={isLocked ? colors.textSecondary : colors.primary}
+            name="chevron-right"
+            size={18}
+            color={themeColors.textSecondary}
           />
-          <Text
-            style={[
-              styles.biometricText,
-              isLocked && styles.biometricTextDisabled,
-            ]}
-          >
-            Login with Biometrics
-          </Text>
         </Pressable>
-
-        <Text
-          style={[
-            styles.biometricSubtext,
-            isLocked && styles.biometricTextDisabled,
-          ]}
-        >
-          Use fingerprint or face ID
-        </Text>
 
         {/* Sign Up Link */}
         <View style={styles.signupRow}>
@@ -375,324 +401,315 @@ export default function LockScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
+function getStyles(themeColors: any) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: themeColors.background,
+    },
 
-  content: {
-    flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: Platform.OS === "ios" ? 40 : 20,
-    paddingBottom: 20,
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
+    content: {
+      flexGrow: 1,
+      paddingHorizontal: 24,
+      paddingTop: Platform.OS === "ios" ? 16 : 12,
+      paddingBottom: 20,
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
 
-  /* Header */
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-    paddingTop: 10,
-    // marginBottom: 8,
-    marginTop: 50,
-    minHeight: 130,
-  },
+    /* Secure Login badge */
+    secureLoginRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+      alignSelf: "flex-end",
+      marginBottom: 4,
+    },
 
-  headerCol: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    marginLeft: 10,
-    flex: 1,
-  },
+    secureLoginText: {
+      color: themeColors.primary,
+      fontSize: 11,
+      fontWeight: "600",
+    },
 
-  headerText: {
-    paddingRight: 10,
-  },
+    /* Header */
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      width: "100%",
+      paddingTop: 10,
+      marginTop: 20,
+      minHeight: 130,
+    },
 
-  logoContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    marginBottom: 10,
-    gap: 4,
-  },
+    headerCol: {
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      flex: 1,
+    },
 
-  logoIcon: {
-    width: 40,
-    height: 40,
-    marginLeft: -8,
-  },
+    headerText: {
+      paddingRight: 10,
+    },
 
-  logoText: {
-    width: 90,
-    height: 32,
-    marginTop: 6,
-    marginLeft: -18,
-  },
+    logoContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 14,
+    },
 
-  welcomeText: {
-    color: colors.textPrimary,
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 4,
-    textAlign: "left",
-  },
+    logoIcon: {
+      width: 44,
+      height: 44,
+      marginBottom: 2,
+    },
 
-  subtitle: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    textAlign: "left",
-    lineHeight: 16,
-  },
+    logoText: {
+      width: 110,
+      height: 30,
+      marginLeft: -23,
+      marginTop: 7,
+    },
 
-  /* Lock Illustration */
-  illustration: {
-    width: 150,
-    height: 140,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
+    welcomeText: {
+      color: themeColors.textPrimary,
+      fontSize: 21,
+      fontWeight: "700",
+      marginBottom: 6,
+      textAlign: "left",
+    },
 
-  lockShackle: {
-    position: "absolute",
-    top: 6,
-    width: 64,
-    height: 64,
-    borderRadius: 27,
-    borderWidth: 8,
-    borderColor: colors.primaryLight,
-    borderBottomColor: "transparent",
-  },
+    subtitle: {
+      color: themeColors.textSecondary,
+      fontSize: 12,
+      textAlign: "left",
+      lineHeight: 16,
+    },
 
-  lockBody: {
-    width: 90,
-    height: 84,
-    borderRadius: 13,
-    backgroundColor: colors.primary,
-    borderWidth: 2,
-    borderColor: colors.primaryLight,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 34,
-  },
+    /* Lock Illustration */
+    illustration: {
+      width: 150,
+      height: 140,
+      alignItems: "center",
+      justifyContent: "center",
+      position: "relative",
+    },
 
-  keyhole: {
-    width: 16,
-    height: 23,
-    borderRadius: 8,
-    backgroundColor: colors.background,
-  },
+    lockImage: {
+      width: 150,
+      height: 140,
+    },
 
-  glowCircle: {
-    position: "absolute",
-    bottom: 2,
-    width: 98,
-    height: 18,
-    borderRadius: 44,
-    borderWidth: 1,
-    borderColor: colors.primaryLight,
-    opacity: 0.4,
-  },
+    /* PIN Input */
+    pinContainer: {
+      width: "100%",
+      alignItems: "center",
+      paddingVertical: 6,
+    },
 
-  /* PIN Input */
-  pinContainer: {
-    width: "100%",
-    alignItems: "center",
-    paddingVertical: 6,
-  },
+    pinDotsContainer: {
+      flexDirection: "row",
+      gap: 16,
+      paddingVertical: 10,
+    },
 
-  pinDotsContainer: {
-    flexDirection: "row",
-    gap: 16,
-    paddingVertical: 8,
-  },
+    pinDot: {
+      width: 14,
+      height: 14,
+      borderRadius: 7,
+      borderWidth: 2.5,
+      borderColor: themeColors.border,
+      backgroundColor: "transparent",
+    },
 
-  pinDot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 2.5,
-    borderColor: colors.border,
-    backgroundColor: "transparent",
-  },
+    pinDotFilled: {
+      borderColor: themeColors.primary,
+      backgroundColor: themeColors.primary,
+    },
 
-  pinDotFilled: {
-    borderColor: colors.primary,
-    backgroundColor: colors.primary,
-  },
+    pinDotError: {
+      borderColor: "#FF3B30",
+    },
 
-  pinDotError: {
-    borderColor: "#FF3B30",
-  },
+    pinHint: {
+      color: themeColors.textPrimary,
+      fontSize: 14,
+      fontWeight: "600",
+    },
 
-  pinHint: {
-    color: colors.textSecondary,
-    fontSize: 11,
-    marginTop: 2,
-  },
+    errorText: {
+      color: "#FF3B30",
+      fontSize: 13,
+      fontWeight: "600",
+    },
 
-  errorText: {
-    color: "#FF3B30",
-    fontSize: 11,
-    marginTop: 2,
-    fontWeight: "500",
-  },
+    /* Forgot PIN */
+    forgotButton: {
+      paddingVertical: 6,
+      paddingHorizontal: 16,
+      marginBottom: 6,
+    },
 
-  /* Forgot PIN */
-  forgotButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 16,
-    marginBottom: 6,
-  },
+    forgotButtonPressed: {
+      opacity: 0.7,
+    },
 
-  forgotButtonPressed: {
-    opacity: 0.7,
-  },
+    forgotText: {
+      color: themeColors.primaryLight,
+      fontSize: 12,
+      fontWeight: "600",
+    },
 
-  forgotText: {
-    color: colors.primaryLight,
-    fontSize: 12,
-    fontWeight: "600",
-  },
+    /* Keypad - Smaller Circular */
+    keypad: {
+      width: "100%",
+      maxWidth: KEYPAD_MAX_WIDTH,
+      alignItems: "center",
+      gap: KEYPAD_GAP,
+      marginBottom: 6,
+    },
 
-  /* Keypad - Smaller Circular */
-  keypad: {
-    width: "100%",
-    maxWidth: KEYPAD_MAX_WIDTH,
-    alignItems: "center",
-    gap: KEYPAD_GAP,
-    marginBottom: 6,
-  },
+    keypadRow: {
+      flexDirection: "row",
+      justifyContent: "center",
+      gap: KEYPAD_GAP,
+    },
 
-  keypadRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: KEYPAD_GAP,
-  },
+    keypadKey: {
+      width: KEY_SIZE,
+      height: KEY_SIZE,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: KEY_SIZE / 2,
+      backgroundColor: themeColors.surface,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+    },
 
-  keypadKey: {
-    width: KEY_SIZE,
-    height: KEY_SIZE,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: KEY_SIZE / 2,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
+    keypadKeySpacer: {
+      width: KEY_SIZE,
+      height: KEY_SIZE,
+    },
 
-  keypadKeySpacer: {
-    width: KEY_SIZE,
-    height: KEY_SIZE,
-  },
+    keypadKeyDelete: {
+      backgroundColor: "transparent",
+      borderColor: "transparent",
+    },
 
-  keypadKeyDelete: {
-    backgroundColor: "transparent",
-    borderColor: "transparent",
-  },
+    keypadKeyPressed: {
+      backgroundColor: themeColors.border,
+      transform: [{ scale: 0.92 }],
+    },
 
-  keypadKeyPressed: {
-    backgroundColor: colors.border,
-    transform: [{ scale: 0.92 }],
-  },
+    keypadKeyText: {
+      color: themeColors.textPrimary,
+      fontSize: 24,
+      fontWeight: "600",
+      includeFontPadding: false,
+    },
 
-  keypadKeyText: {
-    color: colors.textPrimary,
-    fontSize: 22,
-    fontWeight: "600",
-    includeFontPadding: false,
-  },
+    keypadKeyLetters: {
+      color: themeColors.textSecondary,
+      fontSize: 9,
+      fontWeight: "500",
+      marginTop: 1,
+      includeFontPadding: false,
+    },
 
-  keypadKeyLetters: {
-    color: colors.textSecondary,
-    fontSize: 9,
-    fontWeight: "500",
-    marginTop: 1,
-    includeFontPadding: false,
-  },
+    keypadKeyDisabled: {
+      opacity: 0.4,
+    },
 
-  keypadKeyDisabled: {
-    opacity: 0.4,
-  },
+    /* Divider */
+    dividerContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      width: "100%",
+      maxWidth: 180,
+      marginBottom: 14,
+    },
 
-  /* Divider */
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    width: "100%",
-    maxWidth: 180,
-    marginBottom: 14,
-  },
+    dividerLine: {
+      flex: 1,
+      height: 1,
+      backgroundColor: themeColors.border,
+    },
 
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: colors.border,
-  },
+    dividerText: {
+      color: themeColors.textSecondary,
+      fontSize: 11,
+      paddingHorizontal: 10,
+      fontWeight: "500",
+    },
 
-  dividerText: {
-    color: colors.textSecondary,
-    fontSize: 11,
-    paddingHorizontal: 10,
-    fontWeight: "500",
-  },
+    /* Biometric */
+    biometricButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      width: "100%",
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+      borderRadius: 14,
+      backgroundColor: themeColors.surface,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+      marginBottom: 20,
+    },
 
-  /* Biometric */
-  biometricButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    backgroundColor: "rgba(91, 33, 182, 0.08)",
-    borderWidth: 1,
-    borderColor: "rgba(91, 33, 182, 0.15)",
-    marginBottom: 2,
-  },
+    biometricButtonPressed: {
+      backgroundColor: themeColors.border,
+      transform: [{ scale: 0.98 }],
+    },
 
-  biometricButtonPressed: {
-    backgroundColor: "rgba(91, 33, 182, 0.15)",
-    transform: [{ scale: 0.97 }],
-  },
+    biometricIconBubble: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(91, 33, 182, 0.15)",
+    },
 
-  biometricText: {
-    color: colors.primary,
-    fontSize: 13,
-    fontWeight: "600",
-  },
+    biometricTextCol: {
+      flex: 1,
+    },
 
-  biometricTextDisabled: {
-    opacity: 0.4,
-  },
+    biometricText: {
+      color: themeColors.textPrimary,
+      fontSize: 13,
+      fontWeight: "700",
+    },
 
-  biometricSubtext: {
-    color: colors.textSecondary,
-    fontSize: 10,
-    marginBottom: 6,
-  },
+    biometricSubtext: {
+      color: themeColors.textSecondary,
+      fontSize: 10.5,
+      marginTop: 2,
+    },
 
-  /* Sign Up */
-  signupRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 8,
-  },
+    biometricTextDisabled: {
+      opacity: 0.4,
+    },
 
-  signupText: {
-    color: colors.textSecondary,
-    fontSize: 11,
-  },
+    /* Sign Up */
+    signupRow: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingTop: 4,
+    },
 
-  signupLink: {
-    color: colors.primaryLight,
-    fontSize: 11,
-    fontWeight: "600",
-  },
-});
+    signupText: {
+      color: themeColors.textSecondary,
+      fontSize: 11,
+    },
+
+    signupLink: {
+      color: themeColors.primaryLight,
+      fontSize: 11,
+      fontWeight: "600",
+    },
+  });
+}

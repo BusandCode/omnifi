@@ -5,6 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -19,7 +20,7 @@ import { useTheme } from "../../src/theme/ThemeContext";
 type AuthMethod = "email" | "phone";
 
 export default function CreateAccountScreen() {
-  const { colors: themeColors } = useTheme();
+  const { colors: themeColors, mode } = useTheme();
   const [authMethod, setAuthMethod] = useState<AuthMethod>("email");
 
   const [fullName, setFullName] = useState("");
@@ -122,18 +123,37 @@ export default function CreateAccountScreen() {
       style={[styles.container, { backgroundColor: themeColors.background }]}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.content}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={styles.content}
+        bounces={false}
+      >
+        {/* Secure Signup badge */}
+        {/* <View style={styles.secureLoginRow}>
+          <Feather name="shield" size={12} color={colors.primary} />
+          <Text style={styles.secureLoginText}>Secure Signup</Text>
+        </View> */}
+
         {/* Header: Logo + Heading beside Illustration */}
         <View style={styles.hero}>
           <View style={styles.heroText}>
             <View style={styles.logoContainer}>
               <Image
-                source={require("../../assets/logo.png")}
+                source={
+                  mode === "light"
+                    ? require("../../assets/logo-white.png")
+                    : require("../../assets/logo.png")
+                }
                 style={styles.logoIcon}
                 resizeMode="contain"
               />
               <Image
-                source={require("../../assets/logo-text.png")}
+                source={
+                  mode === "light"
+                    ? require("../../assets/logo-text-white.png")
+                    : require("../../assets/logo-text.png")
+                }
                 style={styles.logoText}
                 resizeMode="contain"
               />
@@ -141,7 +161,7 @@ export default function CreateAccountScreen() {
 
             <Text style={styles.heading}>Create your account</Text>
             <Text style={styles.description}>
-              Join Aurelius and experience{"\n"}seamless payments.
+              Join Omnifi and experience{"\n"}seamless payments.
             </Text>
           </View>
 
@@ -315,7 +335,7 @@ export default function CreateAccountScreen() {
             <Text style={styles.loginLink}>Login</Text>
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
@@ -391,11 +411,26 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: Platform.OS === "ios" ? 16 : 14,
     paddingBottom: Platform.OS === "ios" ? 14 : 12,
     justifyContent: "center",
+  },
+
+  /* Secure Signup badge */
+  secureLoginRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    alignSelf: "flex-end",
+    marginBottom: 8,
+  },
+
+  secureLoginText: {
+    color: colors.primary,
+    fontSize: 12,
+    fontWeight: "600",
   },
 
   hero: {
@@ -411,49 +446,47 @@ const styles = StyleSheet.create({
   },
 
   logoContainer: {
-    alignItems: "center",
     flexDirection: "row",
-    justifyContent: "flex-start",
-    marginBottom: 12,
-    gap: 4,
+    alignItems: "center",
+    marginBottom: 14,
   },
 
   logoIcon: {
-    width: 46,
-    height: 46,
+    width: 50,
+    height: 50,
   },
 
   logoText: {
-    width: 120,
-    height: 40,
-    marginLeft: -14,
+    width: 124,
+    height: 34,
+    marginLeft: -26,
+    marginTop: 8,
   },
 
   heading: {
     color: colors.textPrimary,
-    fontSize: 19,
+    fontSize: 23,
     fontWeight: "700",
-    lineHeight: 24,
-    marginBottom: 4,
+    marginBottom: 6,
   },
 
   description: {
     color: colors.textSecondary,
-    fontSize: 11,
-    lineHeight: 15,
+    fontSize: 13,
+    lineHeight: 18,
   },
 
   illustration: {
-    width: 130,
-    height: 140,
+    width: 145,
+    height: 155,
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
   },
 
   document: {
-    width: 88,
-    height: 112,
+    width: 98,
+    height: 124,
     borderRadius: 18,
     borderWidth: 2,
     borderColor: colors.primaryLight,
@@ -464,18 +497,18 @@ const styles = StyleSheet.create({
   },
 
   profileCircle: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
-    backgroundColor: "rgba(139, 92, 246, 0.35)",
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: "rgba(91, 33, 182, 0.15)",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 10,
   },
 
   illustrationLine: {
-    width: 50,
-    height: 6,
+    width: 56,
+    height: 7,
     borderRadius: 5,
     backgroundColor: colors.primaryLight,
     opacity: 0.8,
@@ -486,9 +519,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     bottom: 0,
-    width: 60,
-    height: 64,
-    borderRadius: 17,
+    width: 66,
+    height: 70,
+    borderRadius: 18,
     backgroundColor: "rgba(91, 33, 182, 0.9)",
     borderWidth: 2,
     borderColor: colors.primaryLight,
@@ -509,7 +542,7 @@ const styles = StyleSheet.create({
 
   methodButton: {
     flex: 1,
-    height: 38,
+    height: 44,
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
@@ -525,7 +558,7 @@ const styles = StyleSheet.create({
 
   methodText: {
     color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "500",
   },
 
@@ -540,13 +573,13 @@ const styles = StyleSheet.create({
 
   inputLabel: {
     color: colors.textPrimary,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "500",
     marginBottom: 5,
   },
 
   inputContainer: {
-    minHeight: 42,
+    minHeight: 48,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
@@ -560,8 +593,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: colors.textPrimary,
-    fontSize: 12,
-    minHeight: 40,
+    fontSize: 13.5,
+    minHeight: 46,
   },
 
   termsRow: {
@@ -572,8 +605,8 @@ const styles = StyleSheet.create({
   },
 
   checkbox: {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: colors.border,
@@ -591,8 +624,8 @@ const styles = StyleSheet.create({
   termsText: {
     flex: 1,
     color: colors.textSecondary,
-    fontSize: 10,
-    lineHeight: 15,
+    fontSize: 11,
+    lineHeight: 16,
   },
 
   termsLink: {
@@ -601,7 +634,7 @@ const styles = StyleSheet.create({
   },
 
   createButton: {
-    height: 46,
+    height: 52,
     borderRadius: 12,
     backgroundColor: colors.primary,
     alignItems: "center",
@@ -615,7 +648,7 @@ const styles = StyleSheet.create({
 
   createButtonText: {
     color: "#fff",
-    fontSize: 13,
+    fontSize: 14.5,
     fontWeight: "700",
   },
 
@@ -627,12 +660,12 @@ const styles = StyleSheet.create({
 
   loginText: {
     color: colors.textSecondary,
-    fontSize: 11,
+    fontSize: 12,
   },
 
   loginLink: {
     color: colors.primaryLight,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "600",
   },
 });

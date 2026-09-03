@@ -8,16 +8,21 @@ import MoreBannerCard from "../src/components/more/MoreBannerCard";
 import ServicesGrid from "../src/components/more/ServicesGrid";
 import { MORE_SERVICES, MoreService } from "../src/config/moreServices";
 import { colors } from "../src/theme/colors";
+import { useTheme } from "../src/theme/ThemeContext";
 
 export default function MoreScreen() {
   const router = useRouter();
+  const { colors: themeColors } = useTheme();
 
   const handleServicePress = (service: MoreService) => {
     router.push(service.route as any);
   };
 
   return (
-    <SafeAreaView style={styles.screen} edges={["top", "bottom"]}>
+    <SafeAreaView
+      style={[styles.screen, { backgroundColor: themeColors.background }]}
+      edges={["top", "bottom"]}
+    >
       <MoreHeader onBack={() => router.back()} />
 
       <ScrollView
@@ -25,8 +30,13 @@ export default function MoreScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.sectionTitle}>Services</Text>
-        <ServicesGrid services={MORE_SERVICES} onServicePress={handleServicePress} />
+        <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>
+          Services
+        </Text>
+        <ServicesGrid
+          services={MORE_SERVICES}
+          onServicePress={handleServicePress}
+        />
         <MoreBannerCard />
       </ScrollView>
     </SafeAreaView>

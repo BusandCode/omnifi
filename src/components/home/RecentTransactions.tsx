@@ -15,8 +15,8 @@ type Transaction = {
   sub: string;
   amountNGN: number;
   time: string;
-  bg: string;
-  icon: React.ReactNode;
+  bg?: string;
+  icon?: React.ReactNode;
 };
 
 const transactions: Transaction[] = [
@@ -35,8 +35,7 @@ const transactions: Transaction[] = [
     sub: "Income",
     amountNGN: 2500000,
     time: "Yesterday, 9:15 AM",
-    bg: "#0A84FF",
-    icon: <Feather name="arrow-down" size={15} color="#fff" />,
+    // no icon/bg set — falls back to the generic credit icon below
   },
   {
     id: "3",
@@ -57,6 +56,20 @@ const transactions: Transaction[] = [
     icon: <MaterialCommunityIcons name="netflix" size={15} color="#fff" />,
   },
 ];
+
+// Fallback used only when a transaction doesn't specify its own icon/bg —
+// e.g. a merchant we don't have a brand icon for.
+function getFallbackVisual(amountNGN: number) {
+  const isCredit = amountNGN >= 0;
+  return {
+    icon: isCredit ? (
+      <Feather name="arrow-down-left" size={16} color="#fff" />
+    ) : (
+      <Feather name="arrow-up-right" size={16} color="#fff" />
+    ),
+    bg: isCredit ? "#1DB954" : "#E4302D",
+  };
+}
 
 type RecentTransactionsProps = {
   currency: CurrencyCode;
@@ -90,56 +103,68 @@ export function RecentTransactions({ currency }: RecentTransactionsProps) {
         </View>
       ) : (
         <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
-          {transactions.map((t, index) => (
-            <View
-              key={t.id}
-              style={[
-                styles.row,
-                index !== transactions.length - 1 && [
-                  styles.rowDivider,
-                  { borderBottomColor: themeColors.border },
-                ],
-              ]}
-            >
-              <View style={styles.left}>
-                <View style={[styles.iconCircle, { backgroundColor: t.bg }]}>
-                  {t.icon}
+          {transactions.map((t, index) => {
+            const fallback = getFallbackVisual(t.amountNGN);
+            const icon = t.icon ?? fallback.icon;
+            const bg = t.bg ?? fallback.bg;
+            const isCredit = t.amountNGN >= 0;
+
+            return (
+              <View
+                key={t.id}
+                style={[
+                  styles.row,
+                  index !== transactions.length - 1 && [
+                    styles.rowDivider,
+                    { borderBottomColor: themeColors.border },
+                  ],
+                ]}
+              >
+                <View style={styles.left}>
+                  <View style={[styles.iconCircle, { backgroundColor: bg }]}>
+                    {icon}
+                  </View>
+                  <View>
+                    <Text
+                      style={[
+                        styles.name,
+                        { color: themeColors.textPrimary },
+                      ]}
+                    >
+                      {t.name}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.sub,
+                        { color: themeColors.textSecondary },
+                      ]}
+                    >
+                      {t.sub}
+                    </Text>
+                  </View>
                 </View>
-                <View>
+                <View style={styles.right}>
                   <Text
-                    style={[styles.name, { color: themeColors.textPrimary }]}
+                    style={[
+                      styles.amount,
+                      {
+                        color: isCredit
+                          ? themeColors.success
+                          : themeColors.textPrimary,
+                      },
+                    ]}
                   >
-                    {t.name}
+                    {formatAmount(t.amountNGN, currency)}
                   </Text>
                   <Text
-                    style={[styles.sub, { color: themeColors.textSecondary }]}
+                    style={[styles.time, { color: themeColors.textSecondary }]}
                   >
-                    {t.sub}
+                    {t.time}
                   </Text>
                 </View>
               </View>
-              <View style={styles.right}>
-                <Text
-                  style={[
-                    styles.amount,
-                    {
-                      color:
-                        t.amountNGN < 0
-                          ? themeColors.textPrimary
-                          : themeColors.success,
-                    },
-                  ]}
-                >
-                  {formatAmount(t.amountNGN, currency)}
-                </Text>
-                <Text
-                  style={[styles.time, { color: themeColors.textSecondary }]}
-                >
-                  {t.time}
-                </Text>
-              </View>
-            </View>
-          ))}
+            );
+          })}
         </View>
       )}
     </View>

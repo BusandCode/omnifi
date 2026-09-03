@@ -1,25 +1,39 @@
 // MoreHeader.tsx — back button, "More" title, subtitle line
 // Note: parent screen is wrapped in SafeAreaView, so no top inset needed here.
-import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { ChevronLeft } from 'lucide-react-native';
-import { colors } from '../../theme/colors';
+import React from "react";
+import { View, Text, Pressable, StyleSheet } from "react-native";
+import { ChevronLeft } from "lucide-react-native";
+import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 interface Props {
   onBack?: () => void;
 }
 
 export default function MoreHeader({ onBack }: Props) {
+  const { colors: themeColors } = useTheme();
   return (
     <View style={styles.header}>
       <View style={styles.topRow}>
         <Pressable style={styles.iconBtn} onPress={onBack} hitSlop={10}>
-          <ChevronLeft color={colors.textPrimary} size={22} />
+          <ChevronLeft color={themeColors.textPrimary} size={22} />
         </Pressable>
-        <Text style={styles.title}>More</Text>
-        <View style={styles.iconBtn} />
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>
+          More
+        </Text>
+        <View
+          style={[
+            styles.iconBtn,
+            {
+              backgroundColor: themeColors.surface,
+              borderColor: themeColors.border,
+            },
+          ]}
+        />
       </View>
-      <Text style={styles.subtitle}>Pay bills, buy airtime and access more services</Text>
+      <Text style={styles.subtitle}>
+        Pay bills, buy airtime and access more services
+      </Text>
     </View>
   );
 }
@@ -31,9 +45,9 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   topRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   iconBtn: {
     width: 40,
@@ -42,18 +56,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     color: colors.textPrimary,
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   subtitle: {
     color: colors.textSecondary,
     fontSize: 12,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 10,
   },
 });

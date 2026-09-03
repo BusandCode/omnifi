@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   amountGroup: { flexDirection: "row", alignItems: "center", gap: 10 },
-  amount: { color: colors.textPrimary, fontSize: 20, fontWeight: "700" },
+  amount: { color: colors.textPrimary, fontSize: 20, fontWeight: "700",marginTop:-8,marginBottom:8 },
   dotsRow: { flexDirection: "row", alignItems: "center", gap: 6 },
   dot: {
     width: 9,

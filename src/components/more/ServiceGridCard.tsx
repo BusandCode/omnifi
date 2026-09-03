@@ -1,6 +1,6 @@
 // ServiceGridCard.tsx — single service tile (icon bubble + title + description)
-import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import {
   Smartphone,
   Wifi,
@@ -14,9 +14,10 @@ import {
   Plane,
   ShieldCheck,
   Banknote,
-} from 'lucide-react-native';
-import { colors } from '../../theme/colors';
-import { MoreService, MoreServiceIcon } from '../../config/moreServices';
+} from "lucide-react-native";
+import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
+import { MoreService, MoreServiceIcon } from "../../config/moreServices";
 
 const ICON_MAP: Record<MoreServiceIcon, React.ComponentType<any>> = {
   airtime: Smartphone,
@@ -39,15 +40,35 @@ interface Props {
 }
 
 export default function ServiceGridCard({ service, onPress }: Props) {
+  const { colors: themeColors } = useTheme();
   const Icon = ICON_MAP[service.key];
 
   return (
-    <Pressable style={styles.card} onPress={onPress}>
-      <View style={styles.iconBubble}>
-        <Icon color={colors.primary} size={22} />
+    <Pressable
+      style={[
+        styles.card,
+        {
+          backgroundColor: themeColors.surface,
+          borderColor: themeColors.border,
+        },
+      ]}
+      onPress={onPress}
+    >
+      <View
+        style={[
+          styles.iconBubble,
+          { backgroundColor: themeColors.primaryTint },
+        ]}
+      >
+        <Icon color={themeColors.primary} size={22} />
       </View>
-      <Text style={styles.title}>{service.title}</Text>
-      <Text style={styles.description} numberOfLines={2}>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>
+        {service.title}
+      </Text>
+      <Text
+        style={[styles.description, { color: themeColors.textSecondary }]}
+        numberOfLines={2}
+      >
         {service.description}
       </Text>
     </Pressable>
@@ -56,36 +77,36 @@ export default function ServiceGridCard({ service, onPress }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    width: '31%',
+    width: "31%",
     backgroundColor: colors.surface,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: colors.border,
     paddingVertical: 18,
     paddingHorizontal: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 12,
   },
   iconBubble: {
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: 'rgba(139, 92, 246, 0.12)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(139, 92, 246, 0.12)",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 10,
   },
   title: {
     color: colors.textPrimary,
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: "700",
     marginBottom: 4,
-    textAlign: 'center',
+    textAlign: "center",
   },
   description: {
     color: colors.textSecondary,
     fontSize: 9.5,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 13,
   },
 });

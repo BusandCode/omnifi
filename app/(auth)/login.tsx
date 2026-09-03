@@ -15,7 +15,6 @@ import {
   Image,
 } from "react-native";
 
-import { colors } from "../../src/theme/colors";
 import { useAuthStore } from "../../src/store/authStore";
 import { useTheme } from "../../src/theme/ThemeContext";
 
@@ -25,7 +24,8 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setAuthenticated } = useAuthStore();
-  const { colors: themeColors } = useTheme();
+  const { colors: themeColors, mode } = useTheme();
+  const styles = getStyles(themeColors);
 
   const handleLogin = async () => {
     if (!email.trim()) {
@@ -80,6 +80,12 @@ export default function LoginScreen() {
         contentContainerStyle={styles.content}
         bounces={false}
       >
+        {/* Secure Login badge */}
+        <View style={styles.secureLoginRow}>
+          <Feather name="shield" size={12} color={themeColors.primary} />
+          <Text style={styles.secureLoginText}>Secure Login</Text>
+        </View>
+
         {/* Centered main content */}
         <View style={styles.mainContent}>
           {/* Header with Logo and Welcome */}
@@ -88,12 +94,20 @@ export default function LoginScreen() {
               {/* Logo */}
               <View style={styles.logoContainer}>
                 <Image
-                  source={require("../../assets/logo.png")}
+                  source={
+                    mode === "light"
+                      ? require("../../assets/logo-white.png")
+                      : require("../../assets/logo.png")
+                  }
                   style={styles.logoIcon}
                   resizeMode="contain"
                 />
                 <Image
-                  source={require("../../assets/logo-text.png")}
+                  source={
+                    mode === "light"
+                      ? require("../../assets/logo-text-white.png")
+                      : require("../../assets/logo-text.png")
+                  }
                   style={styles.logoText}
                   resizeMode="contain"
                 />
@@ -121,11 +135,11 @@ export default function LoginScreen() {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email Address</Text>
             <View style={styles.inputContainer}>
-              <Feather name="mail" size={20} color={colors.primaryLight} />
+              <Feather name="mail" size={20} color={themeColors.primaryLight} />
               <TextInput
                 style={styles.input}
                 placeholder="Enter your email address"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={themeColors.textSecondary}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -140,11 +154,11 @@ export default function LoginScreen() {
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Password</Text>
             <View style={styles.inputContainer}>
-              <Feather name="lock" size={20} color={colors.primaryLight} />
+              <Feather name="lock" size={20} color={themeColors.primaryLight} />
               <TextInput
                 style={styles.input}
                 placeholder="Enter your password"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={themeColors.textSecondary}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
@@ -162,7 +176,7 @@ export default function LoginScreen() {
                 <Feather
                   name={showPassword ? "eye-off" : "eye"}
                   size={20}
-                  color={colors.primaryLight}
+                  color={themeColors.primaryLight}
                 />
               </Pressable>
             </View>
@@ -196,7 +210,7 @@ export default function LoginScreen() {
           {/* Security Card */}
           <View style={styles.securityCard}>
             <View style={styles.securityIcon}>
-              <Feather name="shield" size={30} color={colors.primaryLight} />
+              <Feather name="shield" size={20} color={themeColors.primary} />
             </View>
             <View style={styles.securityContent}>
               <Text style={styles.securityTitle}>Secure & Protected</Text>
@@ -223,246 +237,259 @@ export default function LoginScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
+function getStyles(themeColors: any) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: themeColors.background,
+    },
 
-  content: {
-    flexGrow: 1,
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === "ios" ? 50 : 30,
-    paddingBottom: 20,
-  },
+    content: {
+      flexGrow: 1,
+      paddingHorizontal: 20,
+      paddingTop: Platform.OS === "ios" ? 16 : 14,
+      paddingBottom: 20,
+    },
 
-  mainContent: {
-    flex: 1,
-    justifyContent: "center",
-  },
+    /* Secure Login badge */
+    secureLoginRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+      alignSelf: "flex-end",
+      marginBottom: 12,
+    },
 
-  logoContainer: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
-    gap: 4,
-  },
+    secureLoginText: {
+      color: themeColors.primary,
+      fontSize: 11,
+      fontWeight: "600",
+    },
 
-  logoIcon: {
-    width: 60,
-    height: 60,
-    marginLeft: -10,
-  },
+    mainContent: {
+      flex: 1,
+      justifyContent: "center",
+    },
 
-  logoText: {
-    width: 120,
-    height: 40,
-    marginTop: 8,
-    marginLeft: -24,
-  },
+    logoContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 14,
+    },
 
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 16,
-    minHeight: 160,
-  },
+    logoIcon: {
+      width: 44,
+      height: 44,
+    },
 
-  headerCol: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-  },
+    logoText: {
+      width: 110,
+      height: 30,
+      marginLeft: -23,
+      marginTop: 7,
+    },
 
-  headerText: {
-    flex: 1,
-    paddingRight: 10,
-  },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      marginBottom: 16,
+      minHeight: 130,
+    },
 
-  title: {
-    color: colors.textPrimary,
-    fontSize: 24,
-    fontWeight: "700",
-    lineHeight: 32,
-    marginBottom: 4,
-  },
+    headerCol: {
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      flex: 1,
+    },
 
-  subtitle: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    lineHeight: 18,
-  },
+    headerText: {
+      paddingRight: 10,
+    },
 
-  illustration: {
-    width: 100,
-    height: 120,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
+    title: {
+      color: themeColors.textPrimary,
+      fontSize: 21,
+      fontWeight: "700",
+      marginBottom: 6,
+    },
 
-  lockShackle: {
-    position: "absolute",
-    top: 4,
-    width: 48,
-    height: 50,
-    borderRadius: 24,
-    borderWidth: 7,
-    borderColor: colors.primaryLight,
-    borderBottomColor: "transparent",
-  },
+    subtitle: {
+      color: themeColors.textSecondary,
+      fontSize: 12,
+      lineHeight: 16,
+    },
 
-  lockBody: {
-    width: 72,
-    height: 66,
-    borderRadius: 11,
-    backgroundColor: colors.primary,
-    borderWidth: 2,
-    borderColor: colors.primaryLight,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 30,
-  },
+    illustration: {
+      width: 150,
+      height: 140,
+      alignItems: "center",
+      justifyContent: "center",
+      position: "relative",
+    },
 
-  keyhole: {
-    width: 14,
-    height: 21,
-    borderRadius: 7,
-    backgroundColor: colors.background,
-  },
+    lockShackle: {
+      position: "absolute",
+      top: 6,
+      width: 64,
+      height: 64,
+      borderRadius: 27,
+      borderWidth: 8,
+      borderColor: themeColors.primaryLight,
+      borderBottomColor: "transparent",
+    },
 
-  glowCircle: {
-    position: "absolute",
-    bottom: 2,
-    width: 88,
-    height: 16,
-    borderRadius: 40,
-    borderWidth: 1,
-    borderColor: colors.primaryLight,
-    opacity: 0.4,
-  },
+    lockBody: {
+      width: 90,
+      height: 84,
+      borderRadius: 13,
+      backgroundColor: themeColors.primary,
+      borderWidth: 2,
+      borderColor: themeColors.primaryLight,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 34,
+    },
 
-  inputGroup: {
-    marginBottom: 16,
-  },
+    keyhole: {
+      width: 16,
+      height: 23,
+      borderRadius: 8,
+      backgroundColor: themeColors.background,
+    },
 
-  label: {
-    color: colors.textPrimary,
-    fontSize: 12,
-    fontWeight: "500",
-    marginBottom: 6,
-  },
+    glowCircle: {
+      position: "absolute",
+      bottom: 2,
+      width: 98,
+      height: 18,
+      borderRadius: 44,
+      borderWidth: 1,
+      borderColor: themeColors.primaryLight,
+      opacity: 0.4,
+    },
 
-  inputContainer: {
-    minHeight: 52,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 11,
-    paddingHorizontal: 14,
-  },
+    inputGroup: {
+      marginBottom: 16,
+    },
 
-  input: {
-    flex: 1,
-    color: colors.textPrimary,
-    fontSize: 13,
-    minHeight: 50,
-    padding: 0,
-  },
+    label: {
+      color: themeColors.textPrimary,
+      fontSize: 12,
+      fontWeight: "500",
+      marginBottom: 6,
+    },
 
-  forgotButton: {
-    alignSelf: "flex-end",
-    marginTop: -2,
-    marginBottom: 18,
-  },
+    inputContainer: {
+      minHeight: 52,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      backgroundColor: themeColors.surface,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+      borderRadius: 11,
+      paddingHorizontal: 14,
+    },
 
-  forgotText: {
-    color: colors.primaryLight,
-    fontSize: 12,
-    fontWeight: "600",
-  },
+    input: {
+      flex: 1,
+      color: themeColors.textPrimary,
+      fontSize: 13,
+      minHeight: 50,
+      padding: 0,
+    },
 
-  loginButton: {
-    height: 52,
-    borderRadius: 12,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 18,
-  },
+    forgotButton: {
+      alignSelf: "flex-end",
+      marginTop: -2,
+      marginBottom: 18,
+    },
 
-  loginButtonDisabled: {
-    opacity: 0.6,
-  },
+    forgotText: {
+      color: themeColors.primaryLight,
+      fontSize: 12,
+      fontWeight: "600",
+    },
 
-  loginButtonText: {
-    color: "#fff",
-    fontSize: 15,
-    fontWeight: "700",
-  },
+    loginButton: {
+      height: 52,
+      borderRadius: 12,
+      backgroundColor: themeColors.primary,
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 18,
+    },
 
-  bottomSection: {
-    justifyContent: "flex-end",
-  },
+    loginButtonDisabled: {
+      opacity: 0.6,
+    },
 
-  securityCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    padding: 13,
-    marginBottom: 16,
-  },
+    loginButtonText: {
+      color: "#fff",
+      fontSize: 15,
+      fontWeight: "700",
+    },
 
-  securityIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: "rgba(91, 33, 182, 0.12)",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
+    bottomSection: {
+      justifyContent: "flex-end",
+    },
 
-  securityContent: {
-    flex: 1,
-  },
+    securityCard: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: themeColors.surface,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+      borderRadius: 14,
+      padding: 13,
+      marginBottom: 16,
+    },
 
-  securityTitle: {
-    color: colors.textPrimary,
-    fontSize: 12,
-    fontWeight: "700",
-    marginBottom: 3,
-  },
+    securityIcon: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: "rgba(91, 33, 182, 0.15)",
+      alignItems: "center",
+      justifyContent: "center",
+      marginRight: 12,
+    },
 
-  securityText: {
-    color: colors.textSecondary,
-    fontSize: 10,
-    lineHeight: 15,
-  },
+    securityContent: {
+      flex: 1,
+    },
 
-  signupRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingBottom: 8,
-  },
+    securityTitle: {
+      color: themeColors.textPrimary,
+      fontSize: 12,
+      fontWeight: "700",
+      marginBottom: 3,
+    },
 
-  signupText: {
-    color: colors.textSecondary,
-    fontSize: 12,
-  },
+    securityText: {
+      color: themeColors.textSecondary,
+      fontSize: 10,
+      lineHeight: 15,
+    },
 
-  signupLink: {
-    color: colors.primaryLight,
-    fontSize: 12,
-    fontWeight: "600",
-  },
-});
+    signupRow: {
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      paddingBottom: 8,
+    },
+
+    signupText: {
+      color: themeColors.textSecondary,
+      fontSize: 12,
+    },
+
+    signupLink: {
+      color: themeColors.primaryLight,
+      fontSize: 12,
+      fontWeight: "600",
+    },
+  });
+}

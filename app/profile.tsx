@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Switch, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { ProfileHeader } from "../src/components/profile/ProfileHeader";
 import { ProfileSection } from "../src/components/profile/ProfileSection";
 import { QuickActionsGrid } from "../src/components/profile/QuickActionsGrid";
@@ -7,7 +7,7 @@ import { colors } from "../src/theme/colors";
 import { useTheme } from "../src/theme/ThemeContext";
 
 export default function ProfileScreen() {
-  const { colors: themeColors, mode, toggleMode } = useTheme();
+  const { colors: themeColors } = useTheme();
 
   return (
     <View
@@ -26,41 +26,6 @@ export default function ProfileScreen() {
       >
         <SecurityBanner />
         <QuickActionsGrid />
-
-        <View
-          style={[
-            styles.themeRow,
-            {
-              backgroundColor: themeColors.surface,
-              borderColor: themeColors.border,
-            },
-          ]}
-        >
-          <View style={styles.themeCopy}>
-            <Text
-              style={[styles.themeTitle, { color: themeColors.textPrimary }]}
-            >
-              Light theme
-            </Text>
-            <Text
-              style={[
-                styles.themeSubtitle,
-                { color: themeColors.textSecondary },
-              ]}
-            >
-              Use a brighter look across OmniFi
-            </Text>
-          </View>
-          <Switch
-            value={mode === "light"}
-            onValueChange={toggleMode}
-            trackColor={{
-              false: themeColors.surfaceAlt,
-              true: themeColors.primary,
-            }}
-            thumbColor="#FFFFFF"
-          />
-        </View>
 
         <ProfileSection
           title="Account"
@@ -149,15 +114,4 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     gap: 8,
   },
-  themeRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 13,
-  },
-  themeCopy: { flex: 1 },
-  themeTitle: { fontSize: 13, fontWeight: "600" },
-  themeSubtitle: { fontSize: 11, marginTop: 2 },
 });
