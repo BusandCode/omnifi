@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
@@ -73,7 +72,7 @@ export function SendHeader({
           width: s(6),
           height: s(6),
           borderRadius: s(3),
-          backgroundColor: colors.success,
+          backgroundColor: themeColors.success,
         },
         subtitle: { color: themeColors.textSecondary, fontSize: f(10) },
       }),

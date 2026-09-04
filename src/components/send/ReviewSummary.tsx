@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Props = {
   amount: number;
@@ -14,6 +14,7 @@ type Props = {
 
 export function ReviewSummary({ amount, fee, onSubmit, loading }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles, iconSize, gap } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -23,58 +24,58 @@ export function ReviewSummary({ amount, fee, onSubmit, loading }: Props) {
       iconSize: s(10),
       gap: s(12),
       styles: StyleSheet.create({
-        card: { 
-          backgroundColor: colors.surface, 
-          borderRadius: s(14), 
-          padding: s(12), 
-          marginTop: s(-10) 
+        card: {
+          backgroundColor: themeColors.surface,
+          borderRadius: s(14),
+          padding: s(12),
+          marginTop: s(-10),
         },
-        title: { 
-          color: colors.textPrimary, 
-          fontSize: f(12), 
-          fontWeight: "700", 
-          marginBottom: s(10) 
+        title: {
+          color: themeColors.textPrimary,
+          fontSize: f(12),
+          fontWeight: "700",
+          marginBottom: s(10),
         },
-        row: { 
-          flexDirection: "row", 
-          justifyContent: "space-between", 
-          alignItems: "center", 
-          paddingVertical: s(4) 
+        row: {
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingVertical: s(4),
         },
-        feeLabelRow: { 
-          flexDirection: "row", 
-          alignItems: "center", 
-          gap: s(4) 
+        feeLabelRow: {
+          flexDirection: "row",
+          alignItems: "center",
+          gap: s(4),
         },
-        label: { color: colors.textSecondary, fontSize: f(10.5) },
-        value: { color: colors.textPrimary, fontSize: f(11), fontWeight: "600" },
-        feeValue: { color: colors.success, fontSize: f(11), fontWeight: "600" },
-        divider: { 
-          height: 1, 
-          borderStyle: "dashed", 
-          borderWidth: 0.7, 
-          borderColor: "#3A3A3C", 
-          marginVertical: s(6) 
+        label: { color: themeColors.textSecondary, fontSize: f(10.5) },
+        value: { color: themeColors.textPrimary, fontSize: f(11), fontWeight: "600" },
+        feeValue: { color: themeColors.success, fontSize: f(11), fontWeight: "600" },
+        divider: {
+          height: 1,
+          borderStyle: "dashed",
+          borderWidth: 0.7,
+          borderColor: themeColors.border,
+          marginVertical: s(6),
         },
-        totalLabel: { color: colors.textPrimary, fontSize: f(12), fontWeight: "700" },
-        totalValue: { color: colors.textPrimary, fontSize: f(13), fontWeight: "700" },
-        cta: { 
-          backgroundColor: colors.primary, 
-          borderRadius: s(13), 
-          paddingVertical: s(13), 
-          alignItems: "center" 
+        totalLabel: { color: themeColors.textPrimary, fontSize: f(12), fontWeight: "700" },
+        totalValue: { color: themeColors.textPrimary, fontSize: f(13), fontWeight: "700" },
+        cta: {
+          backgroundColor: themeColors.primary,
+          borderRadius: s(13),
+          paddingVertical: s(13),
+          alignItems: "center",
         },
         ctaText: { color: "#fff", fontSize: f(13), fontWeight: "700" },
-        secureRow: { 
-          flexDirection: "row", 
-          justifyContent: "center", 
-          alignItems: "center", 
-          gap: s(5) 
+        secureRow: {
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: s(5),
         },
-        secureText: { color: colors.textSecondary, fontSize: f(9.5) },
+        secureText: { color: themeColors.textSecondary, fontSize: f(9.5) },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   const total = amount + fee;
   const fmt = (n: number) => `₦${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -92,7 +93,7 @@ export function ReviewSummary({ amount, fee, onSubmit, loading }: Props) {
         <View style={styles.row}>
           <View style={styles.feeLabelRow}>
             <Text style={styles.label}>Transfer fee</Text>
-            <Feather name="info" size={iconSize} color={colors.textSecondary} />
+            <Feather name="info" size={iconSize} color={themeColors.textSecondary} />
           </View>
           <Text style={styles.feeValue}>{fmt(fee)}</Text>
         </View>
@@ -114,7 +115,7 @@ export function ReviewSummary({ amount, fee, onSubmit, loading }: Props) {
       </TouchableOpacity>
 
       <View style={styles.secureRow}>
-        <Feather name="lock" size={iconSize} color={colors.textSecondary} />
+        <Feather name="lock" size={iconSize} color={themeColors.textSecondary} />
         <Text style={styles.secureText}>All transactions are secured with bank-level encryption</Text>
       </View>
     </View>

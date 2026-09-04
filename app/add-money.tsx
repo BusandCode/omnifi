@@ -15,11 +15,12 @@ import { OtherMethodsFooter } from '../src/components/add-money/OtherMethodsFoot
 import { AccountHeader } from '../src/components/account/AccountHeader';
 import { ForeignAccountContent } from '../src/components/account/ForeignAccountContent';
 import { getForeignAccount } from '../src/constants/accountData';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 import { useBalances } from '../src/store/BalanceContext';
 
 export default function AddMoneyScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
   const { currency } = useLocalSearchParams<{ currency?: string }>();
   const activeCurrency = currency === 'USD' || currency === 'EUR' ? currency : 'NGN';
   const { credit } = useBalances();
@@ -54,8 +55,8 @@ export default function AddMoneyScreen() {
     const account = getForeignAccount(activeCurrency);
 
     return (
-      <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-        <View style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}>
+      <View style={[styles.container, { backgroundColor: themeColors.background, paddingBottom: insets.bottom }]}>
+        <View style={[styles.fixedHeader, { backgroundColor: themeColors.background, paddingTop: insets.top + 8 }]}>
           <AccountHeader code={account.code} fullName={account.fullName} />
         </View>
 
@@ -71,8 +72,8 @@ export default function AddMoneyScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <View style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}>
+    <View style={[styles.container, { backgroundColor: themeColors.background, paddingBottom: insets.bottom }]}>
+      <View style={[styles.fixedHeader, { backgroundColor: themeColors.background, paddingTop: insets.top + 8 }]}>
         <AddMoneyHeader
           subtitle={tab === 'virtual' ? 'Fund your account via your Virtual Account' : 'Fund your account instantly'}
         />
@@ -99,12 +100,12 @@ export default function AddMoneyScreen() {
         )}
       </ScrollView>
 
-      <View style={styles.fixedBottom}>
+      <View style={[styles.fixedBottom, { backgroundColor: themeColors.background }]}>
         {tab === 'virtual' ? (
           <SecurityFooter />
         ) : (
           <>
-            <TouchableOpacity style={styles.cta} onPress={handleAddMoney}>
+            <TouchableOpacity style={[styles.cta, { backgroundColor: themeColors.primary }]} onPress={handleAddMoney}>
               <Text style={styles.ctaText}>{ctaLabel}</Text>
             </TouchableOpacity>
             <OtherMethodsFooter />
@@ -118,13 +119,11 @@ export default function AddMoneyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   fixedHeader: {
     paddingHorizontal: 20,
     paddingBottom: 8,
     gap: 8,
-    backgroundColor: colors.background,
   },
   scroll: {
     flex: 1,
@@ -139,11 +138,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 8,
     paddingBottom: 0,
-    backgroundColor: colors.background,
     gap: 8,
   },
   cta: {
-    backgroundColor: colors.primary,
     borderRadius: 16,
     paddingVertical: 16,
     alignItems: 'center',

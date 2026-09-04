@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 export type Network = 'mtn' | 'airtel' | 'glo' | '9mobile';
 
@@ -30,6 +30,7 @@ type Props = { selected: Network; onSelect: (n: Network) => void };
 
 export function NetworkSelector({ selected, onSelect }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -37,42 +38,42 @@ export function NetworkSelector({ selected, onSelect }: Props) {
 
     return {
       styles: StyleSheet.create({
-        stepTitle: { 
-          color: colors.textPrimary, 
-          fontSize: f(12.5), 
-          fontWeight: '700', 
-          marginBottom: s(8) 
+        stepTitle: {
+          color: themeColors.textPrimary,
+          fontSize: f(12.5),
+          fontWeight: '700',
+          marginBottom: s(8)
         },
         row: { flexDirection: 'row', gap: s(7) },
         card: {
-          flex: 1, 
-          alignItems: 'center', 
-          gap: s(6), 
+          flex: 1,
+          alignItems: 'center',
+          gap: s(6),
           paddingVertical: s(10),
-          backgroundColor: colors.surface, 
+          backgroundColor: themeColors.surface,
           borderRadius: s(12),
-          borderWidth: 1.5, 
+          borderWidth: 1.5,
           borderColor: 'transparent',
         },
         checkBadge: {
-          position: 'absolute', 
-          top: s(-5), 
+          position: 'absolute',
+          top: s(-5),
           right: s(-5),
-          width: s(16), 
-          height: s(16), 
-          borderRadius: s(8), 
-          backgroundColor: colors.primary,
-          justifyContent: 'center', 
+          width: s(16),
+          height: s(16),
+          borderRadius: s(8),
+          backgroundColor: themeColors.primary,
+          justifyContent: 'center',
           alignItems: 'center',
-          borderWidth: 2, 
-          borderColor: colors.background,
+          borderWidth: 2,
+          borderColor: themeColors.background,
         },
-        logoCircle: { 
-          width: s(32), 
-          height: s(32), 
-          borderRadius: s(16), 
-          justifyContent: 'center', 
-          alignItems: 'center' 
+        logoCircle: {
+          width: s(32),
+          height: s(32),
+          borderRadius: s(16),
+          justifyContent: 'center',
+          alignItems: 'center'
         },
         logoImage: {
           width: s(32),
@@ -81,10 +82,10 @@ export function NetworkSelector({ selected, onSelect }: Props) {
           resizeMode: 'contain',
         },
         logoText: { fontSize: f(13), fontWeight: '800' },
-        name: { color: colors.textPrimary, fontSize: f(9.5), fontWeight: '600' },
+        name: { color: themeColors.textPrimary, fontSize: f(9.5), fontWeight: '600' },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   return (
     <View>
@@ -96,7 +97,7 @@ export function NetworkSelector({ selected, onSelect }: Props) {
           return (
             <TouchableOpacity
               key={n.id}
-              style={[styles.card, active && { borderColor: n.border || colors.primary }]}
+              style={[styles.card, active && { borderColor: n.border || themeColors.primary }]}
               onPress={() => onSelect(n.id)}
             >
               {active && (

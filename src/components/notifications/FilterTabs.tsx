@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 const tabs = ['All', 'Unread'] as const;
 
@@ -9,15 +9,28 @@ type Props = {
 };
 
 export function FilterTabs({ active, onChange }: Props) {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, { backgroundColor: themeColors.surface }]}>
       {tabs.map((t) => (
         <TouchableOpacity
           key={t}
-          style={[styles.tab, active === t && styles.tabActive]}
+          style={[
+            styles.tab,
+            active === t && { backgroundColor: themeColors.primaryTint },
+          ]}
           onPress={() => onChange(t)}
         >
-          <Text style={[styles.text, active === t && styles.textActive]}>{t}</Text>
+          <Text
+            style={[
+              styles.text,
+              { color: themeColors.textSecondary },
+              active === t && { color: themeColors.primaryLight },
+            ]}
+          >
+            {t}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -27,14 +40,9 @@ export function FilterTabs({ active, onChange }: Props) {
 const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
-    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 4,
-    // paddingTop: 2,
-    // marginTop: 12,
   },
   tab: { flex: 1, paddingVertical: 10, borderRadius: 10, alignItems: 'center' },
-  tabActive: { backgroundColor: 'rgba(167,139,250,0.18)' },
-  text: { color: colors.textSecondary, fontSize: 13, fontWeight: '600' },
-  textActive: { color: colors.primaryLight },
+  text: { fontSize: 13, fontWeight: '600' },
 });

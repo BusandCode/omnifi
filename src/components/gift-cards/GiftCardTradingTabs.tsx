@@ -1,5 +1,6 @@
+// src/components/gift-cards/GiftCardTradingTabs.tsx
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export type TradeTab = 'buy' | 'sell';
 
@@ -9,19 +10,37 @@ type Props = {
 };
 
 export function GiftCardTradingTabs({ active, onChange }: Props) {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, { backgroundColor: themeColors.surface }]}>
       <TouchableOpacity
-        style={[styles.tab, active === 'buy' && styles.tabActive]}
+        style={[styles.tab, active === 'buy' && { backgroundColor: themeColors.primary }]}
         onPress={() => onChange('buy')}
       >
-        <Text style={[styles.label, active === 'buy' && styles.labelActive]}>Buy Gift Card</Text>
+        <Text
+          style={[
+            styles.label,
+            { color: themeColors.textSecondary },
+            active === 'buy' && { color: '#fff' },
+          ]}
+        >
+          Buy Gift Card
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[styles.tab, active === 'sell' && styles.tabActive]}
+        style={[styles.tab, active === 'sell' && { backgroundColor: themeColors.primary }]}
         onPress={() => onChange('sell')}
       >
-        <Text style={[styles.label, active === 'sell' && styles.labelActive]}>Sell Gift Card</Text>
+        <Text
+          style={[
+            styles.label,
+            { color: themeColors.textSecondary },
+            active === 'sell' && { color: '#fff' },
+          ]}
+        >
+          Sell Gift Card
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -30,7 +49,6 @@ export function GiftCardTradingTabs({ active, onChange }: Props) {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 4,
     gap: 4,
@@ -41,7 +59,5 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     alignItems: 'center',
   },
-  tabActive: { backgroundColor: colors.primary },
-  label: { color: colors.textSecondary, fontSize: 12.5, fontWeight: '600' },
-  labelActive: { color: '#fff' },
+  label: { fontSize: 12.5, fontWeight: '600' },
 });

@@ -1,6 +1,7 @@
+// src/components/gift-cards/CategoryTabs.tsx
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export type GiftCategory = 'all' | 'ecommerce' | 'entertainment' | 'gaming' | 'food' | 'more';
 
@@ -16,17 +17,29 @@ const tabs: { id: GiftCategory; label: string; icon: keyof typeof Feather.glyphM
 type Props = { active: GiftCategory; onChange: (c: GiftCategory) => void };
 
 export function CategoryTabs({ active, onChange }: Props) {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View style={styles.row}>
       {tabs.map((t) => {
         const isActive = t.id === active;
         return (
           <TouchableOpacity key={t.id} style={styles.item} onPress={() => onChange(t.id)}>
-            <View style={[styles.iconBox, isActive && styles.iconBoxActive]}>
-              <Feather name={t.icon} size={14} color={isActive ? '#fff' : colors.textSecondary} />
+            <View
+              style={[
+                styles.iconBox,
+                { backgroundColor: themeColors.surface, borderColor: 'transparent' },
+                isActive && { backgroundColor: themeColors.primaryTint, borderColor: themeColors.primary },
+              ]}
+            >
+              <Feather name={t.icon} size={14} color={isActive ? themeColors.primaryLight : themeColors.textSecondary} />
             </View>
             <Text
-              style={[styles.label, isActive && styles.labelActive]}
+              style={[
+                styles.label,
+                { color: themeColors.textSecondary },
+                isActive && { color: themeColors.primaryLight },
+              ]}
               numberOfLines={1}
               adjustsFontSizeToFit
               minimumFontScale={0.8}
@@ -41,14 +54,12 @@ export function CategoryTabs({ active, onChange }: Props) {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', justifyContent: 'space-between',gap:8 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', gap: 8 },
   item: { alignItems: 'center', gap: 4, flex: 1 },
   iconBox: {
-    width: 36, height: 36, borderRadius: 12, backgroundColor: colors.surface,
+    width: 36, height: 36, borderRadius: 12,
     justifyContent: 'center', alignItems: 'center',
-    borderWidth: 1.5, borderColor: 'transparent',
+    borderWidth: 1.5,
   },
-  iconBoxActive: { backgroundColor: 'rgba(167,139,250,0.2)', borderColor: colors.primary },
-  label: { color: colors.textSecondary, fontSize: 7.5, fontWeight: '600', textAlign: 'center', width: '100%' },
-  labelActive: { color: colors.primaryLight },
+  label: { fontSize: 7.5, fontWeight: '600', textAlign: 'center', width: '100%' },
 });

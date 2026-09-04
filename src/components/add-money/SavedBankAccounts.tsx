@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 export function SavedBankAccounts() {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles, iconSize } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -16,27 +17,27 @@ export function SavedBankAccounts() {
       iconSize: s(13),
       styles: StyleSheet.create({
         header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: s(12), marginTop: s(-10) },
-        title: { color: colors.textPrimary, fontSize: f(12), fontWeight: '600' },
-        manage: { color: colors.primaryLight, fontSize: f(11), fontWeight: '600' },
+        title: { color: themeColors.textPrimary, fontSize: f(12), fontWeight: '600' },
+        manage: { color: themeColors.primaryLight, fontSize: f(11), fontWeight: '600' },
         card: {
           flexDirection: 'row', alignItems: 'center', gap: s(12),
-          backgroundColor: colors.surface, borderRadius: s(16), padding: s(14),
+          backgroundColor: themeColors.surface, borderRadius: s(16), padding: s(14),
         },
         logoCircle: {
           width: s(36), height: s(36), borderRadius: s(18), backgroundColor: '#fff',
           justifyContent: 'center', alignItems: 'center',
         },
         logoText: { color: '#1DB954', fontSize: f(15), fontWeight: '800' },
-        bankName: { color: colors.textPrimary, fontSize: f(13), fontWeight: '600' },
-        bankSub: { color: colors.textSecondary, fontSize: f(10.5), marginTop: s(2) },
+        bankName: { color: themeColors.textPrimary, fontSize: f(13), fontWeight: '600' },
+        bankSub: { color: themeColors.textSecondary, fontSize: f(10.5), marginTop: s(2) },
         checkCircle: {
-          width: s(22), height: s(22), borderRadius: s(11), backgroundColor: colors.primary,
+          width: s(22), height: s(22), borderRadius: s(11), backgroundColor: themeColors.primary,
           justifyContent: 'center', alignItems: 'center',
         },
         textContainer: { flex: 1 },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   return (
     <View>

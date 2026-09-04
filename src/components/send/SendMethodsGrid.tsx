@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
@@ -15,42 +14,45 @@ type MethodDef = {
   render: () => React.ReactNode;
 };
 
-const methods: MethodDef[] = [
-  {
-    id: "bank",
-    title: "To Bank Account",
-    sub: "Send to any\nbank account",
-    render: () => (
-      <Ionicons name="business" size={20} color={colors.primaryLight} />
-    ),
-  },
-  {
-    id: "phone",
-    title: "To Phone Number",
-    sub: "Send to any\nmobile number",
-    render: () => <Feather name="smartphone" size={20} color="#34C759" />,
-  },
-  {
-    id: "wallet",
-    title: "To Wallet",
-    sub: "Send to app\nwallet",
-    render: () => <Ionicons name="wallet" size={20} color="#3D9CFF" />,
-  },
-  {
-    id: "qr",
-    title: "Scan QR Code",
-    sub: "Scan and\nsend money",
-    render: () => (
-      <Feather name="maximize" size={20} color={colors.primaryLight} />
-    ),
-  },
-];
-
 type Props = { onSelect: (method: SendMethod) => void };
 
 export function SendMethodsGrid({ onSelect }: Props) {
   const layoutScale = useLayoutScale();
   const { colors: themeColors } = useTheme();
+
+  const methods: MethodDef[] = useMemo(
+    () => [
+      {
+        id: "bank",
+        title: "To Bank Account",
+        sub: "Send to any\nbank account",
+        render: () => (
+          <Ionicons name="business" size={20} color={themeColors.primaryLight} />
+        ),
+      },
+      {
+        id: "phone",
+        title: "To Phone Number",
+        sub: "Send to any\nmobile number",
+        render: () => <Feather name="smartphone" size={20} color="#34C759" />,
+      },
+      {
+        id: "wallet",
+        title: "To Wallet",
+        sub: "Send to app\nwallet",
+        render: () => <Ionicons name="wallet" size={20} color="#3D9CFF" />,
+      },
+      {
+        id: "qr",
+        title: "Scan QR Code",
+        sub: "Scan and\nsend money",
+        render: () => (
+          <Feather name="maximize" size={20} color={themeColors.primaryLight} />
+        ),
+      },
+    ],
+    [themeColors]
+  );
 
   const { styles } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);

@@ -7,13 +7,19 @@ import { HowItWorksReferral } from '../src/components/refer-earn/HowItWorksRefer
 import { ReferralLinkCard } from '../src/components/refer-earn/ReferralLinkCard';
 import { RewardsYouEarn } from '../src/components/refer-earn/RewardsYouEarn';
 import { TopReferrers } from '../src/components/refer-earn/TopReferrers';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export default function ReferEarnScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top + 8, paddingBottom: insets.bottom }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: themeColors.background, paddingTop: insets.top + 8, paddingBottom: insets.bottom },
+      ]}
+    >
       <View style={styles.fixedHeader}>
         <ReferEarnHeader />
       </View>
@@ -42,7 +48,7 @@ export default function ReferEarnScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1 },
   fixedHeader: { paddingHorizontal: 20, paddingBottom: 12 },
   scroll: { flex: 1 },
   content: { paddingHorizontal: 20, paddingBottom: 24, gap: 16 },

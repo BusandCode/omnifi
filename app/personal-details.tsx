@@ -4,12 +4,14 @@ import { ProfileCard } from '../src/components/personal-details/ProfileCard';
 import { InfoBanner } from '../src/components/personal-details/InfoBanner';
 import { InfoSection } from '../src/components/personal-details/InfoSection';
 import { LogoutButton } from '../src/components/personal-details/LogoutButton';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export default function PersonalDetailsScreen() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
@@ -33,8 +35,8 @@ export default function PersonalDetailsScreen() {
         title="Security Information"
         items={[
           { icon: 'lock', label: 'Password', value: '********' },
-          { icon: 'shield', label: 'Two-Factor Authentication', value: 'Enabled', valueColor: colors.success },
-          { icon: 'smartphone', label: 'Biometric Login', value: 'Enabled', valueColor: colors.success },
+          { icon: 'shield', label: 'Two-Factor Authentication', value: 'Enabled', valueColor: themeColors.success },
+          { icon: 'smartphone', label: 'Biometric Login', value: 'Enabled', valueColor: themeColors.success },
         ]}
       />
 
@@ -53,6 +55,6 @@ export default function PersonalDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1 },
   content: { paddingHorizontal: 20, paddingTop: 55, paddingBottom: 30, gap: 20 },
 });

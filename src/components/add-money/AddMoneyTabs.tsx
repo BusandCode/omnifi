@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type TabId = 'virtual' | 'other';
 
@@ -12,16 +12,30 @@ const tabs: { id: TabId; label: string; icon: keyof typeof Feather.glyphMap }[] 
 type Props = { active: TabId; onChange: (id: TabId) => void };
 
 export function AddMoneyTabs({ active, onChange }: Props) {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, { backgroundColor: themeColors.surface }]}>
       {tabs.map((t) => (
         <TouchableOpacity
           key={t.id}
-          style={[styles.tab, active === t.id && styles.tabActive]}
+          style={[styles.tab, active === t.id && { backgroundColor: themeColors.primaryTint }]}
           onPress={() => onChange(t.id)}
         >
-          <Feather name={t.icon} size={14} color={active === t.id ? colors.primaryLight : colors.textSecondary} />
-          <Text style={[styles.text, active === t.id && styles.textActive]}>{t.label}</Text>
+          <Feather
+            name={t.icon}
+            size={14}
+            color={active === t.id ? themeColors.primaryLight : themeColors.textSecondary}
+          />
+          <Text
+            style={[
+              styles.text,
+              { color: themeColors.textSecondary },
+              active === t.id && { color: themeColors.primaryLight },
+            ]}
+          >
+            {t.label}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -31,7 +45,6 @@ export function AddMoneyTabs({ active, onChange }: Props) {
 const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
-    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 4,
   },
@@ -44,7 +57,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
   },
-  tabActive: { backgroundColor: 'rgba(167,139,250,0.18)' },
-  text: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
-  textActive: { color: colors.primaryLight },
+  text: { fontSize: 12, fontWeight: '600' },
 });

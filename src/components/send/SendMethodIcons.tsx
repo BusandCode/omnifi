@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 import { FOREIGN_SEND_METHODS, ForeignCurrency, SendMethodId } from "../../constants/foreignSendData";
 
 type Props = {
@@ -14,6 +14,7 @@ type Props = {
 
 export function SendMethodIcons({ currency, selected, onSelect }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles, iconSize } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -26,15 +27,15 @@ export function SendMethodIcons({ currency, selected, onSelect }: Props) {
         item: { alignItems: "center", gap: s(6), width: s(56) },
         iconBox: {
           width: s(44), height: s(44), borderRadius: s(22),
-          backgroundColor: colors.surface,
+          backgroundColor: themeColors.surface,
           justifyContent: "center", alignItems: "center",
           borderWidth: 1.5, borderColor: "transparent",
         },
-        iconBoxActive: { borderColor: colors.primary },
-        label: { color: colors.textPrimary, fontSize: f(8.5), fontWeight: "600", textAlign: "center" },
+        iconBoxActive: { borderColor: themeColors.primary },
+        label: { color: themeColors.textPrimary, fontSize: f(8.5), fontWeight: "600", textAlign: "center" },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   return (
     <View style={styles.row}>
@@ -44,7 +45,11 @@ export function SendMethodIcons({ currency, selected, onSelect }: Props) {
         return (
           <TouchableOpacity key={m.id} style={styles.item} onPress={() => onSelect(m.id)}>
             <View style={[styles.iconBox, active && styles.iconBoxActive]}>
-              <Icon name={m.icon.name as any} size={iconSize} color={active ? colors.primaryLight : colors.textSecondary} />
+              <Icon
+                name={m.icon.name as any}
+                size={iconSize}
+                color={active ? themeColors.primaryLight : themeColors.textSecondary}
+              />
             </View>
             <Text style={styles.label} numberOfLines={2}>{m.label(currency)}</Text>
           </TouchableOpacity>

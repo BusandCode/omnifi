@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 import {
   FOREIGN_ACCOUNTS,
   ForeignCurrency,
@@ -18,10 +18,11 @@ import { ForeignSendSummary } from "./ForeignSendSummary";
 
 function SectionHeader({ number, title }: { number: number; title: string }) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
   const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
   const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
   return (
-    <Text style={{ color: colors.textPrimary, fontSize: f(11.5), fontWeight: "700", marginBottom: s(8) }}>
+    <Text style={{ color: themeColors.textPrimary, fontSize: f(11.5), fontWeight: "700", marginBottom: s(8) }}>
       {number}. {title}
     </Text>
   );

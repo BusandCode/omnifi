@@ -1,3 +1,4 @@
+// app/gift-cards.tsx
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { GiftCardsHeader } from '../src/components/gift-cards/GiftCardsHeader';
@@ -7,14 +8,15 @@ import { CategoryTabs, GiftCategory } from '../src/components/gift-cards/Categor
 import { PopularGiftCards } from '../src/components/gift-cards/PopularGiftCards';
 import { AllGiftCardsList } from '../src/components/gift-cards/AllGiftCardsList';
 import { SafeSecureBanner } from '../src/components/gift-cards/SafeSecureBanner';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export default function GiftCardsScreen() {
   const [category, setCategory] = useState<GiftCategory>('all');
+  const { colors: themeColors } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.fixedHeader}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <View style={[styles.fixedHeader, { backgroundColor: themeColors.background }]}>
         <GiftCardsHeader />
         <GiftWalletCard />
         <GiftSearchBar />
@@ -31,13 +33,12 @@ export default function GiftCardsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1 },
   fixedHeader: {
     paddingHorizontal: 20,
     paddingTop: 50,
     paddingBottom: 12,
     gap: 12,
-    backgroundColor: colors.background,
   },
   content: { flex: 1, paddingHorizontal: 20, paddingTop: 4, paddingBottom: 30, gap: 18 },
 });

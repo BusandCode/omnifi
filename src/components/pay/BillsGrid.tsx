@@ -90,6 +90,7 @@ export function BillsGrid() {
               onPress={() => {
                 if (b.label === "Airtime") router.push("/airtime");
                 if (b.label === "Data") router.push("/data");
+                if (b.label === "Betting") router.push("/betting");
               }}
             >
               <View style={styles.iconBox}>

@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 const steps = [
   { icon: 'clipboard' as const, num: 1, title: 'Copy', sub: 'Copy your unique virtual account number' },
@@ -12,21 +12,23 @@ const steps = [
 const ICON_SIZE = 44;
 
 export function HowItWorks() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View>
-      <Text style={styles.title}>How it works</Text>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>How it works</Text>
       <View style={styles.row}>
-        <View style={styles.connectorLine} pointerEvents="none" />
+        <View style={[styles.connectorLine, { borderColor: themeColors.border }]} pointerEvents="none" />
         {steps.map((s) => (
           <View key={s.num} style={styles.stepWrap}>
-            <View style={styles.iconCircle}>
-              <Feather name={s.icon} size={18} color={colors.primaryLight} />
-              <View style={styles.numBadge}>
+            <View style={[styles.iconCircle, { backgroundColor: themeColors.surface }]}>
+              <Feather name={s.icon} size={18} color={themeColors.primaryLight} />
+              <View style={[styles.numBadge, { backgroundColor: themeColors.primary }]}>
                 <Text style={styles.numText}>{s.num}</Text>
               </View>
             </View>
-            <Text style={styles.stepTitle}>{s.title}</Text>
-            <Text style={styles.stepSub} numberOfLines={3}>{s.sub}</Text>
+            <Text style={[styles.stepTitle, { color: themeColors.textPrimary }]}>{s.title}</Text>
+            <Text style={[styles.stepSub, { color: themeColors.textSecondary }]} numberOfLines={3}>{s.sub}</Text>
           </View>
         ))}
       </View>
@@ -35,7 +37,7 @@ export function HowItWorks() {
 }
 
 const styles = StyleSheet.create({
-  title: { color: colors.textPrimary, fontSize: 15, fontWeight: '600', marginBottom: 16, marginTop: -10 },
+  title: { fontSize: 15, fontWeight: '600', marginBottom: 16, marginTop: -10 },
   row: { flexDirection: 'row', position: 'relative' },
   connectorLine: {
     position: 'absolute',
@@ -45,19 +47,18 @@ const styles = StyleSheet.create({
     height: 1,
     borderStyle: 'dashed',
     borderWidth: 0.7,
-    borderColor: '#3A3A3C',
   },
   stepWrap: { flex: 1, alignItems: 'center', paddingHorizontal: 2 },
   iconCircle: {
-    width: ICON_SIZE, height: ICON_SIZE, borderRadius: ICON_SIZE / 2, backgroundColor: colors.surface,
+    width: ICON_SIZE, height: ICON_SIZE, borderRadius: ICON_SIZE / 2,
     justifyContent: 'center', alignItems: 'center', position: 'relative',
   },
   numBadge: {
     position: 'absolute', top: -3, right: -3,
-    width: 16, height: 16, borderRadius: 8, backgroundColor: colors.primary,
+    width: 16, height: 16, borderRadius: 8,
     justifyContent: 'center', alignItems: 'center',
   },
   numText: { color: '#fff', fontSize: 9, fontWeight: '700' },
-  stepTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '700', marginTop: 8 },
-  stepSub: { color: colors.textSecondary, fontSize: 9, textAlign: 'center', marginTop: 4, lineHeight: 12 },
+  stepTitle: { fontSize: 11, fontWeight: '700', marginTop: 8 },
+  stepSub: { fontSize: 9, textAlign: 'center', marginTop: 4, lineHeight: 12 },
 });

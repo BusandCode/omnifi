@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors } from '../../theme/colors';
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 const amounts = [100, 200, 500, 1000, 2000, 5000, 10000];
 const popular = 500;
@@ -15,6 +15,7 @@ type Props = {
 
 export function AmountSelector({ amount, onSelect, savings }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -22,67 +23,67 @@ export function AmountSelector({ amount, onSelect, savings }: Props) {
 
     return {
       styles: StyleSheet.create({
-        stepTitle: { 
-          color: colors.textPrimary, 
-          fontSize: f(12.5), 
-          fontWeight: '700', 
-          marginBottom: s(8) 
+        stepTitle: {
+          color: themeColors.textPrimary,
+          fontSize: f(12.5),
+          fontWeight: '700',
+          marginBottom: s(8)
         },
-        grid: { 
-          flexDirection: 'row', 
-          flexWrap: 'wrap', 
-          justifyContent: 'space-between', 
-          rowGap: s(8) 
+        grid: {
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          rowGap: s(8)
         },
         card: {
-          width: '23.5%', 
-          backgroundColor: colors.surface, 
-          borderRadius: s(10), 
-          paddingVertical: s(9), 
+          width: '23.5%',
+          backgroundColor: themeColors.surface,
+          borderRadius: s(10),
+          paddingVertical: s(9),
           paddingHorizontal: s(4),
-          alignItems: 'center', 
-          borderWidth: 1.5, 
-          borderColor: 'transparent', 
+          alignItems: 'center',
+          borderWidth: 1.5,
+          borderColor: 'transparent',
           position: 'relative',
         },
-        cardActive: { 
-          borderColor: colors.primary, 
-          backgroundColor: 'rgba(167,139,250,0.1)' 
+        cardActive: {
+          borderColor: themeColors.primary,
+          backgroundColor: themeColors.primaryTint
         },
         popularTag: {
-          position: 'absolute', 
-          top: s(-8), 
+          position: 'absolute',
+          top: s(-8),
           alignSelf: 'center',
-          backgroundColor: colors.primary, 
-          paddingHorizontal: s(5), 
-          paddingVertical: s(1.5), 
+          backgroundColor: themeColors.primary,
+          paddingHorizontal: s(5),
+          paddingVertical: s(1.5),
           borderRadius: s(5),
         },
         popularText: { color: '#fff', fontSize: f(7), fontWeight: '700' },
-        amount: { 
-          color: colors.textPrimary, 
-          fontSize: f(11), 
-          fontWeight: '700', 
-          marginBottom: s(2) 
+        amount: {
+          color: themeColors.textPrimary,
+          fontSize: f(11),
+          fontWeight: '700',
+          marginBottom: s(2)
         },
-        amountActive: { color: colors.primaryLight },
-        save: { color: colors.textSecondary, fontSize: f(7.5) },
-        saveActive: { color: colors.primaryLight },
-        otherTitle: { 
-          color: colors.textPrimary, 
-          fontSize: f(9.5), 
-          fontWeight: '700', 
-          marginBottom: s(2), 
-          textAlign: 'center' 
+        amountActive: { color: themeColors.primaryLight },
+        save: { color: themeColors.textSecondary, fontSize: f(7.5) },
+        saveActive: { color: themeColors.primaryLight },
+        otherTitle: {
+          color: themeColors.textPrimary,
+          fontSize: f(9.5),
+          fontWeight: '700',
+          marginBottom: s(2),
+          textAlign: 'center'
         },
-        otherSub: { 
-          color: colors.textSecondary, 
-          fontSize: f(7.5), 
-          textAlign: 'center' 
+        otherSub: {
+          color: themeColors.textSecondary,
+          fontSize: f(7.5),
+          textAlign: 'center'
         },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   return (
     <View>

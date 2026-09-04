@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Omnifi",
-    "slug": "omnifi",
+    "slug": "my-fintech-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -57,6 +57,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/f046e91e-ccf7-4f42-bdbe-2d99c15a4bef"
-    }
+    },
+    "owner": "busandcode"
   }
 }

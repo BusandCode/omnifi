@@ -1,12 +1,14 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function LogoutButton() {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <TouchableOpacity style={styles.btn}>
-      <Feather name="log-out" size={15} color={colors.danger} />
-      <Text style={styles.text}>Log Out</Text>
+    <TouchableOpacity style={[styles.btn, { borderColor: themeColors.danger }]}>
+      <Feather name="log-out" size={15} color={themeColors.danger} />
+      <Text style={[styles.text, { color: themeColors.danger }]}>Log Out</Text>
     </TouchableOpacity>
   );
 }
@@ -14,7 +16,7 @@ export function LogoutButton() {
 const styles = StyleSheet.create({
   btn: {
     flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8,
-    borderWidth: 1.2, borderColor: colors.danger, borderRadius: 16, paddingVertical: 15,
+    borderWidth: 1.2, borderRadius: 16, paddingVertical: 15,
   },
-  text: { color: colors.danger, fontSize: 14, fontWeight: '700' },
+  text: { fontSize: 14, fontWeight: '700' },
 });

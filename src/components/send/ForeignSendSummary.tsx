@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Props = {
   symbol: string;
@@ -14,6 +14,7 @@ type Props = {
 
 export function ForeignSendSummary({ symbol, amount, fee, onReview }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles, iconSize } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -22,19 +23,19 @@ export function ForeignSendSummary({ symbol, amount, fee, onReview }: Props) {
     return {
       iconSize: s(14),
       styles: StyleSheet.create({
-        card: { backgroundColor: colors.surface, borderRadius: s(14), padding: s(12) },
+        card: { backgroundColor: themeColors.surface, borderRadius: s(14), padding: s(12) },
         row: { flexDirection: "row", justifyContent: "space-between", paddingVertical: s(4) },
-        label: { color: colors.textSecondary, fontSize: f(10.5) },
-        value: { color: colors.textPrimary, fontSize: f(11), fontWeight: "600" },
-        valueSuccess: { color: colors.success, fontSize: f(11), fontWeight: "700" },
+        label: { color: themeColors.textSecondary, fontSize: f(10.5) },
+        value: { color: themeColors.textPrimary, fontSize: f(11), fontWeight: "600" },
+        valueSuccess: { color: themeColors.success, fontSize: f(11), fontWeight: "700" },
         cta: {
-          backgroundColor: colors.primary, borderRadius: s(13), paddingVertical: s(13), marginTop: s(12),
+          backgroundColor: themeColors.primary, borderRadius: s(13), paddingVertical: s(13), marginTop: s(12),
           flexDirection: "row", justifyContent: "center", alignItems: "center", gap: s(6),
         },
         ctaText: { color: "#fff", fontSize: f(13), fontWeight: "700" },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   const recipientReceives = Math.max(amount - fee, 0);
   const fmt = (n: number) => `${symbol}${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;

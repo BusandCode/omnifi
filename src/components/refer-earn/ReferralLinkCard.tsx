@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { Feather } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
+import { useTheme } from "../../theme/ThemeContext";
 
 type Props = {
   referralLink: string;
@@ -17,6 +17,7 @@ type Props = {
 
 export function ReferralLinkCard({ referralLink }: Props) {
   const [copied, setCopied] = useState(false);
+  const { colors: themeColors } = useTheme();
 
   useEffect(() => {
     if (!copied) return;
@@ -64,23 +65,23 @@ export function ReferralLinkCard({ referralLink }: Props) {
   };
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.title}>Your Referral Link</Text>
+    <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>Your Referral Link</Text>
 
-      <Text style={styles.sub}>
+      <Text style={[styles.sub, { color: themeColors.textSecondary }]}>
         Share your link and start earning
       </Text>
 
       <View style={styles.linkRow}>
-        <View style={styles.linkBox}>
+        <View style={[styles.linkBox, { backgroundColor: themeColors.background, borderColor: themeColors.border }]}>
           <Feather
             name="link"
             size={13}
-            color={colors.primaryLight}
+            color={themeColors.primaryLight}
           />
 
           <Text
-            style={styles.linkText}
+            style={[styles.linkText, { color: themeColors.textPrimary }]}
             numberOfLines={1}
             ellipsizeMode="middle"
           >
@@ -91,7 +92,8 @@ export function ReferralLinkCard({ referralLink }: Props) {
         <TouchableOpacity
           style={[
             styles.copyBtn,
-            copied && styles.copyBtnActive,
+            { borderColor: themeColors.border },
+            copied && { backgroundColor: themeColors.primaryTint },
           ]}
           onPress={handleCopy}
           activeOpacity={0.7}
@@ -99,17 +101,17 @@ export function ReferralLinkCard({ referralLink }: Props) {
           <Feather
             name={copied ? "check" : "copy"}
             size={12}
-            color={colors.primaryLight}
+            color={themeColors.primaryLight}
           />
 
-          <Text style={styles.copyText}>
+          <Text style={[styles.copyText, { color: themeColors.primaryLight }]}>
             {copied ? "Copied" : "Copy"}
           </Text>
         </TouchableOpacity>
       </View>
 
       <TouchableOpacity
-        style={styles.shareBtn}
+        style={[styles.shareBtn, { backgroundColor: themeColors.primary }]}
         onPress={handleShare}
         activeOpacity={0.8}
       >
@@ -129,19 +131,16 @@ export function ReferralLinkCard({ referralLink }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.surface,
     borderRadius: 18,
     padding: 16,
   },
 
   title: {
-    color: colors.textPrimary,
     fontSize: 13.5,
     fontWeight: "700",
   },
 
   sub: {
-    color: colors.textSecondary,
     fontSize: 10.5,
     marginTop: 2,
     marginBottom: 12,
@@ -158,17 +157,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    backgroundColor: colors.background,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
 
   linkText: {
     flex: 1,
-    color: colors.textPrimary,
     fontSize: 11.5,
   },
 
@@ -177,18 +173,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
     borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 12,
     justifyContent: "center",
   },
 
-  copyBtnActive: {
-    backgroundColor: "rgba(167,139,250,0.08)",
-  },
-
   copyText: {
-    color: colors.primaryLight,
     fontSize: 11.5,
     fontWeight: "600",
   },
@@ -198,7 +188,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
-    backgroundColor: colors.primary,
     borderRadius: 14,
     paddingVertical: 14,
   },

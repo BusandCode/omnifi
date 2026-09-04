@@ -1,7 +1,7 @@
 // DestinationCard.tsx — photo card for a popular destination, used in a horizontal scroller
 import React from 'react';
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { Destination } from '../../config/flightMockData';
 
 interface Props {
@@ -10,8 +10,10 @@ interface Props {
 }
 
 export default function DestinationCard({ destination, onPress }: Props) {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <Pressable style={styles.card} onPress={onPress}>
+    <Pressable style={[styles.card, { backgroundColor: themeColors.surface }]} onPress={onPress}>
       <Image source={{ uri: destination.image }} style={styles.image} />
       <View style={styles.overlay} />
       <View style={styles.textWrap}>
@@ -31,7 +33,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     marginRight: 10,
-    backgroundColor: colors.surface,
   },
   image: {
     ...StyleSheet.absoluteFillObject,

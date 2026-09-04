@@ -1,18 +1,23 @@
+// src/components/gift-cards/SafeSecureBanner.tsx
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function SafeSecureBanner() {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <TouchableOpacity style={styles.card}>
-      <View style={styles.iconBox}>
-        <Ionicons name="shield-checkmark" size={14} color={colors.primaryLight} />
+    <TouchableOpacity style={[styles.card, { backgroundColor: themeColors.primaryTint, borderColor: themeColors.primary }]}>
+      <View style={[styles.iconBox, { backgroundColor: themeColors.primaryTint }]}>
+        <Ionicons name="shield-checkmark" size={14} color={themeColors.primaryLight} />
       </View>
       <View style={{ flex: 1 }}>
-        <Text style={styles.title}>Safe. Secure. Instant.</Text>
-        <Text style={styles.sub}>All transactions are 100% secure and your gift cards are delivered instantly.</Text>
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>Safe. Secure. Instant.</Text>
+        <Text style={[styles.sub, { color: themeColors.textSecondary }]}>
+          All transactions are 100% secure and your gift cards are delivered instantly.
+        </Text>
       </View>
-      <Feather name="chevron-right" size={14} color={colors.textSecondary} />
+      <Feather name="chevron-right" size={14} color={themeColors.textSecondary} />
     </TouchableOpacity>
   );
 }
@@ -20,14 +25,12 @@ export function SafeSecureBanner() {
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: 'rgba(167,139,250,0.1)', borderRadius: 12, padding: 9,
-    borderWidth: 1, borderColor: 'rgba(167,139,250,0.25)',
-    marginTop:-1
+    borderRadius: 12, padding: 9, borderWidth: 1, marginTop: -1,
   },
   iconBox: {
-    width: 27, height: 27, borderRadius: 14, backgroundColor: 'rgba(167,139,250,0.2)',
+    width: 27, height: 27, borderRadius: 14,
     justifyContent: 'center', alignItems: 'center',
   },
-  title: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '600' },
-  sub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 2, lineHeight: 13 },
+  title: { fontSize: 11.5, fontWeight: '600' },
+  sub: { fontSize: 9.5, marginTop: 2, lineHeight: 13 },
 });

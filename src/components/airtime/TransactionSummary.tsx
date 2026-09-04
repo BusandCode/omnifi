@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Network } from './NetworkSelector';
-import { colors } from '../../theme/colors';
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 const NETWORK_LABELS: Record<Network, string> = {
   mtn: 'MTN', airtel: 'Airtel', glo: 'Glo', '9mobile': '9mobile',
@@ -19,6 +19,7 @@ type Props = {
 
 export function TransactionSummary({ network, phone, amount, save, total }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -26,44 +27,44 @@ export function TransactionSummary({ network, phone, amount, save, total }: Prop
 
     return {
       styles: StyleSheet.create({
-        card: { 
-          backgroundColor: colors.surface, 
-          borderRadius: s(14), 
-          padding: s(12) 
+        card: {
+          backgroundColor: themeColors.surface,
+          borderRadius: s(14),
+          padding: s(12)
         },
-        title: { 
-          color: colors.textPrimary, 
-          fontSize: f(12), 
-          fontWeight: '700', 
-          marginBottom: s(8) 
+        title: {
+          color: themeColors.textPrimary,
+          fontSize: f(12),
+          fontWeight: '700',
+          marginBottom: s(8)
         },
-        row: { 
-          flexDirection: 'row', 
-          justifyContent: 'space-between', 
-          paddingVertical: s(4) 
+        row: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingVertical: s(4)
         },
-        label: { color: colors.textSecondary, fontSize: f(10.5) },
-        value: { color: colors.textPrimary, fontSize: f(10.5), fontWeight: '600' },
-        saveLabel: { color: colors.primaryLight, fontSize: f(10.5) },
-        saveValue: { color: colors.primaryLight, fontSize: f(10.5), fontWeight: '600' },
-        divider: { 
-          height: 1, 
-          backgroundColor: '#2C2C2E', 
-          marginVertical: s(6) 
+        label: { color: themeColors.textSecondary, fontSize: f(10.5) },
+        value: { color: themeColors.textPrimary, fontSize: f(10.5), fontWeight: '600' },
+        saveLabel: { color: themeColors.primaryLight, fontSize: f(10.5) },
+        saveValue: { color: themeColors.primaryLight, fontSize: f(10.5), fontWeight: '600' },
+        divider: {
+          height: 1,
+          backgroundColor: themeColors.border,
+          marginVertical: s(6)
         },
-        totalLabel: { color: colors.textPrimary, fontSize: f(12.5), fontWeight: '700' },
-        totalValue: { color: colors.textPrimary, fontSize: f(13), fontWeight: '700' },
-        cta: { 
-          backgroundColor: colors.primary, 
-          borderRadius: s(14), 
-          paddingVertical: s(13), 
-          alignItems: 'center' 
+        totalLabel: { color: themeColors.textPrimary, fontSize: f(12.5), fontWeight: '700' },
+        totalValue: { color: themeColors.textPrimary, fontSize: f(13), fontWeight: '700' },
+        cta: {
+          backgroundColor: themeColors.primary,
+          borderRadius: s(14),
+          paddingVertical: s(13),
+          alignItems: 'center'
         },
         ctaText: { color: '#fff', fontSize: f(13.5), fontWeight: '700' },
         gap: { gap: s(8) },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   return (
     <View style={styles.gap}>

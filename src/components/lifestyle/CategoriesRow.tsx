@@ -15,7 +15,7 @@ const categories: Category[] = [
   { icon: "airplane", label: "Flights", route: "/flights" },
   { icon: "business", label: "Hotels" },
   { icon: "restaurant", label: "Food", route: "/food" },
-  { icon: "bag", label: "Shopping" },
+  { icon: "bag", label: "Shopping", route: "/strawise" },
   { icon: "film", label: "Entertainment" },
   { icon: "car", label: "Transport" },
 ];

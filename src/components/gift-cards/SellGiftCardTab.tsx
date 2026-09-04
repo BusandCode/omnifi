@@ -1,8 +1,9 @@
-import { useState } from 'react';
+// src/components/gift-cards/SellGiftCardTab.tsx
+import { useMemo, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, Pressable } from 'react-native';
 import { Ionicons, Feather, FontAwesome5 } from '@expo/vector-icons';
 import Svg, { Defs, LinearGradient, Stop, Rect, Line, Text as SvgText, G } from 'react-native-svg';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Brand = { id: string; label: string; icon: React.ReactNode };
 
@@ -15,7 +16,7 @@ const brands: Brand[] = [
 
 const PAYOUT_RATE = 0.855; // ~85.5% of face value, matching the ₦50,000 → ₦42,750 example
 
-function GiftCardIllustration() {
+function GiftCardIllustration({ themeColors }: { themeColors: ReturnType<typeof useTheme>['colors'] }) {
   return (
     <View style={illStyles.wrap}>
       <Svg width={104} height={78} viewBox="0 0 104 78">
@@ -45,7 +46,7 @@ function GiftCardIllustration() {
       <View style={illStyles.bow}>
         <Feather name="gift" size={13} color="#fff" />
       </View>
-      <View style={illStyles.cameraBadge}>
+      <View style={[illStyles.cameraBadge, { backgroundColor: themeColors.primary, borderColor: themeColors.surface }]}>
         <Feather name="camera" size={14} color="#fff" />
       </View>
     </View>
@@ -53,6 +54,9 @@ function GiftCardIllustration() {
 }
 
 export function SellGiftCardTab() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(() => makeStyles(themeColors), [themeColors]);
+
   const [brandOpen, setBrandOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState('apple');
   const [cardNumber, setCardNumber] = useState('X234 5678 9012 3456');
@@ -84,7 +88,7 @@ export function SellGiftCardTab() {
               Enter your card details and upload a clear image. We'll verify and pay you instantly.
             </Text>
           </View>
-          <GiftCardIllustration />
+          <GiftCardIllustration themeColors={themeColors} />
         </View>
       </View>
 
@@ -93,7 +97,7 @@ export function SellGiftCardTab() {
         <TouchableOpacity style={styles.dropdown} onPress={() => setBrandOpen(true)}>
           <View style={styles.dropdownIcon}>{brand.icon}</View>
           <Text style={styles.dropdownLabel}>{brand.label}</Text>
-          <Ionicons name="chevron-down" size={16} color={colors.textSecondary} />
+          <Ionicons name="chevron-down" size={16} color={themeColors.textSecondary} />
         </TouchableOpacity>
 
         <Modal visible={brandOpen} transparent animationType="fade" onRequestClose={() => setBrandOpen(false)}>
@@ -111,7 +115,7 @@ export function SellGiftCardTab() {
                   <View style={styles.dropdownIcon}>{b.icon}</View>
                   <Text style={styles.modalItemText}>{b.label}</Text>
                   {b.id === selectedBrand && (
-                    <Ionicons name="checkmark" size={16} color={colors.primaryLight} />
+                    <Ionicons name="checkmark" size={16} color={themeColors.primaryLight} />
                   )}
                 </TouchableOpacity>
               ))}
@@ -125,16 +129,16 @@ export function SellGiftCardTab() {
 
         <Text style={styles.fieldLabel}>Card Number</Text>
         <View style={styles.inputRow}>
-          <Feather name="credit-card" size={15} color={colors.textSecondary} />
+          <Feather name="credit-card" size={15} color={themeColors.textSecondary} />
           <TextInput
             value={cardNumber}
             onChangeText={setCardNumber}
             placeholder="X234 5678 9012 3456"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={themeColors.textSecondary}
             style={styles.input}
           />
           {cardNumber.length > 0 && (
-            <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+            <Ionicons name="checkmark-circle" size={16} color={themeColors.success} />
           )}
         </View>
 
@@ -142,14 +146,14 @@ export function SellGiftCardTab() {
           <View style={styles.fieldHalf}>
             <View style={styles.fieldLabelRow}>
               <Text style={styles.fieldLabel}>PIN / Security Code</Text>
-              <Ionicons name="information-circle-outline" size={11} color={colors.textSecondary} />
+              <Ionicons name="information-circle-outline" size={11} color={themeColors.textSecondary} />
             </View>
             <View style={styles.inputRow}>
               <TextInput
                 value={pin}
                 onChangeText={setPin}
                 placeholder="••••••••"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={themeColors.textSecondary}
                 secureTextEntry={!pinVisible}
                 style={styles.input}
               />
@@ -157,11 +161,11 @@ export function SellGiftCardTab() {
                 <Ionicons
                   name={pinVisible ? 'eye-off-outline' : 'eye-outline'}
                   size={15}
-                  color={colors.textSecondary}
+                  color={themeColors.textSecondary}
                 />
               </TouchableOpacity>
               {pin.length > 0 && (
-                <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+                <Ionicons name="checkmark-circle" size={16} color={themeColors.success} />
               )}
             </View>
           </View>
@@ -169,7 +173,7 @@ export function SellGiftCardTab() {
           <View style={styles.fieldHalf}>
             <View style={styles.fieldLabelRow}>
               <Text style={styles.fieldLabel}>Card Value</Text>
-              <Ionicons name="information-circle-outline" size={11} color={colors.textSecondary} />
+              <Ionicons name="information-circle-outline" size={11} color={themeColors.textSecondary} />
             </View>
             <View style={styles.inputRow}>
               <TextInput
@@ -177,18 +181,18 @@ export function SellGiftCardTab() {
                 onChangeText={(t) => setCardValue(t.replace(/[^0-9]/g, ''))}
                 keyboardType="number-pad"
                 placeholder="₦50,000"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={themeColors.textSecondary}
                 style={styles.input}
               />
               {numericValue > 0 && (
-                <Ionicons name="checkmark-circle" size={16} color={colors.success} />
+                <Ionicons name="checkmark-circle" size={16} color={themeColors.success} />
               )}
             </View>
           </View>
         </View>
 
         <View style={styles.infoNote}>
-          <Ionicons name="information-circle" size={15} color={colors.primaryLight} />
+          <Ionicons name="information-circle" size={15} color={themeColors.primaryLight} />
           <Text style={styles.infoText}>
             Please ensure the card details are correct. Incorrect details may lead to declined transaction.
           </Text>
@@ -223,20 +227,20 @@ export function SellGiftCardTab() {
 
               <View style={styles.uploadPromptCol}>
                 <View style={styles.uploadIconSm}>
-                  <Feather name="upload-cloud" size={16} color={colors.primaryLight} />
+                  <Feather name="upload-cloud" size={16} color={themeColors.primaryLight} />
                 </View>
                 <Text style={styles.uploadText}>Tap to upload or drag and drop</Text>
                 <Text style={styles.uploadHint}>JPG, PNG (Max 5MB)</Text>
               </View>
 
               <View style={styles.uploadCheckAbs}>
-                <Ionicons name="checkmark-circle" size={18} color={colors.success} />
+                <Ionicons name="checkmark-circle" size={18} color={themeColors.success} />
               </View>
             </View>
           ) : (
             <View style={styles.uploadEmptyCol}>
               <View style={styles.uploadIconSm}>
-                <Feather name="upload-cloud" size={18} color={colors.primaryLight} />
+                <Feather name="upload-cloud" size={18} color={themeColors.primaryLight} />
               </View>
               <Text style={styles.uploadText}>Tap to upload or drag and drop</Text>
               <Text style={styles.uploadHint}>JPG, PNG (Max 5MB)</Text>
@@ -247,7 +251,7 @@ export function SellGiftCardTab() {
 
       <View style={styles.nextCard}>
         <View style={styles.nextHeaderRow}>
-          <Ionicons name="shield-checkmark" size={15} color={colors.primaryLight} />
+          <Ionicons name="shield-checkmark" size={15} color={themeColors.primaryLight} />
           <Text style={styles.nextTitle}>What happens next?</Text>
         </View>
         {[
@@ -256,7 +260,7 @@ export function SellGiftCardTab() {
           "You'll be notified at every step.",
         ].map((line) => (
           <View key={line} style={styles.nextRow}>
-            <Ionicons name="checkmark" size={13} color={colors.success} />
+            <Ionicons name="checkmark" size={13} color={themeColors.success} />
             <Text style={styles.nextText}>{line}</Text>
           </View>
         ))}
@@ -267,11 +271,11 @@ export function SellGiftCardTab() {
       <View style={styles.payoutRow}>
         <View style={styles.payoutLabelRow}>
           <Text style={styles.payoutLabel}>Estimated Payout</Text>
-          <Ionicons name="information-circle-outline" size={13} color={colors.textSecondary} />
+          <Ionicons name="information-circle-outline" size={13} color={themeColors.textSecondary} />
         </View>
         <View style={styles.payoutValueRow}>
           <Text style={styles.payoutValue}>₦{estimatedPayout.toLocaleString()}.00</Text>
-          <Ionicons name="chevron-down" size={14} color={colors.success} />
+          <Ionicons name="chevron-down" size={14} color={themeColors.success} />
         </View>
       </View>
 
@@ -312,117 +316,117 @@ const illStyles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: colors.surface,
   },
 });
 
-const styles = StyleSheet.create({
-  promoCard: { backgroundColor: colors.surface, borderRadius: 18, padding: 16 },
-  promoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
-  promoTextCol: { flex: 1, gap: 6 },
-  promoTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
-  promoSub: { color: colors.textSecondary, fontSize: 11.5, lineHeight: 16 },
-  sectionTitle: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700', marginBottom: 10 },
-  dropdown: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 14,
-  },
-  dropdownIcon: {
-    width: 26, height: 26, borderRadius: 13,
-    backgroundColor: '#111',
-    justifyContent: 'center', alignItems: 'center',
-  },
-  dropdownLabel: { flex: 1, color: colors.textPrimary, fontSize: 12.5, fontWeight: '600' },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 24 },
-  modalCard: { backgroundColor: colors.surface, borderRadius: 16, paddingVertical: 6 },
-  modalItem: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 12 },
-  modalItemActive: { backgroundColor: 'rgba(167,139,250,0.1)' },
-  modalItemText: { flex: 1, color: colors.textPrimary, fontSize: 12.5, fontWeight: '600' },
-  fieldLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 6 },
-  fieldLabel: { color: colors.textSecondary, fontSize: 10.5 },
-  inputRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    marginBottom: 12,
-  },
-  input: { flex: 1, color: colors.textPrimary, fontSize: 12.5 },
-  fieldRow: { flexDirection: 'row', gap: 10 },
-  fieldHalf: { flex: 1 },
-  infoNote: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
-    backgroundColor: 'rgba(167,139,250,0.08)',
-    borderRadius: 12,
-    padding: 12,
-  },
-  infoText: { flex: 1, color: colors.textSecondary, fontSize: 10.5, lineHeight: 15 },
-  uploadSub: { color: colors.textSecondary, fontSize: 11, marginBottom: 10, lineHeight: 15 },
-  uploadBox: {
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    borderStyle: 'dashed',
-    borderRadius: 16,
-    padding: 12,
-  },
-  uploadRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    position: 'relative',
-  },
-  thumbWrap: { position: 'relative' },
-  thumbPlaceholder: {
-    width: 64,
-    height: 44,
-    borderRadius: 10,
-    backgroundColor: '#1a1a1a',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  thumbRemove: {
-    position: 'absolute',
-    top: -6,
-    right: -6,
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    backgroundColor: '#3A3A3C',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  uploadPromptCol: { flex: 1, alignItems: 'center', gap: 4 },
-  uploadEmptyCol: { alignItems: 'center', gap: 6, paddingVertical: 14 },
-  uploadIconSm: {
-    width: 32, height: 32, borderRadius: 16,
-    backgroundColor: 'rgba(167,139,250,0.15)',
-    justifyContent: 'center', alignItems: 'center',
-  },
-  uploadText: { color: colors.textPrimary, fontSize: 11, fontWeight: '600', textAlign: 'center' },
-  uploadHint: { color: colors.textSecondary, fontSize: 9.5 },
-  uploadCheckAbs: { position: 'absolute', top: -2, right: 0 },
-  nextCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 16, gap: 8 },
-  nextHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
-  nextTitle: { color: colors.primaryLight, fontSize: 12, fontWeight: '700' },
-  nextRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  nextText: { color: colors.textSecondary, fontSize: 11 },
-  divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
-  payoutRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  payoutLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  payoutLabel: { color: colors.textSecondary, fontSize: 11.5 },
-  payoutValueRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  payoutValue: { color: colors.success, fontSize: 15, fontWeight: '700' },
-  submitBtn: { backgroundColor: colors.primary, borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
-  submitBtnDisabled: { opacity: 0.5 },
-  submitText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
-  termsText: { color: colors.textSecondary, fontSize: 10.5, textAlign: 'center' },
-  termsLink: { color: colors.primaryLight, fontWeight: '600' },
-});
+function makeStyles(themeColors: ReturnType<typeof useTheme>['colors']) {
+  return StyleSheet.create({
+    promoCard: { backgroundColor: themeColors.surface, borderRadius: 18, padding: 16 },
+    promoRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
+    promoTextCol: { flex: 1, gap: 6 },
+    promoTitle: { color: themeColors.textPrimary, fontSize: 15, fontWeight: '700' },
+    promoSub: { color: themeColors.textSecondary, fontSize: 11.5, lineHeight: 16 },
+    sectionTitle: { color: themeColors.textPrimary, fontSize: 13.5, fontWeight: '700', marginBottom: 10 },
+    dropdown: {
+      flexDirection: 'row', alignItems: 'center', gap: 10,
+      backgroundColor: themeColors.surface,
+      borderRadius: 14,
+      paddingHorizontal: 14,
+      paddingVertical: 14,
+    },
+    dropdownIcon: {
+      width: 26, height: 26, borderRadius: 13,
+      backgroundColor: '#111',
+      justifyContent: 'center', alignItems: 'center',
+    },
+    dropdownLabel: { flex: 1, color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '600' },
+    modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 24 },
+    modalCard: { backgroundColor: themeColors.surface, borderRadius: 16, paddingVertical: 6 },
+    modalItem: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 12 },
+    modalItemActive: { backgroundColor: themeColors.primaryTint },
+    modalItemText: { flex: 1, color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '600' },
+    fieldLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 6 },
+    fieldLabel: { color: themeColors.textSecondary, fontSize: 10.5 },
+    inputRow: {
+      flexDirection: 'row', alignItems: 'center', gap: 8,
+      backgroundColor: themeColors.surface,
+      borderRadius: 12,
+      paddingHorizontal: 12,
+      paddingVertical: 12,
+      marginBottom: 12,
+    },
+    input: { flex: 1, color: themeColors.textPrimary, fontSize: 12.5 },
+    fieldRow: { flexDirection: 'row', gap: 10 },
+    fieldHalf: { flex: 1 },
+    infoNote: {
+      flexDirection: 'row', alignItems: 'flex-start', gap: 8,
+      backgroundColor: themeColors.primaryTint,
+      borderRadius: 12,
+      padding: 12,
+    },
+    infoText: { flex: 1, color: themeColors.textSecondary, fontSize: 10.5, lineHeight: 15 },
+    uploadSub: { color: themeColors.textSecondary, fontSize: 11, marginBottom: 10, lineHeight: 15 },
+    uploadBox: {
+      borderWidth: 1.5,
+      borderColor: themeColors.border,
+      borderStyle: 'dashed',
+      borderRadius: 16,
+      padding: 12,
+    },
+    uploadRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+      position: 'relative',
+    },
+    thumbWrap: { position: 'relative' },
+    thumbPlaceholder: {
+      width: 64,
+      height: 44,
+      borderRadius: 10,
+      backgroundColor: '#1a1a1a',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    thumbRemove: {
+      position: 'absolute',
+      top: -6,
+      right: -6,
+      width: 18,
+      height: 18,
+      borderRadius: 9,
+      backgroundColor: '#3A3A3C',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    uploadPromptCol: { flex: 1, alignItems: 'center', gap: 4 },
+    uploadEmptyCol: { alignItems: 'center', gap: 6, paddingVertical: 14 },
+    uploadIconSm: {
+      width: 32, height: 32, borderRadius: 16,
+      backgroundColor: themeColors.primaryTint,
+      justifyContent: 'center', alignItems: 'center',
+    },
+    uploadText: { color: themeColors.textPrimary, fontSize: 11, fontWeight: '600', textAlign: 'center' },
+    uploadHint: { color: themeColors.textSecondary, fontSize: 9.5 },
+    uploadCheckAbs: { position: 'absolute', top: -2, right: 0 },
+    nextCard: { backgroundColor: themeColors.surface, borderRadius: 16, padding: 16, gap: 8 },
+    nextHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 4 },
+    nextTitle: { color: themeColors.primaryLight, fontSize: 12, fontWeight: '700' },
+    nextRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+    nextText: { color: themeColors.textSecondary, fontSize: 11 },
+    divider: { height: StyleSheet.hairlineWidth, backgroundColor: themeColors.border },
+    payoutRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    payoutLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+    payoutLabel: { color: themeColors.textSecondary, fontSize: 11.5 },
+    payoutValueRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    payoutValue: { color: themeColors.success, fontSize: 15, fontWeight: '700' },
+    submitBtn: { backgroundColor: themeColors.primary, borderRadius: 16, paddingVertical: 16, alignItems: 'center' },
+    submitBtnDisabled: { opacity: 0.5 },
+    submitText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
+    termsText: { color: themeColors.textSecondary, fontSize: 10.5, textAlign: 'center' },
+    termsLink: { color: themeColors.primaryLight, fontWeight: '600' },
+  });
+}

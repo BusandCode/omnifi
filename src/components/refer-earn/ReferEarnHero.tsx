@@ -1,21 +1,21 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../theme/ThemeContext';
 
-function GiftIllustration() {
+function GiftIllustration({ themeColors }: { themeColors: ReturnType<typeof useTheme>['colors'] }) {
   return (
     <View style={illStyles.wrap}>
-      <View style={illStyles.envelope}>
+      <View style={[illStyles.envelope, { backgroundColor: themeColors.primary }]}>
         <Ionicons name="person" size={16} color="#fff" />
       </View>
       <View style={illStyles.giftBox}>
         <View style={illStyles.ribbonV} />
         <View style={illStyles.ribbonBow} />
       </View>
-      <View style={[illStyles.coin, illStyles.coinLeft]}>
+      <View style={[illStyles.coin, illStyles.coinLeft, { borderColor: themeColors.background }]}>
         <Text style={illStyles.coinText}>₦</Text>
       </View>
-      <View style={[illStyles.coin, illStyles.coinRight]}>
+      <View style={[illStyles.coin, illStyles.coinRight, { borderColor: themeColors.background }]}>
         <Text style={illStyles.coinText}>₦</Text>
       </View>
     </View>
@@ -23,16 +23,18 @@ function GiftIllustration() {
 }
 
 export function ReferEarnHero() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View style={styles.row}>
       <View style={styles.textCol}>
-        <Text style={styles.title}>Refer friends.</Text>
-        <Text style={[styles.title, styles.titleAccent]}>Earn rewards.</Text>
-        <Text style={styles.sub}>
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>Refer friends.</Text>
+        <Text style={[styles.title, { color: themeColors.primaryLight }]}>Earn rewards.</Text>
+        <Text style={[styles.sub, { color: themeColors.textSecondary }]}>
           Invite your friends to Omnifi and earn exciting rewards when they join and transact.
         </Text>
       </View>
-      <GiftIllustration />
+      <GiftIllustration themeColors={themeColors} />
     </View>
   );
 }
@@ -42,7 +44,6 @@ const illStyles = StyleSheet.create({
   envelope: {
     position: 'absolute', top: 4, left: 4,
     width: 52, height: 40, borderRadius: 8,
-    backgroundColor: colors.primary,
     justifyContent: 'center', alignItems: 'center',
     transform: [{ rotate: '-8deg' }],
   },
@@ -67,7 +68,7 @@ const illStyles = StyleSheet.create({
     width: 22, height: 22, borderRadius: 11,
     backgroundColor: '#F5A623',
     justifyContent: 'center', alignItems: 'center',
-    borderWidth: 2, borderColor: colors.background,
+    borderWidth: 2,
   },
   coinLeft: { bottom: 0, left: 6 },
   coinRight: { bottom: 6, right: 2 },
@@ -77,7 +78,6 @@ const illStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   textCol: { flex: 1 },
-  title: { color: colors.textPrimary, fontSize: 19, fontWeight: '800', lineHeight: 24 },
-  titleAccent: { color: colors.primaryLight },
-  sub: { color: colors.textSecondary, fontSize: 11.5, lineHeight: 16, marginTop: 8 },
+  title: { fontSize: 19, fontWeight: '800', lineHeight: 24 },
+  sub: { fontSize: 11.5, lineHeight: 16, marginTop: 8 },
 });

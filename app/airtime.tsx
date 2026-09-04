@@ -8,7 +8,7 @@ import { PhoneNumberInput } from '../src/components/airtime/PhoneNumberInput';
 import { AmountSelector } from '../src/components/airtime/AmountSelector';
 import { PromoBanner } from '../src/components/airtime/PromoBanner';
 import { TransactionSummary } from '../src/components/airtime/TransactionSummary';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 import { clamp } from '../src/theme/scale';
 import { ScaleProvider } from '../src/theme/ScaleContext';
 
@@ -31,6 +31,7 @@ const savings: Record<number, number> = {
 
 export default function AirtimeScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
   const [network, setNetwork] = useState<Network>('mtn');
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState<number | null>(null);
@@ -76,7 +77,7 @@ export default function AirtimeScreen() {
       (sum, k) => sum + itemHeights[k],
       0,
     );
-    
+
     const totalGaps = MIN_GAP * (BODY_ITEM_KEYS.length - 1);
     const availableForItems = bodyContainerHeight - BOTTOM_GAP - totalGaps;
 
@@ -93,7 +94,7 @@ export default function AirtimeScreen() {
     (sum, k) => sum + itemHeights[k],
     0,
   );
-  
+
   let gap = MIN_GAP;
   if (bodyContainerHeight > 0) {
     const leftover = bodyContainerHeight - BOTTOM_GAP - totalItemHeight;
@@ -107,9 +108,9 @@ export default function AirtimeScreen() {
   const total = amount != null ? amount - save : 0;
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <View style={[styles.container, { backgroundColor: themeColors.background, paddingBottom: insets.bottom }]}>
       <View
-        style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}
+        style={[styles.fixedHeader, { backgroundColor: themeColors.background, paddingTop: insets.top + 8 }]}
         onLayout={onTopLayout}
       >
         <AirtimeHeader />
@@ -119,7 +120,7 @@ export default function AirtimeScreen() {
         <View
           style={[
             styles.content,
-            { 
+            {
               rowGap: gap,
               paddingBottom: BOTTOM_GAP,
               paddingTop: 4,
@@ -130,23 +131,23 @@ export default function AirtimeScreen() {
           <View onLayout={makeItemLayoutHandler("wallet")}>
             <WalletBalanceCard />
           </View>
-          
+
           <View onLayout={makeItemLayoutHandler("network")}>
             <NetworkSelector selected={network} onSelect={setNetwork} />
           </View>
-          
+
           <View onLayout={makeItemLayoutHandler("phone")}>
             <PhoneNumberInput value={phone} onChangeText={setPhone} />
           </View>
-          
+
           <View onLayout={makeItemLayoutHandler("amount")}>
             <AmountSelector amount={amount} onSelect={setAmount} savings={savings} />
           </View>
-          
+
           <View onLayout={makeItemLayoutHandler("promo")}>
             <PromoBanner />
           </View>
-          
+
           <View onLayout={makeItemLayoutHandler("summary")}>
             <TransactionSummary
               network={network}
@@ -163,17 +164,15 @@ export default function AirtimeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: colors.background 
+  container: {
+    flex: 1,
   },
   fixedHeader: {
     paddingHorizontal: 20,
     paddingBottom: 4,
-    backgroundColor: colors.background,
   },
-  content: { 
-    flex: 1, 
+  content: {
+    flex: 1,
     paddingHorizontal: 20,
   },
 });

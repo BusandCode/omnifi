@@ -1,6 +1,7 @@
+// src/components/gift-cards/AllGiftCardsList.tsx
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather, Ionicons, FontAwesome5 } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { GiftCategory } from './CategoryTabs';
 
 type GiftCard = {
@@ -22,37 +23,31 @@ const allCards: GiftCard[] = [
   { id: 'uber', name: 'Uber', tag: 'Transport', category: 'more', markets: 'Available in NGN', from: '₦300 / $1', bg: '#000', icon: <FontAwesome5 name="uber" size={13} color="#fff" /> },
 ];
 
-const TAG_COLOR: Record<string, string> = {
-  'E-Commerce': colors.primaryLight,
-  'Gaming': colors.primaryLight,
-  'Entertainment': colors.primaryLight,
-  'Transport': colors.primaryLight,
-};
-
 export function AllGiftCardsList({ category }: { category: GiftCategory }) {
+  const { colors: themeColors } = useTheme();
   const filtered = category === 'all' ? allCards : allCards.filter((c) => c.category === category);
 
   return (
     <View>
-      <Text style={styles.title}>All Gift Cards</Text>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>All Gift Cards</Text>
       <View style={{ gap: 8 }}>
         {filtered.map((c) => (
-          <TouchableOpacity key={c.id} style={styles.row}>
+          <TouchableOpacity key={c.id} style={[styles.row, { backgroundColor: themeColors.surface }]}>
             <View style={[styles.iconCircle, { backgroundColor: c.bg }]}>{c.icon}</View>
             <View style={{ flex: 1 }}>
               <View style={styles.nameRow}>
-                <Text style={styles.name}>{c.name}</Text>
-                <View style={styles.tagPill}>
-                  <Text style={[styles.tagText, { color: TAG_COLOR[c.tag] }]}>{c.tag}</Text>
+                <Text style={[styles.name, { color: themeColors.textPrimary }]}>{c.name}</Text>
+                <View style={[styles.tagPill, { backgroundColor: themeColors.primaryTint }]}>
+                  <Text style={[styles.tagText, { color: themeColors.primaryLight }]}>{c.tag}</Text>
                 </View>
               </View>
-              <Text style={styles.markets}>{c.markets}</Text>
+              <Text style={[styles.markets, { color: themeColors.textSecondary }]}>{c.markets}</Text>
             </View>
             <View style={{ alignItems: 'flex-end' }}>
-              <Text style={styles.fromLabel}>From</Text>
-              <Text style={styles.fromValue}>{c.from}</Text>
+              <Text style={[styles.fromLabel, { color: themeColors.textSecondary }]}>From</Text>
+              <Text style={[styles.fromValue, { color: themeColors.textPrimary }]}>{c.from}</Text>
             </View>
-            <Feather name="chevron-right" size={14} color={colors.textSecondary} />
+            <Feather name="chevron-right" size={14} color={themeColors.textSecondary} />
           </TouchableOpacity>
         ))}
       </View>
@@ -61,18 +56,17 @@ export function AllGiftCardsList({ category }: { category: GiftCategory }) {
 }
 
 const styles = StyleSheet.create({
-  title: { color: colors.textPrimary, fontSize: 12, fontWeight: '700', marginBottom: 12,marginTop:-8 },
+  title: { fontSize: 12, fontWeight: '700', marginBottom: 12, marginTop: -8 },
   row: {
     flexDirection: 'row', alignItems: 'center', gap: 10,
-    backgroundColor: colors.surface, borderRadius: 14, padding: 12,
-    marginTop:-7
+    borderRadius: 14, padding: 12, marginTop: -7,
   },
   iconCircle: { width: 36, height: 36, borderRadius: 10, justifyContent: 'center', alignItems: 'center' },
   nameRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  name: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '600' },
-  tagPill: { backgroundColor: 'rgba(167,139,250,0.15)', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 5 },
+  name: { fontSize: 12.5, fontWeight: '600' },
+  tagPill: { paddingHorizontal: 6, paddingVertical: 2, borderRadius: 5 },
   tagText: { fontSize: 8.5, fontWeight: '700' },
-  markets: { color: colors.textSecondary, fontSize: 10, marginTop: 3 },
-  fromLabel: { color: colors.textSecondary, fontSize: 9 },
-  fromValue: { color: colors.textPrimary, fontSize: 11, fontWeight: '600', marginTop: 1 },
+  markets: { fontSize: 10, marginTop: 3 },
+  fromLabel: { fontSize: 9 },
+  fromValue: { fontSize: 11, fontWeight: '600', marginTop: 1 },
 });

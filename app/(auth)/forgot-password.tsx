@@ -9,12 +9,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { colors } from "../../src/theme/colors";
 import { useTheme } from "../../src/theme/ThemeContext";
@@ -89,369 +89,360 @@ export default function ForgotPasswordScreen() {
   };
 
   return (
-    <KeyboardAvoidingView
+    <SafeAreaView
       style={[
         styles.container,
-        {
-          backgroundColor: themeColors.background,
-        },
+        { backgroundColor: themeColors.background },
       ]}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      edges={["top", "bottom"]}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.content}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <Pressable
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <Feather
-              name="arrow-left"
-              size={24}
-              color={themeColors.textPrimary}
-            />
-          </Pressable>
-
-          <Text
-            style={[
-              styles.title,
-              { color: themeColors.textPrimary },
-            ]}
-          >
-            Forgot Password
-          </Text>
-        </View>
-
-        {/* Hero Section */}
-        <View style={styles.heroSection}>
-          {/* Text */}
-          <View style={styles.descriptionContainer}>
-            <Text
-              style={[
-                styles.description,
-                { color: themeColors.textPrimary },
-              ]}
+        <View style={styles.content}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Pressable
+              style={styles.backButton}
+              onPress={() => router.back()}
             >
-              Reset your password securely
-            </Text>
+              <Feather
+                name="arrow-left"
+                size={24}
+                color={themeColors.textPrimary}
+              />
+            </Pressable>
 
             <Text
               style={[
-                styles.subDescription,
-                { color: themeColors.textSecondary },
+                styles.title,
+                { color: themeColors.textPrimary },
               ]}
             >
-              No worries! Enter the email address linked to your Aurelius
-              account and we'll send you a link to reset your password.
+              Forgot Password
             </Text>
           </View>
 
-          {/* Password Illustration */}
-          <View style={styles.illustration}>
-            <Image
-              source={
-                mode === "light"
-                  ? require("../../assets/password-light.png")
-                  : require("../../assets/password.png")
-              }
-              style={styles.passwordImage}
-              resizeMode="contain"
-            />
-          </View>
-        </View>
+          {/* Hero Section */}
+          <View style={styles.heroSection}>
+            {/* Text */}
+            <View style={styles.descriptionContainer}>
+              <Text
+                style={[
+                  styles.description,
+                  { color: themeColors.textPrimary },
+                ]}
+              >
+                Reset your password securely
+              </Text>
 
-        {/* Email Input */}
-        <View style={styles.inputGroup}>
-          <Text
-            style={[
-              styles.label,
-              { color: themeColors.textPrimary },
-            ]}
-          >
-            Email Address
-          </Text>
+              <Text
+                style={[
+                  styles.subDescription,
+                  { color: themeColors.textSecondary },
+                ]}
+              >
+                No worries! Enter the email address linked to your Aurelius
+                account and we'll send you a link to reset your password.
+              </Text>
+            </View>
 
-          <View
-            style={[
-              styles.inputContainer,
-              {
-                backgroundColor: themeColors.surface,
-                borderColor: emailError
-                  ? "#FF3B30"
-                  : themeColors.border,
-              },
-            ]}
-          >
-            <Feather
-              name="mail"
-              size={20}
-              color={
-                emailError
-                  ? "#FF3B30"
-                  : themeColors.primaryLight
-              }
-            />
-
-            <TextInput
-              style={[
-                styles.input,
-                { color: themeColors.textPrimary },
-              ]}
-              placeholder="Enter your email address"
-              placeholderTextColor={themeColors.textSecondary}
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-
-                if (emailError) {
-                  validateEmail(text);
+            {/* Password Illustration */}
+            <View style={styles.illustration}>
+              <Image
+                source={
+                  mode === "light"
+                    ? require("../../assets/password-light.png")
+                    : require("../../assets/password.png")
                 }
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              returnKeyType="send"
-              onSubmitEditing={handleSendResetLink}
-            />
+                style={styles.passwordImage}
+                resizeMode="contain"
+              />
+            </View>
           </View>
 
-          {emailError && (
-            <Text style={styles.errorText}>
-              {emailError}
+          {/* Email Input */}
+          <View style={styles.inputGroup}>
+            <Text
+              style={[
+                styles.label,
+                { color: themeColors.textPrimary },
+              ]}
+            >
+              Email Address
             </Text>
-          )}
-        </View>
 
-        {/* Security Card */}
-        <View
-          style={[
-            styles.securityCard,
-            {
-              backgroundColor:
-                mode === "light"
-                  ? "rgba(91, 33, 182, 0.04)"
-                  : "rgba(91, 33, 182, 0.05)",
-              borderColor:
-                mode === "light"
-                  ? "rgba(91, 33, 182, 0.12)"
-                  : "rgba(91, 33, 182, 0.1)",
-            },
-          ]}
-        >
+            <View
+              style={[
+                styles.inputContainer,
+                {
+                  backgroundColor: themeColors.surface,
+                  borderColor: emailError
+                    ? "#FF3B30"
+                    : themeColors.border,
+                },
+              ]}
+            >
+              <Feather
+                name="mail"
+                size={20}
+                color={
+                  emailError
+                    ? "#FF3B30"
+                    : themeColors.primaryLight
+                }
+              />
+
+              <TextInput
+                style={[
+                  styles.input,
+                  { color: themeColors.textPrimary },
+                ]}
+                placeholder="Enter your email address"
+                placeholderTextColor={themeColors.textSecondary}
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+
+                  if (emailError) {
+                    validateEmail(text);
+                  }
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                returnKeyType="send"
+                onSubmitEditing={handleSendResetLink}
+              />
+            </View>
+
+            {emailError && (
+              <Text style={styles.errorText}>
+                {emailError}
+              </Text>
+            )}
+          </View>
+
+          {/* Security Card */}
           <View
             style={[
-              styles.securityIcon,
+              styles.securityCard,
               {
                 backgroundColor:
-                  "rgba(91, 33, 182, 0.08)",
+                  mode === "light"
+                    ? "rgba(91, 33, 182, 0.04)"
+                    : "rgba(91, 33, 182, 0.05)",
+                borderColor:
+                  mode === "light"
+                    ? "rgba(91, 33, 182, 0.12)"
+                    : "rgba(91, 33, 182, 0.1)",
               },
             ]}
           >
-            <Feather
-              name="shield"
-              size={24}
-              color={themeColors.primaryLight}
-            />
-          </View>
-
-          <View style={styles.securityContent}>
-            <Text
+            <View
               style={[
-                styles.securityTitle,
-                { color: themeColors.textPrimary },
+                styles.securityIcon,
+                {
+                  backgroundColor: "rgba(91, 33, 182, 0.08)",
+                },
               ]}
             >
-              Your security is our priority
+              <Feather
+                name="shield"
+                size={24}
+                color={themeColors.primaryLight}
+              />
+            </View>
+
+            <View style={styles.securityContent}>
+              <Text
+                style={[
+                  styles.securityTitle,
+                  { color: themeColors.textPrimary },
+                ]}
+              >
+                Your security is our priority
+              </Text>
+
+              <Text
+                style={[
+                  styles.securityText,
+                  { color: themeColors.textSecondary },
+                ]}
+              >
+                We'll send a secure password reset link to help you
+                regain access to your account.
+              </Text>
+            </View>
+          </View>
+
+          {/* Send Reset Link Button */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.sendButton,
+              { backgroundColor: themeColors.primary },
+              (!email || loading) && styles.sendButtonDisabled,
+              pressed && !loading && styles.sendButtonPressed,
+            ]}
+            onPress={handleSendResetLink}
+            disabled={loading || !email}
+          >
+            <Text style={styles.sendButtonText}>
+              {loading ? "Sending..." : "Send Reset Link"}
             </Text>
+          </Pressable>
+
+          {/* OR Divider */}
+          <View style={styles.dividerContainer}>
+            <View
+              style={[
+                styles.dividerLine,
+                { backgroundColor: themeColors.border },
+              ]}
+            />
 
             <Text
               style={[
-                styles.securityText,
+                styles.dividerText,
                 { color: themeColors.textSecondary },
               ]}
             >
-              We'll send a secure password reset link to help you
-              regain access to your account.
+              OR
             </Text>
+
+            <View
+              style={[
+                styles.dividerLine,
+                { backgroundColor: themeColors.border },
+              ]}
+            />
           </View>
-        </View>
 
-        {/* Send Reset Link Button */}
-        <Pressable
-          style={({ pressed }) => [
-            styles.sendButton,
-            {
-              backgroundColor: themeColors.primary,
-            },
-            (!email || loading) &&
-              styles.sendButtonDisabled,
-            pressed &&
-              !loading &&
-              styles.sendButtonPressed,
-          ]}
-          onPress={handleSendResetLink}
-          disabled={loading || !email}
-        >
-          <Text style={styles.sendButtonText}>
-            {loading ? "Sending..." : "Send Reset Link"}
-          </Text>
-        </Pressable>
+          {/* Alternative Options */}
+          <View style={styles.optionsContainer}>
+            {/* Reset Using Phone */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.optionButton,
+                {
+                  backgroundColor: themeColors.surface,
+                  borderColor: themeColors.border,
+                },
+                pressed && styles.optionButtonPressed,
+              ]}
+              onPress={handleResetWithPhone}
+            >
+              <View style={styles.optionIcon}>
+                <Feather
+                  name="phone"
+                  size={20}
+                  color={themeColors.primary}
+                />
+              </View>
 
-        {/* OR Divider */}
-        <View style={styles.dividerContainer}>
-          <View
-            style={[
-              styles.dividerLine,
-              { backgroundColor: themeColors.border },
-            ]}
-          />
+              <View style={styles.optionContent}>
+                <Text
+                  style={[
+                    styles.optionTitle,
+                    { color: themeColors.textPrimary },
+                  ]}
+                >
+                  Reset using Phone Number
+                </Text>
 
-          <Text
-            style={[
-              styles.dividerText,
-              { color: themeColors.textSecondary },
-            ]}
-          >
-            OR
-          </Text>
+                <Text
+                  style={[
+                    styles.optionSubtext,
+                    { color: themeColors.textSecondary },
+                  ]}
+                >
+                  Receive a reset link via SMS
+                </Text>
+              </View>
 
-          <View
-            style={[
-              styles.dividerLine,
-              { backgroundColor: themeColors.border },
-            ]}
-          />
-        </View>
-
-        {/* Alternative Options */}
-        <View style={styles.optionsContainer}>
-          {/* Reset Using Phone */}
-          <Pressable
-            style={({ pressed }) => [
-              styles.optionButton,
-              {
-                backgroundColor: themeColors.surface,
-                borderColor: themeColors.border,
-              },
-              pressed && styles.optionButtonPressed,
-            ]}
-            onPress={handleResetWithPhone}
-          >
-            <View style={styles.optionIcon}>
               <Feather
-                name="phone"
-                size={22}
-                color={themeColors.primary}
+                name="chevron-right"
+                size={18}
+                color={themeColors.textSecondary}
               />
-            </View>
+            </Pressable>
 
-            <View style={styles.optionContent}>
-              <Text
-                style={[
-                  styles.optionTitle,
-                  { color: themeColors.textPrimary },
-                ]}
-              >
-                Reset using Phone Number
-              </Text>
+            {/* Contact Support */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.optionButton,
+                {
+                  backgroundColor: themeColors.surface,
+                  borderColor: themeColors.border,
+                },
+                pressed && styles.optionButtonPressed,
+              ]}
+              onPress={handleContactSupport}
+            >
+              <View style={styles.optionIcon}>
+                <Feather
+                  name="headphones"
+                  size={20}
+                  color={themeColors.primary}
+                />
+              </View>
 
-              <Text
-                style={[
-                  styles.optionSubtext,
-                  { color: themeColors.textSecondary },
-                ]}
-              >
-                Receive a reset link via SMS
-              </Text>
-            </View>
+              <View style={styles.optionContent}>
+                <Text
+                  style={[
+                    styles.optionTitle,
+                    { color: themeColors.textPrimary },
+                  ]}
+                >
+                  Contact Support
+                </Text>
 
-            <Feather
-              name="chevron-right"
-              size={20}
-              color={themeColors.textSecondary}
-            />
-          </Pressable>
+                <Text
+                  style={[
+                    styles.optionSubtext,
+                    { color: themeColors.textSecondary },
+                  ]}
+                >
+                  Get help from our support team
+                </Text>
+              </View>
 
-          {/* Contact Support */}
-          <Pressable
-            style={({ pressed }) => [
-              styles.optionButton,
-              {
-                backgroundColor: themeColors.surface,
-                borderColor: themeColors.border,
-              },
-              pressed && styles.optionButtonPressed,
-            ]}
-            onPress={handleContactSupport}
-          >
-            <View style={styles.optionIcon}>
               <Feather
-                name="headphones"
-                size={22}
-                color={themeColors.primary}
+                name="chevron-right"
+                size={18}
+                color={themeColors.textSecondary}
               />
-            </View>
+            </Pressable>
+          </View>
 
-            <View style={styles.optionContent}>
-              <Text
-                style={[
-                  styles.optionTitle,
-                  { color: themeColors.textPrimary },
-                ]}
-              >
-                Contact Support
-              </Text>
-
-              <Text
-                style={[
-                  styles.optionSubtext,
-                  { color: themeColors.textSecondary },
-                ]}
-              >
-                Get help from our support team
-              </Text>
-            </View>
-
-            <Feather
-              name="chevron-right"
-              size={20}
-              color={themeColors.textSecondary}
-            />
-          </Pressable>
-        </View>
-
-        {/* Back to Login */}
-        <View style={styles.loginRow}>
-          <Text
-            style={[
-              styles.loginText,
-              { color: themeColors.textSecondary },
-            ]}
-          >
-            Remember your password?{" "}
-          </Text>
-
-          <Pressable
-            onPress={() =>
-              router.replace("/(auth)/login")
-            }
-          >
+          {/* Back to Login */}
+          <View style={styles.loginRow}>
             <Text
               style={[
-                styles.loginLink,
-                { color: themeColors.primaryLight },
+                styles.loginText,
+                { color: themeColors.textSecondary },
               ]}
             >
-              Login
+              Remember your password?{" "}
             </Text>
-          </Pressable>
+
+            <Pressable
+              onPress={() => router.replace("/(auth)/login")}
+            >
+              <Text
+                style={[
+                  styles.loginLink,
+                  { color: themeColors.primaryLight },
+                ]}
+              >
+                Login
+              </Text>
+            </Pressable>
+          </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
@@ -461,17 +452,18 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    flexGrow: 1,
+    flex: 1,
     paddingHorizontal: 24,
-    paddingTop: Platform.OS === "ios" ? 50 : 30,
-    paddingBottom: 30,
+    paddingTop: 12,
+    paddingBottom: 16,
+    justifyContent: "space-between",
   },
 
   /* Header */
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 12,
   },
 
   backButton: {
@@ -480,7 +472,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "700",
   },
 
@@ -488,8 +480,7 @@ const styles = StyleSheet.create({
   heroSection: {
     flexDirection: "row",
     alignItems: "center",
-    minHeight: 150,
-    marginBottom: 24,
+    minHeight: 100,
   },
 
   descriptionContainer: {
@@ -498,33 +489,33 @@ const styles = StyleSheet.create({
   },
 
   description: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
-    marginBottom: 10,
-    lineHeight: 26,
+    marginBottom: 8,
+    lineHeight: 24,
   },
 
   subDescription: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: 13,
+    lineHeight: 19,
   },
 
   /* Password Illustration */
   illustration: {
-    width: 145,
-    height: 145,
+    width: 100,
+    height: 100,
     alignItems: "center",
     justifyContent: "center",
   },
 
   passwordImage: {
-    width: 180,
-    height: 165,
+    width: 120,
+    height: 110,
   },
 
   /* Email Input */
   inputGroup: {
-    marginBottom: 20,
+    marginTop: 4,
   },
 
   label: {
@@ -534,7 +525,7 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    height: 56,
+    height: 52,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
@@ -546,7 +537,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 14,
-    height: 56,
+    height: 52,
   },
 
   errorText: {
@@ -561,17 +552,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 14,
-    padding: 16,
-    marginBottom: 24,
+    padding: 12,
   },
 
   securityIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 14,
+    marginRight: 12,
   },
 
   securityContent: {
@@ -579,23 +569,22 @@ const styles = StyleSheet.create({
   },
 
   securityTitle: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "600",
     marginBottom: 2,
   },
 
   securityText: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: 11,
+    lineHeight: 15,
   },
 
   /* Send Button */
   sendButton: {
-    height: 56,
+    height: 52,
     borderRadius: 13,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 24,
   },
 
   sendButtonPressed: {
@@ -617,7 +606,6 @@ const styles = StyleSheet.create({
   dividerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 24,
   },
 
   dividerLine: {
@@ -633,8 +621,7 @@ const styles = StyleSheet.create({
 
   /* Options */
   optionsContainer: {
-    gap: 12,
-    marginBottom: 32,
+    gap: 8,
   },
 
   optionButton: {
@@ -642,7 +629,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
   },
 
   optionButtonPressed: {
@@ -651,13 +638,13 @@ const styles = StyleSheet.create({
   },
 
   optionIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 11,
+    width: 38,
+    height: 38,
+    borderRadius: 10,
     backgroundColor: "rgba(91, 33, 182, 0.08)",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 14,
+    marginRight: 12,
   },
 
   optionContent: {
@@ -665,13 +652,13 @@ const styles = StyleSheet.create({
   },
 
   optionTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     marginBottom: 2,
   },
 
   optionSubtext: {
-    fontSize: 12,
+    fontSize: 11,
   },
 
   /* Login */
@@ -679,7 +666,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "auto",
   },
 
   loginText: {

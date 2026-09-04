@@ -110,7 +110,7 @@ export function WalletBalanceCard() {
   return (
     <TouchableOpacity style={styles.wrapper} activeOpacity={0.9}>
       <LinearGradient
-        colors={["#FFFFFF", "#FFFFFF", "#FFFFFF"]}
+        colors={["#2A1858", "#160D33", "#0A0616"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}
@@ -123,7 +123,7 @@ export function WalletBalanceCard() {
             <Ionicons
               name={visible ? "eye-outline" : "eye-off-outline"}
               size={iconSize}
-              color={themeColors.textSecondary}
+              color="rgba(255,255,255,0.6)"
             />
           </TouchableOpacity>
         </View>

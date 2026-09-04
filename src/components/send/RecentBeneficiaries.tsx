@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from "../../theme/ThemeContext";
 
 export type Beneficiary = {
   id: string;
@@ -23,6 +23,7 @@ type Props = {
 
 export function RecentBeneficiaries({ beneficiaries, onSelect, onViewAll, onAddNew }: Props) {
   const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
   const { styles, iconSize } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -31,47 +32,47 @@ export function RecentBeneficiaries({ beneficiaries, onSelect, onViewAll, onAddN
     return {
       iconSize: s(18),
       styles: StyleSheet.create({
-        header: { 
-          flexDirection: "row", 
-          justifyContent: "space-between", 
-          marginBottom: s(14) 
+        header: {
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginBottom: s(14),
         },
-        title: { color: colors.textPrimary, fontSize: f(11.5), fontWeight: "700" },
-        viewAll: { color: colors.primaryLight, fontSize: f(11.5), fontWeight: "600" },
+        title: { color: themeColors.textPrimary, fontSize: f(11.5), fontWeight: "700" },
+        viewAll: { color: themeColors.primaryLight, fontSize: f(11.5), fontWeight: "600" },
         row: { flexDirection: "row", justifyContent: "space-between" },
         item: { alignItems: "center", gap: s(6), width: s(60) },
-        avatar: { 
-          width: s(48), 
-          height: s(48), 
-          borderRadius: s(24), 
-          justifyContent: "center", 
-          alignItems: "center" 
+        avatar: {
+          width: s(48),
+          height: s(48),
+          borderRadius: s(24),
+          justifyContent: "center",
+          alignItems: "center",
         },
         initials: { color: "#1A1A1A", fontSize: f(14), fontWeight: "700" },
         addCircle: {
-          width: s(48), 
-          height: s(48), 
+          width: s(48),
+          height: s(48),
           borderRadius: s(24),
-          borderWidth: 1.5, 
-          borderColor: "#3A3A3C", 
+          borderWidth: 1.5,
+          borderColor: themeColors.border,
           borderStyle: "dashed",
-          justifyContent: "center", 
+          justifyContent: "center",
           alignItems: "center",
         },
-        name: { 
-          color: colors.textPrimary, 
-          fontSize: f(10.5), 
-          fontWeight: "600", 
-          textAlign: "center" 
+        name: {
+          color: themeColors.textPrimary,
+          fontSize: f(10.5),
+          fontWeight: "600",
+          textAlign: "center",
         },
-        bank: { 
-          color: colors.textSecondary, 
-          fontSize: f(9), 
-          textAlign: "center" 
+        bank: {
+          color: themeColors.textSecondary,
+          fontSize: f(9),
+          textAlign: "center",
         },
       }),
     };
-  }, [layoutScale]);
+  }, [layoutScale, themeColors]);
 
   return (
     <View>
@@ -99,7 +100,7 @@ export function RecentBeneficiaries({ beneficiaries, onSelect, onViewAll, onAddN
 
         <TouchableOpacity style={styles.item} onPress={onAddNew}>
           <View style={styles.addCircle}>
-            <Feather name="plus" size={iconSize} color={colors.textSecondary} />
+            <Feather name="plus" size={iconSize} color={themeColors.textSecondary} />
           </View>
           <Text style={styles.name}>Add New</Text>
         </TouchableOpacity>

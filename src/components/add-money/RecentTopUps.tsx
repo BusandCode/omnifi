@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type TopUp = {
   id: string;
@@ -17,37 +17,47 @@ const topUps: TopUp[] = [
 ];
 
 export function RecentTopUps() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.title}>Recent top-ups</Text>
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>Recent top-ups</Text>
         {topUps.length > 0 && (
-          <TouchableOpacity><Text style={styles.viewAll}>View all</Text></TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={[styles.viewAll, { color: themeColors.primaryLight }]}>View all</Text>
+          </TouchableOpacity>
         )}
       </View>
 
       {topUps.length === 0 ? (
-        <View style={styles.emptyCard}>
-          <Text style={styles.emptyText}>No recent top-ups</Text>
+        <View style={[styles.emptyCard, { backgroundColor: themeColors.surface }]}>
+          <Text style={[styles.emptyText, { color: themeColors.textSecondary }]}>No recent top-ups</Text>
         </View>
       ) : (
-        <View style={styles.card}>
+        <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
           {topUps.map((t, index) => (
             <TouchableOpacity
               key={t.id}
-              style={[styles.row, index !== topUps.length - 1 && styles.rowDivider]}
+              style={[
+                styles.row,
+                index !== topUps.length - 1 && {
+                  borderBottomWidth: StyleSheet.hairlineWidth,
+                  borderBottomColor: themeColors.border,
+                },
+              ]}
             >
               <View style={styles.iconCircle}>
                 <Feather name="arrow-down-left" size={16} color="#fff" />
               </View>
               <View style={styles.textContainer}>
-                <Text style={styles.name}>{t.name}</Text>
-                <Text style={styles.sub}>{t.sub}</Text>
+                <Text style={[styles.name, { color: themeColors.textPrimary }]}>{t.name}</Text>
+                <Text style={[styles.sub, { color: themeColors.textSecondary }]}>{t.sub}</Text>
               </View>
               <View style={styles.rightCol}>
-                <Text style={styles.amount}>{t.amount}</Text>
-                <View style={styles.statusTag}>
-                  <Text style={styles.statusText}>{t.status}</Text>
+                <Text style={[styles.amount, { color: themeColors.success }]}>{t.amount}</Text>
+                <View style={[styles.statusTag, { backgroundColor: themeColors.primaryTint }]}>
+                  <Text style={[styles.statusText, { color: themeColors.primaryLight }]}>{t.status}</Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -60,22 +70,19 @@ export function RecentTopUps() {
 
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5, marginTop: -10 },
-  title: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
-  viewAll: { color: colors.primaryLight, fontSize: 12, fontWeight: '600' },
+  title: { fontSize: 15, fontWeight: '600' },
+  viewAll: { fontSize: 12, fontWeight: '600' },
   card: {
-    backgroundColor: colors.surface,
     borderRadius: 16,
     paddingHorizontal: 14,
   },
   emptyCard: {
-    backgroundColor: colors.surface,
     borderRadius: 16,
     paddingVertical: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
   emptyText: {
-    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: '500',
   },
@@ -83,19 +90,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    // marginTop:-,
     paddingVertical: 14,
   },
-  rowDivider: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
-  },
   iconCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#1DB954', justifyContent: 'center', alignItems: 'center' },
-  name: { color: colors.textPrimary, fontSize: 13, fontWeight: '600' },
-  sub: { color: colors.textSecondary, fontSize: 11, marginTop: 2 },
-  amount: { color: colors.success, fontSize: 12, fontWeight: '600' },
-  statusTag: { backgroundColor: 'rgba(167,139,250,0.15)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  statusText: { color: colors.primaryLight, fontSize: 9, fontWeight: '600' },
+  name: { fontSize: 13, fontWeight: '600' },
+  sub: { fontSize: 11, marginTop: 2 },
+  amount: { fontSize: 12, fontWeight: '600' },
+  statusTag: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
+  statusText: { fontSize: 9, fontWeight: '600' },
   textContainer: { flex: 1 },
   rightCol: { alignItems: 'flex-end', gap: 4 },
 });

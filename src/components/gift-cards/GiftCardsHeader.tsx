@@ -1,42 +1,35 @@
+// src/components/gift-cards/GiftCardsHeader.tsx
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { Ionicons, Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function GiftCardsHeader() {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View>
-      <View style={styles.topRow}>
-        <View style={styles.left}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-            <Ionicons name="chevron-back" size={17} color={colors.textPrimary} />
-          </TouchableOpacity>
-          <Text style={styles.title}>Gift Cards</Text>
-        </View>
-       <TouchableOpacity
-                   style={styles.tradeBtn}
-                   onPress={() => router.push('/gift-card-trading')}
-                 >
-                   <Feather name="repeat" size={10} color={colors.primaryLight} />
-                   <Text style={styles.tradeText}>Trade Card</Text>
-                 </TouchableOpacity>
-      </View>
+    <View style={styles.row}>
+      <TouchableOpacity
+        onPress={() => router.back()}
+        style={[styles.iconBtn, { borderColor: themeColors.primary }]}
+        hitSlop={8}
+      >
+        <Ionicons name="chevron-back" size={20} color={themeColors.textPrimary} />
+      </TouchableOpacity>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>Gift Cards</Text>
+      <TouchableOpacity style={[styles.iconBtn, { borderColor: themeColors.primary }]}>
+        <Ionicons name="help-circle-outline" size={19} color={themeColors.primaryLight} />
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  left: { flexDirection: 'row', alignItems: 'center', gap: 9 },
-  backBtn: {
-    width: 30, height: 30, borderRadius: 15, backgroundColor: colors.surface,
+  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  iconBtn: {
+    width: 36, height: 36, borderRadius: 18,
+    borderWidth: 1.2,
     justifyContent: 'center', alignItems: 'center',
   },
-  title: { color: colors.textPrimary, fontSize: 17, fontWeight: '700' },
-  tradeBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 4,
-    borderWidth: 1.1, borderColor: colors.primary, borderRadius: 9,
-    paddingHorizontal: 9, paddingVertical: 6,
-  },
-  tradeText: { color: colors.primaryLight, fontSize: 10, fontWeight: '600' },
+  title: { fontSize: 16, fontWeight: '700' },
 });

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
 import { router } from 'expo-router';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Props = {
   totalEarnings: number;
@@ -20,6 +20,7 @@ export function EarningsStatsCard({
   availableBalance,
   pendingBalance,
 }: Props) {
+  const { colors: themeColors } = useTheme();
   const fmt = (n: number) => `₦${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 
   const handleAvailableBalancePress = () => {
@@ -27,64 +28,62 @@ export function EarningsStatsCard({
   };
 
   const handlePendingBalancePress = () => {
-    // You can navigate to pending balance screen or show a modal
-    // For now, we'll just show an alert or navigate to balance
     router.push('/balance');
   };
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: themeColors.primaryTint }]}>
       <View style={styles.topRow}>
         <View style={styles.col}>
           <View style={styles.labelRow}>
-            <Text style={styles.label}>Total Earnings</Text>
-            <Ionicons name="help-circle-outline" size={12} color={colors.textSecondary} />
+            <Text style={[styles.label, { color: themeColors.textSecondary }]}>Total Earnings</Text>
+            <Ionicons name="help-circle-outline" size={12} color={themeColors.textSecondary} />
           </View>
-          <Text style={styles.bigValue}>{fmt(totalEarnings)}</Text>
-          <Text style={styles.deltaGreen}>+ {fmt(earningsThisMonth)} this month</Text>
+          <Text style={[styles.bigValue, { color: themeColors.textPrimary }]}>{fmt(totalEarnings)}</Text>
+          <Text style={[styles.deltaGreen, { color: themeColors.success }]}>+ {fmt(earningsThisMonth)} this month</Text>
         </View>
 
-        <View style={styles.vDivider} />
+        <View style={[styles.vDivider, { backgroundColor: themeColors.border }]} />
 
         <View style={styles.col}>
-          <Text style={styles.label}>Successful Referrals</Text>
-          <Text style={styles.bigValue}>{successfulReferrals}</Text>
+          <Text style={[styles.label, { color: themeColors.textSecondary }]}>Successful Referrals</Text>
+          <Text style={[styles.bigValue, { color: themeColors.textPrimary }]}>{successfulReferrals}</Text>
           <Text style={styles.deltaBlue}>+ {referralsThisMonth} this month</Text>
         </View>
       </View>
 
-      <View style={styles.hDivider} />
+      <View style={[styles.hDivider, { backgroundColor: themeColors.border }]} />
 
       <View style={styles.bottomRow}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.balanceItem}
           onPress={handleAvailableBalancePress}
           activeOpacity={0.7}
         >
-          <View style={styles.iconCircle}>
-            <Ionicons name="wallet" size={14} color={colors.primaryLight} />
+          <View style={[styles.iconCircle, { backgroundColor: themeColors.primaryTint }]}>
+            <Ionicons name="wallet" size={14} color={themeColors.primaryLight} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.balanceLabel}>Available Balance</Text>
-            <Text style={styles.balanceValue}>{fmt(availableBalance)}</Text>
+            <Text style={[styles.balanceLabel, { color: themeColors.textSecondary }]}>Available Balance</Text>
+            <Text style={[styles.balanceValue, { color: themeColors.textPrimary }]}>{fmt(availableBalance)}</Text>
           </View>
-          <Feather name="chevron-right" size={14} color={colors.textSecondary} />
+          <Feather name="chevron-right" size={14} color={themeColors.textSecondary} />
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.balanceItem}
-          // onPress={handlePendingBalancePress}
+          onPress={handlePendingBalancePress}
           activeOpacity={0.7}
         >
-          <View style={styles.iconCircle}>
-            <Feather name="clock" size={14} color={colors.primaryLight} />
+          <View style={[styles.iconCircle, { backgroundColor: themeColors.primaryTint }]}>
+            <Feather name="clock" size={14} color={themeColors.primaryLight} />
           </View>
           <View style={{ flex: 1 }}>
             <View style={styles.labelRow}>
-              <Text style={styles.balanceLabel}>Pending Balance</Text>
-              <Ionicons name="help-circle-outline" size={11} color={colors.textSecondary} />
+              <Text style={[styles.balanceLabel, { color: themeColors.textSecondary }]}>Pending Balance</Text>
+              <Ionicons name="help-circle-outline" size={11} color={themeColors.textSecondary} />
             </View>
-            <Text style={styles.balanceValue}>{fmt(pendingBalance)}</Text>
+            <Text style={[styles.balanceValue, { color: themeColors.textPrimary }]}>{fmt(pendingBalance)}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -93,34 +92,33 @@ export function EarningsStatsCard({
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: 'rgba(167,139,250,0.08)', borderRadius: 18, padding: 16 },
+  card: { borderRadius: 18, padding: 16 },
   topRow: { flexDirection: 'row' },
   col: { flex: 1 },
-  vDivider: { width: 1, backgroundColor: colors.border, marginHorizontal: 14 },
+  vDivider: { width: 1, marginHorizontal: 14 },
   labelRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 6 },
-  label: { color: colors.textSecondary, fontSize: 11 },
-  bigValue: { color: colors.textPrimary, fontSize: 19, fontWeight: '800' },
-  deltaGreen: { color: colors.success, fontSize: 10, marginTop: 4, fontWeight: '600' },
+  label: { fontSize: 11 },
+  bigValue: { fontSize: 19, fontWeight: '800' },
+  deltaGreen: { fontSize: 10, marginTop: 4, fontWeight: '600' },
   deltaBlue: { color: '#60A5FA', fontSize: 10, marginTop: 4, fontWeight: '600' },
-  hDivider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: 14 },
+  hDivider: { height: StyleSheet.hairlineWidth, marginVertical: 14 },
   bottomRow: { flexDirection: 'row', gap: 14 },
-  balanceItem: { 
-    flex: 1, 
-    flexDirection: 'row', 
-    alignItems: 'center', 
+  balanceItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     paddingVertical: 4,
     paddingHorizontal: 4,
     borderRadius: 8,
   },
   iconCircle: {
-    width: 30, 
-    height: 30, 
+    width: 30,
+    height: 30,
     borderRadius: 15,
-    backgroundColor: 'rgba(167,139,250,0.15)',
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  balanceLabel: { color: colors.textSecondary, fontSize: 10 },
-  balanceValue: { color: colors.textPrimary, fontSize: 12, fontWeight: '700', marginTop: 2 },
+  balanceLabel: { fontSize: 10 },
+  balanceValue: { fontSize: 12, fontWeight: '700', marginTop: 2 },
 });
