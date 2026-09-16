@@ -2,7 +2,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "../../theme/colors";
 import { useTheme } from "../../theme/ThemeContext";
 
 type Category = {
@@ -48,12 +47,12 @@ export function CategoriesRow() {
                 borderColor: themeColors.primaryTint,
               },
             ]}
-            onPress={() => c.route && router.push(c.route)}
+            onPress={() => c.route && router.push(c.route as any)}
             disabled={!c.route}
           >
             <Ionicons
               name={c.icon}
-              size={22}
+              size={16}
               color={themeColors.primaryLight}
             />
             <Text style={[styles.label, { color: themeColors.textPrimary }]}>
@@ -72,31 +71,27 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 12,
   },
-  title: { color: colors.textPrimary, fontSize: 11.5, fontWeight: "500" },
-  viewAll: { color: colors.primaryLight, fontSize: 11, fontWeight: "600" },
+  title: { fontSize: 11.5, fontWeight: "500" },
+  viewAll: { fontSize: 11, fontWeight: "600" },
   grid: {
     flexDirection: "row",
-    gap: 6,
+    gap: 3,
     justifyContent: "space-between",
-    flexWrap: "wrap",
   },
   item: {
     flex: 1,
-    aspectRatio: 0.85,
-    borderRadius: 14,
-    backgroundColor: "#0F0F11",
+    aspectRatio: 0.75,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: "rgba(167,139,250,0.35)",
     justifyContent: "center",
     alignItems: "center",
-    gap: 2,
-    paddingHorizontal: 2,
-    paddingVertical: 4,
+    gap: 3,
+    paddingHorizontal: 1,
+    paddingVertical: 5,
   },
   label: {
-    color: colors.textPrimary,
-    fontSize: 8,
+    fontSize: 7,
     textAlign: "center",
-    lineHeight: 10,
+    lineHeight: 8.5,
   },
 });

@@ -1,9 +1,9 @@
 // VerificationLevelCard.tsx — tier name, badge graphic, daily/monthly limits, progress bar
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Check } from 'lucide-react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { TierConfig } from '../../config/tierConfig';
 import { ShieldNumberBadge, ShieldCheckBadge, CrownHexBadge } from './TierBadges';
 
@@ -12,9 +12,120 @@ interface Props {
 }
 
 export default function VerificationLevelCard({ config }: Props) {
+  const { colors: themeColors } = useTheme();
   const isTier1 = config.tier === 1;
   const isTier2 = config.tier === 2;
   const isTier3 = config.tier === 3;
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        card: {
+          backgroundColor: themeColors.surface,
+          borderRadius: 16,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+          padding: 12,
+          marginTop: 2,
+          marginBottom: 10,
+        },
+        cardTier3: {
+          borderColor: 'rgba(245, 179, 36, 0.35)',
+        },
+        row: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+        },
+        label: {
+          color: themeColors.textSecondary,
+          fontSize: 10.5,
+          marginBottom: 3,
+        },
+        tier: {
+          color: themeColors.textPrimary,
+          fontSize: 20,
+          fontWeight: '800',
+        },
+        badgeLabelRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 3,
+          gap: 5,
+        },
+        badgeLabelText: {
+          color: themeColors.primary,
+          fontSize: 11,
+          fontWeight: '600',
+        },
+        verifiedDot: {
+          width: 13,
+          height: 13,
+          borderRadius: 6.5,
+          backgroundColor: themeColors.primary,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        badgeGraphic: {
+          width: 74,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        pairRow: {
+          flexDirection: 'row',
+          marginTop: 10,
+        },
+        pairCol: {
+          flex: 1,
+        },
+        pairDivider: {
+          width: 1,
+          backgroundColor: themeColors.border,
+          marginHorizontal: 10,
+        },
+        pairLabel: {
+          color: themeColors.textSecondary,
+          fontSize: 10,
+          marginBottom: 2,
+        },
+        pairValue: {
+          color: themeColors.textPrimary,
+          fontSize: 13.5,
+          fontWeight: '700',
+        },
+        progressRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          marginTop: 10,
+          gap: 8,
+        },
+        progressTrack: {
+          flex: 1,
+          height: 5,
+          borderRadius: 2.5,
+          backgroundColor: themeColors.border,
+          overflow: 'hidden',
+        },
+        progressFill: {
+          height: '100%',
+          borderRadius: 2.5,
+        },
+        progressPercent: {
+          color: themeColors.textSecondary,
+          fontSize: 10.5,
+          fontWeight: '600',
+          width: 28,
+          textAlign: 'right',
+        },
+        caption: {
+          color: themeColors.textSecondary,
+          fontSize: 10.5,
+          marginTop: 6,
+          lineHeight: 14,
+        },
+      }),
+    [themeColors]
+  );
 
   return (
     <View style={[styles.card, isTier3 && styles.cardTier3]}>
@@ -24,7 +135,7 @@ export default function VerificationLevelCard({ config }: Props) {
           <Text style={styles.tier}>{config.levelName}</Text>
           {config.badgeLabel && (
             <View style={styles.badgeLabelRow}>
-              <Text style={[styles.badgeLabelText, isTier3 && { color: colors.primary }]}>
+              <Text style={[styles.badgeLabelText, isTier3 && { color: themeColors.primary }]}>
                 {config.badgeLabel}
               </Text>
               {isTier3 && (
@@ -58,7 +169,7 @@ export default function VerificationLevelCard({ config }: Props) {
       <View style={styles.progressRow}>
         <View style={styles.progressTrack}>
           <LinearGradient
-            colors={[colors.primary, colors.primary]}
+            colors={[themeColors.primary, themeColors.primary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={[styles.progressFill, { width: `${config.progressPercent}%` }]}
@@ -71,109 +182,3 @@ export default function VerificationLevelCard({ config }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: 12,
-    marginTop: 2,
-    marginBottom: 10,
-  },
-  cardTier3: {
-    borderColor: 'rgba(245, 179, 36, 0.35)',
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  label: {
-    color: colors.textSecondary,
-    fontSize: 10.5,
-    marginBottom: 3,
-  },
-  tier: {
-    color: colors.textPrimary,
-    fontSize: 20,
-    fontWeight: '800',
-  },
-  badgeLabelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 3,
-    gap: 5,
-  },
-  badgeLabelText: {
-    color: colors.primary,
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  verifiedDot: {
-    width: 13,
-    height: 13,
-    borderRadius: 6.5,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  badgeGraphic: {
-    width: 74,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  pairRow: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  pairCol: {
-    flex: 1,
-  },
-  pairDivider: {
-    width: 1,
-    backgroundColor: colors.border,
-    marginHorizontal: 10,
-  },
-  pairLabel: {
-    color: colors.textSecondary,
-    fontSize: 10,
-    marginBottom: 2,
-  },
-  pairValue: {
-    color: colors.textPrimary,
-    fontSize: 13.5,
-    fontWeight: '700',
-  },
-  progressRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-    gap: 8,
-  },
-  progressTrack: {
-    flex: 1,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: colors.border,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 2.5,
-  },
-  progressPercent: {
-    color: colors.textSecondary,
-    fontSize: 10.5,
-    fontWeight: '600',
-    width: 28,
-    textAlign: 'right',
-  },
-  caption: {
-    color: colors.textSecondary,
-    fontSize: 10.5,
-    marginTop: 6,
-    lineHeight: 14,
-  },
-});

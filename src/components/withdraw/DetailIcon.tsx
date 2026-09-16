@@ -1,19 +1,8 @@
 import { Feather } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Tone = 'purple' | 'red' | 'green';
-
-const BG: Record<Tone, string> = {
-  purple: colors.primaryTint,
-  red: colors.dangerTint,
-  green: colors.successTint,
-};
-const FG: Record<Tone, string> = {
-  purple: colors.primary,
-  red: colors.danger,
-  green: colors.success,
-};
 
 export default function DetailIcon({
   name,
@@ -24,6 +13,19 @@ export default function DetailIcon({
   tone?: Tone;
   size?: number;
 }) {
+  const { colors: themeColors } = useTheme();
+
+  const BG: Record<Tone, string> = {
+    purple: themeColors.primaryTint,
+    red: themeColors.dangerTint,
+    green: themeColors.successTint,
+  };
+  const FG: Record<Tone, string> = {
+    purple: themeColors.primary,
+    red: themeColors.danger,
+    green: themeColors.success,
+  };
+
   return (
     <View style={[styles.wrap, { backgroundColor: BG[tone] }]}>
       <Feather name={name} size={size} color={FG[tone]} />

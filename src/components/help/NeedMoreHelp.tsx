@@ -1,10 +1,64 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function NeedMoreHelp() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  wrapper: {
+    borderRadius: 16,
+    padding: 14,
+    overflow: 'hidden',
+  },
+  title: { color: '#fff', fontSize: 14, fontWeight: '700', marginBottom: 5 },
+  sub: {
+    color: 'rgba(255,255,255,0.65)',
+    fontSize: 10.5,
+    lineHeight: 15,
+    maxWidth: '70%',
+  },
+  illustration: {
+    position: 'absolute',
+    top: 10,
+    right: 6,
+  },
+  buttonsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 44,
+  },
+  chatBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: themeColors.primary,
+    borderRadius: 12,
+    padding: 10,
+  },
+  chatBtnTitle: { color: '#fff', fontSize: 10.5, fontWeight: '700' },
+  chatBtnSub: { color: 'rgba(255,255,255,0.75)', fontSize: 8.5, marginTop: 1 },
+  emailBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 12,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(167,139,250,0.4)',
+  },
+  emailBtnTitle: { color: '#fff', fontSize: 10.5, fontWeight: '700' },
+  emailBtnSub: { color: 'rgba(255,255,255,0.55)', fontSize: 8.5, marginTop: 1 },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.wrapper}>
       <LinearGradient
@@ -33,7 +87,7 @@ export function NeedMoreHelp() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.emailBtn}>
-          <Feather name="mail" size={13} color={colors.primaryLight} />
+          <Feather name="mail" size={13} color={themeColors.primaryLight} />
           <View>
             <Text style={styles.emailBtnTitle}>Email Support</Text>
             <Text style={styles.emailBtnSub}>Get help via email</Text>
@@ -44,51 +98,3 @@ export function NeedMoreHelp() {
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    borderRadius: 16,
-    padding: 14,
-    overflow: 'hidden',
-  },
-  title: { color: '#fff', fontSize: 14, fontWeight: '700', marginBottom: 5 },
-  sub: {
-    color: 'rgba(255,255,255,0.65)',
-    fontSize: 10.5,
-    lineHeight: 15,
-    maxWidth: '70%',
-  },
-  illustration: {
-    position: 'absolute',
-    top: 10,
-    right: 6,
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 44,
-  },
-  chatBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    padding: 10,
-  },
-  chatBtnTitle: { color: '#fff', fontSize: 10.5, fontWeight: '700' },
-  chatBtnSub: { color: 'rgba(255,255,255,0.75)', fontSize: 8.5, marginTop: 1 },
-  emailBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderRadius: 12,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(167,139,250,0.4)',
-  },
-  emailBtnTitle: { color: '#fff', fontSize: 10.5, fontWeight: '700' },
-  emailBtnSub: { color: 'rgba(255,255,255,0.55)', fontSize: 8.5, marginTop: 1 },
-});

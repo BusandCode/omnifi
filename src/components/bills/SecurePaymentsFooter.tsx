@@ -1,46 +1,42 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from '../../theme/ThemeContext';
+
+const ICON_SIZE = 15;
 
 export function SecurePaymentsFooter() {
-  const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
-  const { styles, iconSize } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      iconSize: s(15),
-      styles: StyleSheet.create({
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
         card: {
-          flexDirection: 'row', alignItems: 'center', gap: s(12),
-          backgroundColor: colors.surface, borderRadius: s(14), padding: s(14),
+          flexDirection: 'row', alignItems: 'center', gap: 12,
+          backgroundColor: themeColors.surface, borderRadius: 14, padding: 14,
         },
         iconBox: {
-          width: s(32), height: s(32), borderRadius: s(16), 
-          backgroundColor: 'rgba(167,139,250,0.15)',
+          width: 32, height: 32, borderRadius: 16,
+          backgroundColor: themeColors.primaryTint,
           justifyContent: 'center', alignItems: 'center',
         },
-        title: { color: colors.textPrimary, fontSize: f(12), fontWeight: '600' },
-        sub: { color: colors.textSecondary, fontSize: f(10), marginTop: s(2) },
+        title: { color: themeColors.textPrimary, fontSize: 12, fontWeight: '600' },
+        sub: { color: themeColors.textSecondary, fontSize: 10, marginTop: 2 },
         textContainer: { flex: 1 },
       }),
-    };
-  }, [layoutScale]);
+    [themeColors]
+  );
 
   return (
     <TouchableOpacity style={styles.card}>
       <View style={styles.iconBox}>
-        <Feather name="shield" size={iconSize} color={colors.primaryLight} />
+        <Feather name="shield" size={ICON_SIZE} color={themeColors.primaryLight} />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.title}>Secure payments</Text>
         <Text style={styles.sub}>Your payments are protected with bank-level security.</Text>
       </View>
-      <Feather name="chevron-right" size={iconSize + 1} color={colors.textSecondary} />
+      <Feather name="chevron-right" size={ICON_SIZE + 1} color={themeColors.textSecondary} />
     </TouchableOpacity>
   );
 }

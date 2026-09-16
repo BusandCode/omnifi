@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Props = {
   sendLabel: string;
@@ -9,6 +10,31 @@ type Props = {
 };
 
 export function TransferSummaryCard({ sendLabel, feeLabel, totalLabel, receiveLabel }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  card: { backgroundColor: themeColors.surface, borderRadius: 18, padding: 16, overflow: 'hidden' },
+  title: { color: themeColors.textPrimary, fontSize: 13.5, fontWeight: '700', marginBottom: 12 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 },
+  label: { color: themeColors.textSecondary, fontSize: 12 },
+  value: { color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '700' },
+  freeValue: { color: themeColors.success, fontSize: 12.5, fontWeight: '700' },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: themeColors.border, marginVertical: 10 },
+  receiveRow: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    marginHorizontal: -16,
+    marginBottom: -16,
+    marginTop: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+  },
+  receiveLabel: { color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '700' },
+  receiveValue: { color: themeColors.success, fontSize: 13.5, fontWeight: '700' },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>Transfer Summary</Text>
@@ -37,23 +63,3 @@ export function TransferSummaryCard({ sendLabel, feeLabel, totalLabel, receiveLa
   );
 }
 
-const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 18, padding: 16, overflow: 'hidden' },
-  title: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700', marginBottom: 12 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 },
-  label: { color: colors.textSecondary, fontSize: 12 },
-  value: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
-  freeValue: { color: colors.success, fontSize: 12.5, fontWeight: '700' },
-  divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: 10 },
-  receiveRow: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    marginHorizontal: -16,
-    marginBottom: -16,
-    marginTop: 6,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  receiveLabel: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
-  receiveValue: { color: colors.success, fontSize: 13.5, fontWeight: '700' },
-});

@@ -1,18 +1,21 @@
+// src/components/statements/PasswordProtectedNote.tsx
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function PasswordProtectedNote() {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, { backgroundColor: themeColors.surface }]}>
       <View style={styles.iconBox}>
-        <Ionicons name="shield-checkmark" size={14} color={colors.primaryLight} />
+        <Ionicons name="shield-checkmark" size={14} color={themeColors.primaryLight} />
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>All documents are password protected for your security.</Text>
-        <Text style={styles.sub}>Your password is your date of birth (DDMMYYYY).</Text>
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>All documents are password protected for your security.</Text>
+        <Text style={[styles.sub, { color: themeColors.textSecondary }]}>Your password is your date of birth (DDMMYYYY).</Text>
       </View>
-      <View style={styles.lockBox}>
+      <View style={[styles.lockBox, { backgroundColor: themeColors.primary }]}>
         <Ionicons name="lock-closed" size={14} color="#fff" />
       </View>
     </View>
@@ -24,10 +27,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 9,
-    backgroundColor: colors.surface,
     borderRadius: 13,
     padding: 10,
-    marginBottom:-20
+    marginBottom: -20,
   },
   iconBox: {
     width: 26,
@@ -38,13 +40,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textContainer: { flex: 1 },
-  title: { color: colors.textPrimary, fontSize: 9.5, fontWeight: '600', lineHeight: 13 },
-  sub: { color: colors.textSecondary, fontSize: 8.5, marginTop: 2 },
+  title: { fontSize: 9.5, fontWeight: '600', lineHeight: 13 },
+  sub: { fontSize: 8.5, marginTop: 2 },
   lockBox: {
     width: 30,
     height: 30,
     borderRadius: 9,
-    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },

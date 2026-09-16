@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Step = {
   icon: React.ReactNode;
@@ -13,6 +14,24 @@ type Props = {
 };
 
 export function WhatHappensNextCard({ recipientFirstName }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  card: { backgroundColor: themeColors.surface, borderRadius: 16, padding: 14, gap: 10 },
+  title: { color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '700', marginBottom: 2 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  iconCircle: {
+    width: 28, height: 28, borderRadius: 14,
+    backgroundColor: themeColors.primary,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  textCol: { flex: 1 },
+  stepTitle: { color: themeColors.textPrimary, fontSize: 11.5, fontWeight: '700' },
+  stepSub: { color: themeColors.textSecondary, fontSize: 9.5, marginTop: 1, lineHeight: 13 },
+}),
+    [themeColors]
+  );
+
   const steps: Step[] = [
     {
       icon: <Ionicons name="mail" size={13} color="#fff" />,
@@ -48,16 +67,3 @@ export function WhatHappensNextCard({ recipientFirstName }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 14, gap: 10 },
-  title: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700', marginBottom: 2 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  iconCircle: {
-    width: 28, height: 28, borderRadius: 14,
-    backgroundColor: colors.primary,
-    justifyContent: 'center', alignItems: 'center',
-  },
-  textCol: { flex: 1 },
-  stepTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
-  stepSub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 1, lineHeight: 13 },
-});

@@ -1,23 +1,13 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function ReportIssueHeader() {
-  return (
-    <View style={styles.row}>
-      <TouchableOpacity onPress={() => router.back()} style={[styles.iconBtn, styles.left]} hitSlop={8}>
-        <Ionicons name="chevron-back" size={20} color={colors.textPrimary} />
-      </TouchableOpacity>
-      <Text style={styles.title}>Report an Issue</Text>
-      <TouchableOpacity style={[styles.iconBtn, styles.right]}>
-        <Ionicons name="headset-outline" size={19} color={colors.primaryLight} />
-      </TouchableOpacity>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -30,11 +20,27 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 18,
     borderWidth: 1.2,
-    borderColor: colors.primary,
+    borderColor: themeColors.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },
   left: { left: 0 },
   right: { right: 0 },
-  title: { color: colors.textPrimary, fontSize: 17, fontWeight: '700' },
-});
+  title: { color: themeColors.textPrimary, fontSize: 17, fontWeight: '700' },
+}),
+    [themeColors]
+  );
+
+  return (
+    <View style={styles.row}>
+      <TouchableOpacity onPress={() => router.back()} style={[styles.iconBtn, styles.left]} hitSlop={8}>
+        <Ionicons name="chevron-back" size={20} color={themeColors.textPrimary} />
+      </TouchableOpacity>
+      <Text style={styles.title}>Report an Issue</Text>
+      <TouchableOpacity style={[styles.iconBtn, styles.right]}>
+        <Ionicons name="headset-outline" size={19} color={themeColors.primaryLight} />
+      </TouchableOpacity>
+    </View>
+  );
+}
+

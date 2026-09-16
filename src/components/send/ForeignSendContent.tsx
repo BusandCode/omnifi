@@ -1,8 +1,6 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
 import {
   FOREIGN_ACCOUNTS,
@@ -17,12 +15,9 @@ import { ForeignAmountCard, ForeignNoteCard } from "./ForeignAmountInput";
 import { ForeignSendSummary } from "./ForeignSendSummary";
 
 function SectionHeader({ number, title }: { number: number; title: string }) {
-  const layoutScale = useLayoutScale();
   const { colors: themeColors } = useTheme();
-  const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-  const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
   return (
-    <Text style={{ color: themeColors.textPrimary, fontSize: f(11.5), fontWeight: "700", marginBottom: s(8) }}>
+    <Text style={[styles.sectionHeader, { color: themeColors.textPrimary }]}>
       {number}. {title}
     </Text>
   );
@@ -33,7 +28,6 @@ type Props = {
 };
 
 export function ForeignSendContent({ currency }: Props) {
-  const layoutScale = useLayoutScale();
   const account = FOREIGN_ACCOUNTS[currency];
 
   const [method, setMethod] = useState<SendMethodId>("bank");
@@ -42,14 +36,6 @@ export function ForeignSendContent({ currency }: Props) {
   const [note, setNote] = useState("");
 
   const numericAmount = parseFloat(amount.replace(/,/g, "")) || 0;
-
-  const styles = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    return StyleSheet.create({
-      container: { gap: s(16) },
-      section: { gap: s(8) },
-    });
-  }, [layoutScale]);
 
   const handleReview = () => {
     const recipientName = fields.recipientName || "";
@@ -112,3 +98,9 @@ export function ForeignSendContent({ currency }: Props) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { gap: 22 },
+  section: { gap: 10 },
+  sectionHeader: { fontSize: 13, fontWeight: "700" },
+});

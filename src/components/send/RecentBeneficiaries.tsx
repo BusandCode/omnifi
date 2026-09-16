@@ -1,8 +1,5 @@
-import { useMemo } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
 
 export type Beneficiary = {
@@ -21,65 +18,24 @@ type Props = {
   onAddNew: () => void;
 };
 
-export function RecentBeneficiaries({ beneficiaries, onSelect, onViewAll, onAddNew }: Props) {
-  const layoutScale = useLayoutScale();
+export function RecentBeneficiaries({
+  beneficiaries,
+  onSelect,
+  onViewAll,
+  onAddNew,
+}: Props) {
   const { colors: themeColors } = useTheme();
-
-  const { styles, iconSize } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      iconSize: s(18),
-      styles: StyleSheet.create({
-        header: {
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginBottom: s(14),
-        },
-        title: { color: themeColors.textPrimary, fontSize: f(11.5), fontWeight: "700" },
-        viewAll: { color: themeColors.primaryLight, fontSize: f(11.5), fontWeight: "600" },
-        row: { flexDirection: "row", justifyContent: "space-between" },
-        item: { alignItems: "center", gap: s(6), width: s(60) },
-        avatar: {
-          width: s(48),
-          height: s(48),
-          borderRadius: s(24),
-          justifyContent: "center",
-          alignItems: "center",
-        },
-        initials: { color: "#1A1A1A", fontSize: f(14), fontWeight: "700" },
-        addCircle: {
-          width: s(48),
-          height: s(48),
-          borderRadius: s(24),
-          borderWidth: 1.5,
-          borderColor: themeColors.border,
-          borderStyle: "dashed",
-          justifyContent: "center",
-          alignItems: "center",
-        },
-        name: {
-          color: themeColors.textPrimary,
-          fontSize: f(10.5),
-          fontWeight: "600",
-          textAlign: "center",
-        },
-        bank: {
-          color: themeColors.textSecondary,
-          fontSize: f(9),
-          textAlign: "center",
-        },
-      }),
-    };
-  }, [layoutScale, themeColors]);
 
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.title}>Recent Beneficiaries</Text>
+        <Text style={[styles.title, { color: themeColors.textPrimary }]}>
+          Recent Beneficiaries
+        </Text>
         <TouchableOpacity onPress={onViewAll}>
-          <Text style={styles.viewAll}>View all</Text>
+          <Text style={[styles.viewAll, { color: themeColors.primaryLight }]}>
+            View all
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -93,18 +49,60 @@ export function RecentBeneficiaries({ beneficiaries, onSelect, onViewAll, onAddN
                 <Text style={styles.initials}>{b.initials}</Text>
               </View>
             )}
-            <Text style={styles.name} numberOfLines={1}>{b.name}</Text>
-            <Text style={styles.bank} numberOfLines={1}>{b.bank}</Text>
+            <Text style={[styles.name, { color: themeColors.textPrimary }]} numberOfLines={1}>
+              {b.name}
+            </Text>
+            <Text style={[styles.bank, { color: themeColors.textSecondary }]} numberOfLines={1}>
+              {b.bank}
+            </Text>
           </TouchableOpacity>
         ))}
 
         <TouchableOpacity style={styles.item} onPress={onAddNew}>
-          <View style={styles.addCircle}>
-            <Feather name="plus" size={iconSize} color={themeColors.textSecondary} />
+          <View style={[styles.addCircle, { borderColor: themeColors.border }]}>
+            <Feather name="plus" size={18} color={themeColors.textSecondary} />
           </View>
-          <Text style={styles.name}>Add New</Text>
+          <Text style={[styles.name, { color: themeColors.textPrimary }]}>Add New</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 14,
+  },
+  title: { fontSize: 12, fontWeight: "600" },
+  viewAll: { fontSize: 13, fontWeight: "600" },
+  row: { flexDirection: "row", justifyContent: "space-between" },
+  item: { alignItems: "center", gap: 6, width: 64 },
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  initials: { color: "#1A1A1A", fontSize: 14, fontWeight: "700" },
+  addCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 1.5,
+    borderStyle: "dashed",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  name: {
+    fontSize: 11,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  bank: {
+    fontSize: 9.5,
+    textAlign: "center",
+  },
+});

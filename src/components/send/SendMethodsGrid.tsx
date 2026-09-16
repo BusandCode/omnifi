@@ -1,8 +1,6 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
 
 export type SendMethod = "bank" | "phone" | "wallet" | "qr";
@@ -17,7 +15,6 @@ type MethodDef = {
 type Props = { onSelect: (method: SendMethod) => void };
 
 export function SendMethodsGrid({ onSelect }: Props) {
-  const layoutScale = useLayoutScale();
   const { colors: themeColors } = useTheme();
 
   const methods: MethodDef[] = useMemo(
@@ -54,43 +51,6 @@ export function SendMethodsGrid({ onSelect }: Props) {
     [themeColors]
   );
 
-  const { styles } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      styles: StyleSheet.create({
-        row: { flexDirection: "row", justifyContent: "space-between" },
-        item: {
-          flex: 1,
-          alignItems: "center",
-          gap: s(8),
-          paddingHorizontal: s(2),
-        },
-        iconBox: {
-          width: s(52),
-          height: s(52),
-          borderRadius: s(26),
-          backgroundColor: themeColors.surface,
-          justifyContent: "center",
-          alignItems: "center",
-        },
-        title: {
-          color: themeColors.textPrimary,
-          fontSize: f(10.5),
-          fontWeight: "700",
-          textAlign: "center",
-        },
-        sub: {
-          color: themeColors.textSecondary,
-          fontSize: f(9),
-          textAlign: "center",
-          lineHeight: s(12),
-        },
-      }),
-    };
-  }, [layoutScale, themeColors]);
-
   return (
     <View style={styles.row}>
       {methods.map((m) => (
@@ -99,11 +59,44 @@ export function SendMethodsGrid({ onSelect }: Props) {
           style={styles.item}
           onPress={() => onSelect(m.id)}
         >
-          <View style={styles.iconBox}>{m.render()}</View>
-          <Text style={styles.title}>{m.title}</Text>
-          <Text style={styles.sub}>{m.sub}</Text>
+          <View style={[styles.iconBox, { backgroundColor: themeColors.surface }]}>
+            {m.render()}
+          </View>
+          <Text style={[styles.title, { color: themeColors.textPrimary }]}>
+            {m.title}
+          </Text>
+          <Text style={[styles.sub, { color: themeColors.textSecondary }]}>
+            {m.sub}
+          </Text>
         </TouchableOpacity>
       ))}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  row: { flexDirection: "row", justifyContent: "space-between" },
+  item: {
+    flex: 1,
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 4,
+  },
+  iconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 26,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 9,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  sub: {
+    fontSize: 9,
+    textAlign: "center",
+    lineHeight: 11,
+  },
+});

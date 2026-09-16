@@ -1,9 +1,53 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function ContactIntro() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  textContainer: { flex: 1 },
+  title: { color: themeColors.textPrimary, fontSize: 22, fontWeight: '700', marginBottom: 8 },
+  sub: { color: themeColors.textSecondary, fontSize: 12.5, lineHeight: 18 },
+  illustration: {
+    width: 84,
+    height: 84,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  envelope: {
+    width: 64,
+    height: 64,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ rotate: '-6deg' }],
+  },
+  bubble: {
+    position: 'absolute',
+    bottom: 4,
+    right: 0,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: themeColors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: themeColors.background,
+  },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.row}>
       <View style={styles.textContainer}>
@@ -30,41 +74,3 @@ export function ContactIntro() {
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  textContainer: { flex: 1 },
-  title: { color: colors.textPrimary, fontSize: 22, fontWeight: '700', marginBottom: 8 },
-  sub: { color: colors.textSecondary, fontSize: 12.5, lineHeight: 18 },
-  illustration: {
-    width: 84,
-    height: 84,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  envelope: {
-    width: 64,
-    height: 64,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    transform: [{ rotate: '-6deg' }],
-  },
-  bubble: {
-    position: 'absolute',
-    bottom: 4,
-    right: 0,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.background,
-  },
-});

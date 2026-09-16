@@ -143,7 +143,7 @@ export default function ForgotPasswordScreen() {
                   { color: themeColors.textSecondary },
                 ]}
               >
-                No worries! Enter the email address linked to your Aurelius
+                No worries! Enter the email address linked to you Omnifi
                 account and we'll send you a link to reset your password.
               </Text>
             </View>

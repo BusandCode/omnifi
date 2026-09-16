@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
@@ -6,11 +7,34 @@ import { ReviewSwapCard } from '../src/components/review-swap/ReviewSwapCard';
 import { ReviewTransactionSummary } from '../src/components/review-swap/ReviewTransactionSummary';
 import { GuaranteeBanner } from '../src/components/review-swap/GuaranteeBanner';
 import { PaymentMethodRow } from '../src/components/review-swap/PaymentMethodRow';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export default function ReviewSwapScreen() {
+  const { colors: themeColors } = useTheme();
   const { amount, currency } = useLocalSearchParams<{ amount?: string; currency?: string }>();
   const swapCurrency = currency === 'USD' || currency === 'EUR' ? currency : 'NGN';
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: themeColors.background,
+          paddingHorizontal: 20,
+          paddingTop: 46,
+          paddingBottom: 16,
+          gap: 8,
+        },
+        cta: {
+          flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 7,
+          backgroundColor: themeColors.primary, borderRadius: 14, paddingVertical: 13,
+        },
+        ctaText: { color: '#fff', fontSize: 13.5, fontWeight: '700' },
+        secureRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, marginTop: 6 },
+        secureText: { color: themeColors.textSecondary, fontSize: 9.5 },
+      }),
+    [themeColors],
+  );
 
   const handleConfirm = () => {
     router.replace({
@@ -43,20 +67,9 @@ export default function ReviewSwapScreen() {
       </TouchableOpacity>
 
       <View style={styles.secureRow}>
-        <Feather name="shield" size={10} color={colors.textSecondary} />
+        <Feather name="shield" size={10} color={themeColors.textSecondary} />
         <Text style={styles.secureText}>Secure encrypted transaction</Text>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 20, paddingTop: 46, paddingBottom: 16, gap: 8 },
-  cta: {
-    flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 7,
-    backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 13,
-  },
-  ctaText: { color: '#fff', fontSize: 13.5, fontWeight: '700' },
-  secureRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 5, marginTop: 6 },
-  secureText: { color: colors.textSecondary, fontSize: 9.5 },
-});

@@ -8,7 +8,7 @@ import { TotalSpentCard } from '../../src/components/spending-analytics/TotalSpe
 import { SpendingOverviewCard } from '../../src/components/spending-analytics/SpendingOverviewCard';
 import { SpendingTrendCard } from '../../src/components/spending-analytics/SpendingTrendCard';
 import { SetBudgetBanner } from '../../src/components/spending-analytics/SetBudgetBanner';
-import { colors } from '../../src/theme/colors';
+import { useTheme } from '../../src/theme/ThemeContext';
 import { SPENDING_DATA, PeriodKey } from '../../src/constants/spendingData';
 import { getCurrency } from '../../src/constants/currencies';
 
@@ -20,10 +20,25 @@ function isValidPeriod(value: unknown): value is PeriodKey {
 
 export default function SpendingAnalyticsScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
   const { period: rawPeriod } = useLocalSearchParams<{ period: string }>();
 
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: { flex: 1, backgroundColor: themeColors.background },
+        fixedHeader: {
+          paddingHorizontal: 20,
+          paddingBottom: 10,
+          backgroundColor: themeColors.background,
+        },
+        scroll: { flex: 1 },
+        content: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 24, gap: 16 },
+      }),
+    [themeColors],
+  );
+
   if (!isValidPeriod(rawPeriod)) {
-    // return <Redirect href="/spending-analytics/month" />;
     return <Redirect href={`/spending-analytics/month` as any} />;
   }
 
@@ -34,7 +49,7 @@ export default function SpendingAnalyticsScreen() {
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <View style={[styles.fixedHeader, { paddingTop: insets.top + 8 }]}>
+      <View style={[styles.fixedHeader, { paddingTop: insets.top + 16 }]}>
         <SpendingAnalyticsHeader />
       </View>
 
@@ -66,10 +81,3 @@ export default function SpendingAnalyticsScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  fixedHeader: { paddingHorizontal: 20, paddingBottom: 10, backgroundColor: colors.background },
-  scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 24, gap: 16 },
-});

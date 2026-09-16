@@ -1,7 +1,8 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Share } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Props = {
   requestId: string;
@@ -9,6 +10,21 @@ type Props = {
 };
 
 export function RequestSuccessActions({ requestId, onRequestAgain }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  row: { flexDirection: 'row' },
+  item: { flex: 1, alignItems: 'center', gap: 8 },
+  iconCircle: {
+    width: 46, height: 46, borderRadius: 23,
+    backgroundColor: themeColors.surface,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  label: { color: themeColors.textPrimary, fontSize: 9.5, textAlign: 'center' },
+}),
+    [themeColors]
+  );
+
   const handleShare = () => {
     Share.share({ message: `View my payment request: omnifi.app/r/${requestId}` });
   };
@@ -29,7 +45,7 @@ export function RequestSuccessActions({ requestId, onRequestAgain }: Props) {
       {actions.map((a) => (
         <TouchableOpacity key={a.label} style={styles.item} onPress={a.onPress}>
           <View style={styles.iconCircle}>
-            <Feather name={a.icon} size={17} color={colors.primaryLight} />
+            <Feather name={a.icon} size={17} color={themeColors.primaryLight} />
           </View>
           <Text style={styles.label} numberOfLines={1}>{a.label}</Text>
         </TouchableOpacity>
@@ -38,13 +54,3 @@ export function RequestSuccessActions({ requestId, onRequestAgain }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: { flexDirection: 'row' },
-  item: { flex: 1, alignItems: 'center', gap: 8 },
-  iconCircle: {
-    width: 46, height: 46, borderRadius: 23,
-    backgroundColor: colors.surface,
-    justifyContent: 'center', alignItems: 'center',
-  },
-  label: { color: colors.textPrimary, fontSize: 9.5, textAlign: 'center' },
-});

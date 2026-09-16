@@ -1,3 +1,4 @@
+// app/transfer-success.tsx
 import { View, StyleSheet } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SuccessHeader } from '../src/components/transfer-success/SuccessHeader';
@@ -7,10 +8,11 @@ import { TransactionDetails } from '../src/components/transfer-success/Transacti
 import { SecureBanner } from '../src/components/transfer-success/SecureBanner';
 import { ActionButtons } from '../src/components/transfer-success/ActionButtons';
 import { NeedHelp } from '../src/components/transfer-success/NeedHelp';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 import { CurrencyCode } from '../src/constants/currencies';
 
 export default function TransferSuccessScreen() {
+  const { colors: themeColors } = useTheme();
   const params = useLocalSearchParams<{
     amount?: string;
     currency?: string;
@@ -34,7 +36,7 @@ export default function TransferSuccessScreen() {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <SuccessHeader />
       <SuccessBadge />
       <TransferSummary
@@ -60,5 +62,5 @@ export default function TransferSuccessScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 20, paddingTop: 45, paddingBottom: 20, gap: 8 },
+  container: { flex: 1, paddingHorizontal: 20, paddingTop: 45, paddingBottom: 20, gap: 8 },
 });

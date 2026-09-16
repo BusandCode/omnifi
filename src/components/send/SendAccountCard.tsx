@@ -1,72 +1,74 @@
-import { useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
 import { ForeignAccountBrief } from "../../constants/foreignSendData";
 
 type Props = { account: ForeignAccountBrief };
 
 export function SendAccountCard({ account }: Props) {
-  const layoutScale = useLayoutScale();
   const { colors: themeColors } = useTheme();
 
-  const { styles, iconSize } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      iconSize: s(11),
-      styles: StyleSheet.create({
-        card: { backgroundColor: themeColors.surface, borderRadius: s(16), padding: s(14), overflow: "hidden" },
-        topRow: { flexDirection: "row", alignItems: "center", gap: s(8) },
-        flagCircle: {
-          width: s(28), height: s(28), borderRadius: s(14),
-          backgroundColor: themeColors.primaryTint,
-          justifyContent: "center", alignItems: "center",
-        },
-        flagText: { fontSize: f(14) },
-        nameCol: { flex: 1 },
-        accountName: { color: themeColors.textPrimary, fontSize: f(12.5), fontWeight: "700" },
-        activeRow: { flexDirection: "row", alignItems: "center", gap: s(4), marginTop: s(2) },
-        activeDot: { width: s(6), height: s(6), borderRadius: s(3), backgroundColor: themeColors.success },
-        activeText: { color: themeColors.success, fontSize: f(9.5), fontWeight: "600" },
-        balance: { color: themeColors.textPrimary, fontSize: f(26), fontWeight: "700", marginTop: s(12) },
-        balanceLabelRow: { flexDirection: "row", alignItems: "center", gap: s(4), marginTop: s(2) },
-        balanceLabel: { color: themeColors.textSecondary, fontSize: f(10) },
-        watermark: {
-          position: "absolute", right: s(-4), top: s(10),
-          fontSize: f(72), fontWeight: "700", color: themeColors.primaryTint,
-        },
-      }),
-    };
-  }, [layoutScale, themeColors]);
-
   return (
-    <View style={styles.card}>
-      <Text style={styles.watermark}>{account.symbol}</Text>
+    <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
+      <Text style={[styles.watermark, { color: themeColors.primaryTint }]}>
+        {account.symbol}
+      </Text>
       <View style={styles.topRow}>
-        <View style={styles.flagCircle}>
+        <View style={[styles.flagCircle, { backgroundColor: themeColors.primaryTint }]}>
           <Text style={styles.flagText}>{account.flagEmoji}</Text>
         </View>
         <View style={styles.nameCol}>
-          <Text style={styles.accountName}>{account.code} Account</Text>
+          <Text style={[styles.accountName, { color: themeColors.textPrimary }]}>
+            {account.code} Account
+          </Text>
           <View style={styles.activeRow}>
-            <View style={styles.activeDot} />
-            <Text style={styles.activeText}>Active</Text>
+            <View style={[styles.activeDot, { backgroundColor: themeColors.success }]} />
+            <Text style={[styles.activeText, { color: themeColors.success }]}>Active</Text>
           </View>
         </View>
       </View>
 
-      <Text style={styles.balance}>
+      <Text style={[styles.balance, { color: themeColors.textPrimary }]}>
         {account.symbol}
-        {account.balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        {account.balance.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
       </Text>
       <View style={styles.balanceLabelRow}>
-        <Text style={styles.balanceLabel}>Available Balance</Text>
-        <Feather name="info" size={iconSize} color={themeColors.textSecondary} />
+        <Text style={[styles.balanceLabel, { color: themeColors.textSecondary }]}>
+          Available Balance
+        </Text>
+        <Feather name="info" size={11} color={themeColors.textSecondary} />
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  card: { borderRadius: 18, padding: 16, overflow: "hidden" },
+  topRow: { flexDirection: "row", alignItems: "center", gap: 10 },
+  flagCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  flagText: { fontSize: 15 },
+  nameCol: { flex: 1 },
+  accountName: { fontSize: 13.5, fontWeight: "700" },
+  activeRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 3 },
+  activeDot: { width: 6, height: 6, borderRadius: 3 },
+  activeText: { fontSize: 10.5, fontWeight: "600" },
+  balance: { fontSize: 28, fontWeight: "700", marginTop: 14 },
+  balanceLabelRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 3 },
+  balanceLabel: { fontSize: 11 },
+  watermark: {
+    position: "absolute",
+    right: -4,
+    top: 10,
+    fontSize: 76,
+    fontWeight: "700",
+  },
+});

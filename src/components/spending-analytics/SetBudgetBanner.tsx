@@ -1,17 +1,34 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 function TargetIllustration() {
+  const { colors: themeColors } = useTheme();
+  const illStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        wrap: { width: 56, height: 56, justifyContent: 'center', alignItems: 'center' },
+        coinStack: { position: 'absolute', left: -2, bottom: -2 },
+        coin: {
+          position: 'absolute',
+          width: 16, height: 16, borderRadius: 8,
+          backgroundColor: '#8B5CF6',
+          borderWidth: 1.5, borderColor: themeColors.surface,
+        },
+      }),
+    [themeColors]
+  );
+
   return (
     <View style={illStyles.wrap}>
       <Svg width={48} height={48} viewBox="0 0 48 48">
-        <Circle cx={22} cy={26} r={18} fill="rgba(167,139,250,0.15)" stroke={colors.primaryLight} strokeWidth={1.5} />
-        <Circle cx={22} cy={26} r={11} fill="rgba(167,139,250,0.15)" stroke={colors.primaryLight} strokeWidth={1.5} />
-        <Circle cx={22} cy={26} r={4} fill={colors.primary} />
-        <Path d="M38 8 L22 26" stroke={colors.primaryLight} strokeWidth={2} strokeLinecap="round" />
-        <Path d="M38 8 L30 8 M38 8 L38 16" stroke={colors.primaryLight} strokeWidth={2} strokeLinecap="round" />
+        <Circle cx={22} cy={26} r={18} fill="rgba(167,139,250,0.15)" stroke={themeColors.primaryLight} strokeWidth={1.5} />
+        <Circle cx={22} cy={26} r={11} fill="rgba(167,139,250,0.15)" stroke={themeColors.primaryLight} strokeWidth={1.5} />
+        <Circle cx={22} cy={26} r={4} fill={themeColors.primary} />
+        <Path d="M38 8 L22 26" stroke={themeColors.primaryLight} strokeWidth={2} strokeLinecap="round" />
+        <Path d="M38 8 L30 8 M38 8 L38 16" stroke={themeColors.primaryLight} strokeWidth={2} strokeLinecap="round" />
       </Svg>
       <View style={illStyles.coinStack}>
         <View style={[illStyles.coin, { bottom: 0, left: 0 }]} />
@@ -22,6 +39,31 @@ function TargetIllustration() {
 }
 
 export function SetBudgetBanner() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        card: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 12,
+          backgroundColor: themeColors.surface,
+          borderRadius: 18,
+          padding: 14,
+        },
+        title: { color: themeColors.textPrimary, fontSize: 13, fontWeight: '700' },
+        sub: { color: themeColors.textSecondary, fontSize: 10.5, marginTop: 3, lineHeight: 14 },
+        cta: {
+          backgroundColor: themeColors.primary,
+          borderRadius: 10,
+          paddingHorizontal: 14,
+          paddingVertical: 10,
+        },
+        ctaText: { color: '#fff', fontSize: 11.5, fontWeight: '700' },
+      }),
+    [themeColors]
+  );
+
   return (
     <View style={styles.card}>
       <TargetIllustration />
@@ -35,34 +77,3 @@ export function SetBudgetBanner() {
     </View>
   );
 }
-
-const illStyles = StyleSheet.create({
-  wrap: { width: 56, height: 56, justifyContent: 'center', alignItems: 'center' },
-  coinStack: { position: 'absolute', left: -2, bottom: -2 },
-  coin: {
-    position: 'absolute',
-    width: 16, height: 16, borderRadius: 8,
-    backgroundColor: '#8B5CF6',
-    borderWidth: 1.5, borderColor: colors.surface,
-  },
-});
-
-const styles = StyleSheet.create({
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    backgroundColor: colors.surface,
-    borderRadius: 18,
-    padding: 14,
-  },
-  title: { color: colors.textPrimary, fontSize: 13, fontWeight: '700' },
-  sub: { color: colors.textSecondary, fontSize: 10.5, marginTop: 3, lineHeight: 14 },
-  cta: {
-    backgroundColor: colors.primary,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  ctaText: { color: '#fff', fontSize: 11.5, fontWeight: '700' },
-});

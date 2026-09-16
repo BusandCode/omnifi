@@ -1,37 +1,44 @@
 // app/(auth)/forgot-pin.tsx
+
 import { Feather } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import { colors } from "../../src/theme/colors";
 import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function ForgotPinScreen() {
-  const { colors: themeColors } = useTheme();
+  const { colors: themeColors, mode } = useTheme();
+
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!email) {
       setEmailError("Email address is required");
       return false;
     }
+
     if (!emailRegex.test(email)) {
       setEmailError("Please enter a valid email address");
       return false;
     }
+
     setEmailError("");
     return true;
   };
@@ -55,12 +62,12 @@ export default function ForgotPinScreen() {
             text: "OK",
             onPress: () => router.push("/(auth)/verify-otp"),
           },
-        ],
+        ]
       );
     } catch (error) {
       Alert.alert(
         "Error",
-        "Unable to send reset code. Please try again later.",
+        "Unable to send reset code. Please try again later."
       );
     } finally {
       setLoading(false);
@@ -68,191 +75,395 @@ export default function ForgotPinScreen() {
   };
 
   const handleResetWithPhone = () => {
-    // Navigate to phone reset
-    Alert.alert("Coming Soon", "Phone number reset will be available soon.");
+    Alert.alert(
+      "Coming Soon",
+      "Phone number reset will be available soon."
+    );
   };
 
   const handleContactSupport = () => {
-    // Navigate to support or open email
     Alert.alert(
       "Contact Support",
-      "Support contact information will be available soon.",
+      "Support contact information will be available soon."
     );
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, { backgroundColor: themeColors.background }]}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <SafeAreaView
+      style={[
+        styles.container,
+        { backgroundColor: themeColors.background },
+      ]}
+      edges={["top", "bottom"]}
     >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={styles.content}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <Pressable style={styles.backButton} onPress={() => router.back()}>
-            <Feather name="arrow-left" size={24} color={colors.textPrimary} />
-          </Pressable>
-          <Text style={styles.title}>Forgot PIN</Text>
-        </View>
+        <View style={styles.content}>
+          {/* Header */}
+          <View style={styles.header}>
+            <Pressable
+              style={styles.backButton}
+              onPress={() => router.back()}
+            >
+              <Feather
+                name="arrow-left"
+                size={24}
+                color={themeColors.textPrimary}
+              />
+            </Pressable>
 
-        {/* Description */}
-        <Text style={styles.description}>
-          Reset your PIN in a few simple steps
-        </Text>
-        <Text style={styles.subDescription}>
-          Enter the email address linked to your Aurelius account and we&apos;ll
-          send you a reset code.
-        </Text>
-
-        {/* Email Input */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Email Address</Text>
-          <View
-            style={[
-              styles.inputContainer,
-              emailError && styles.inputContainerError,
-            ]}
-          >
-            <Feather
-              name="mail"
-              size={20}
-              color={emailError ? "#FF3B30" : colors.primaryLight}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your email address"
-              placeholderTextColor={colors.textSecondary}
-              value={email}
-              onChangeText={(text) => {
-                setEmail(text);
-                if (emailError) validateEmail(text);
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-          {emailError && <Text style={styles.errorText}>{emailError}</Text>}
-        </View>
-
-        {/* Security Card */}
-        <View style={styles.securityCard}>
-          <View style={styles.securityIcon}>
-            <Feather name="shield" size={24} color={colors.primaryLight} />
-          </View>
-          <View style={styles.securityContent}>
-            <Text style={styles.securityTitle}>
-              Your security is our priority
-            </Text>
-            <Text style={styles.securityText}>
-              We&apos;ll send a secure reset link to help you regain access to
-              your account.
+            <Text
+              style={[
+                styles.title,
+                { color: themeColors.textPrimary },
+              ]}
+            >
+              Forgot PIN
             </Text>
           </View>
-        </View>
 
-        {/* Send Reset Code Button */}
-        <Pressable
-          style={({ pressed }) => [
-            styles.sendButton,
-            (loading || !email) && styles.sendButtonDisabled,
-            pressed && !loading && styles.sendButtonPressed,
-          ]}
-          onPress={handleSendResetCode}
-          disabled={loading || !email}
-        >
-          <Text style={styles.sendButtonText}>
-            {loading ? "Sending..." : "Send Reset Code"}
-          </Text>
-        </Pressable>
+          {/* Hero Section */}
+          <View style={styles.heroSection}>
+            {/* Text */}
+            <View style={styles.descriptionContainer}>
+              <Text
+                style={[
+                  styles.description,
+                  { color: themeColors.textPrimary },
+                ]}
+              >
+                Reset your PIN in a few simple steps
+              </Text>
 
-        {/* OR Divider */}
-        <View style={styles.dividerContainer}>
-          <View style={styles.dividerLine} />
-          <Text style={styles.dividerText}>OR</Text>
-          <View style={styles.dividerLine} />
-        </View>
-
-        {/* Alternative Options */}
-        <View style={styles.optionsContainer}>
-          <Pressable
-            style={({ pressed }) => [
-              styles.optionButton,
-              pressed && styles.optionButtonPressed,
-            ]}
-            onPress={handleResetWithPhone}
-          >
-            <View style={styles.optionIcon}>
-              <Feather name="phone" size={22} color={colors.primary} />
-            </View>
-            <View style={styles.optionContent}>
-              <Text style={styles.optionTitle}>Reset using Phone Number</Text>
-              <Text style={styles.optionSubtext}>Receive a code via SMS</Text>
-            </View>
-            <Feather
-              name="chevron-right"
-              size={20}
-              color={colors.textSecondary}
-            />
-          </Pressable>
-
-          <Pressable
-            style={({ pressed }) => [
-              styles.optionButton,
-              pressed && styles.optionButtonPressed,
-            ]}
-            onPress={handleContactSupport}
-          >
-            <View style={styles.optionIcon}>
-              <Feather name="headphones" size={22} color={colors.primary} />
-            </View>
-            <View style={styles.optionContent}>
-              <Text style={styles.optionTitle}>Contact Support</Text>
-              <Text style={styles.optionSubtext}>
-                Get help from our support team
+              <Text
+                style={[
+                  styles.subDescription,
+                  { color: themeColors.textSecondary },
+                ]}
+              >
+                Enter the email address linked to your Omnifi account and
+                we'll send you a reset code.
               </Text>
             </View>
-            <Feather
-              name="chevron-right"
-              size={20}
-              color={colors.textSecondary}
-            />
-          </Pressable>
-        </View>
 
-        {/* Back to Login */}
-        <View style={styles.loginRow}>
-          <Text style={styles.loginText}>Remember your PIN? </Text>
-          <Pressable onPress={() => router.replace("/(auth)/lock")}>
-            <Text style={styles.loginLink}>Login</Text>
+            {/* PIN Illustration */}
+            <View style={styles.illustration}>
+              <Image
+                source={
+                  mode === "light"
+                    ? require("../../assets/password-light.png")
+                    : require("../../assets/password.png")
+                }
+                style={styles.pinImage}
+                resizeMode="contain"
+              />
+            </View>
+          </View>
+
+          {/* Email Input */}
+          <View style={styles.inputGroup}>
+            <Text
+              style={[
+                styles.label,
+                { color: themeColors.textPrimary },
+              ]}
+            >
+              Email Address
+            </Text>
+
+            <View
+              style={[
+                styles.inputContainer,
+                {
+                  backgroundColor: themeColors.surface,
+                  borderColor: emailError
+                    ? "#FF3B30"
+                    : themeColors.border,
+                },
+              ]}
+            >
+              <Feather
+                name="mail"
+                size={20}
+                color={
+                  emailError
+                    ? "#FF3B30"
+                    : themeColors.primaryLight
+                }
+              />
+
+              <TextInput
+                style={[
+                  styles.input,
+                  { color: themeColors.textPrimary },
+                ]}
+                placeholder="Enter your email address"
+                placeholderTextColor={themeColors.textSecondary}
+                value={email}
+                onChangeText={(text) => {
+                  setEmail(text);
+
+                  if (emailError) {
+                    validateEmail(text);
+                  }
+                }}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                returnKeyType="send"
+                onSubmitEditing={handleSendResetCode}
+              />
+            </View>
+
+            {emailError && (
+              <Text style={styles.errorText}>
+                {emailError}
+              </Text>
+            )}
+          </View>
+
+          {/* Security Card */}
+          <View
+            style={[
+              styles.securityCard,
+              {
+                backgroundColor:
+                  mode === "light"
+                    ? "rgba(91, 33, 182, 0.04)"
+                    : "rgba(91, 33, 182, 0.05)",
+                borderColor:
+                  mode === "light"
+                    ? "rgba(91, 33, 182, 0.12)"
+                    : "rgba(91, 33, 182, 0.1)",
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.securityIcon,
+                {
+                  backgroundColor: "rgba(91, 33, 182, 0.08)",
+                },
+              ]}
+            >
+              <Feather
+                name="shield"
+                size={24}
+                color={themeColors.primaryLight}
+              />
+            </View>
+
+            <View style={styles.securityContent}>
+              <Text
+                style={[
+                  styles.securityTitle,
+                  { color: themeColors.textPrimary },
+                ]}
+              >
+                Your security is our priority
+              </Text>
+
+              <Text
+                style={[
+                  styles.securityText,
+                  { color: themeColors.textSecondary },
+                ]}
+              >
+                We'll send a secure reset code to help you regain access to
+                your account.
+              </Text>
+            </View>
+          </View>
+
+          {/* Send Reset Code Button */}
+          <Pressable
+            style={({ pressed }) => [
+              styles.sendButton,
+              { backgroundColor: themeColors.primary },
+              (!email || loading) && styles.sendButtonDisabled,
+              pressed && !loading && styles.sendButtonPressed,
+            ]}
+            onPress={handleSendResetCode}
+            disabled={loading || !email}
+          >
+            <Text style={styles.sendButtonText}>
+              {loading ? "Sending..." : "Send Reset Code"}
+            </Text>
           </Pressable>
+
+          {/* OR Divider */}
+          <View style={styles.dividerContainer}>
+            <View
+              style={[
+                styles.dividerLine,
+                { backgroundColor: themeColors.border },
+              ]}
+            />
+
+            <Text
+              style={[
+                styles.dividerText,
+                { color: themeColors.textSecondary },
+              ]}
+            >
+              OR
+            </Text>
+
+            <View
+              style={[
+                styles.dividerLine,
+                { backgroundColor: themeColors.border },
+              ]}
+            />
+          </View>
+
+          {/* Alternative Options */}
+          <View style={styles.optionsContainer}>
+            {/* Reset Using Phone */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.optionButton,
+                {
+                  backgroundColor: themeColors.surface,
+                  borderColor: themeColors.border,
+                },
+                pressed && styles.optionButtonPressed,
+              ]}
+              onPress={handleResetWithPhone}
+            >
+              <View style={styles.optionIcon}>
+                <Feather
+                  name="phone"
+                  size={20}
+                  color={themeColors.primary}
+                />
+              </View>
+
+              <View style={styles.optionContent}>
+                <Text
+                  style={[
+                    styles.optionTitle,
+                    { color: themeColors.textPrimary },
+                  ]}
+                >
+                  Reset using Phone Number
+                </Text>
+
+                <Text
+                  style={[
+                    styles.optionSubtext,
+                    { color: themeColors.textSecondary },
+                  ]}
+                >
+                  Receive a code via SMS
+                </Text>
+              </View>
+
+              <Feather
+                name="chevron-right"
+                size={18}
+                color={themeColors.textSecondary}
+              />
+            </Pressable>
+
+            {/* Contact Support */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.optionButton,
+                {
+                  backgroundColor: themeColors.surface,
+                  borderColor: themeColors.border,
+                },
+                pressed && styles.optionButtonPressed,
+              ]}
+              onPress={handleContactSupport}
+            >
+              <View style={styles.optionIcon}>
+                <Feather
+                  name="headphones"
+                  size={20}
+                  color={themeColors.primary}
+                />
+              </View>
+
+              <View style={styles.optionContent}>
+                <Text
+                  style={[
+                    styles.optionTitle,
+                    { color: themeColors.textPrimary },
+                  ]}
+                >
+                  Contact Support
+                </Text>
+
+                <Text
+                  style={[
+                    styles.optionSubtext,
+                    { color: themeColors.textSecondary },
+                  ]}
+                >
+                  Get help from our support team
+                </Text>
+              </View>
+
+              <Feather
+                name="chevron-right"
+                size={18}
+                color={themeColors.textSecondary}
+              />
+            </Pressable>
+          </View>
+
+          {/* Back to Login */}
+          <View style={styles.loginRow}>
+            <Text
+              style={[
+                styles.loginText,
+                { color: themeColors.textSecondary },
+              ]}
+            >
+              Remember your PIN?{" "}
+            </Text>
+
+            <Pressable
+              onPress={() => router.replace("/(auth)/lock")}
+            >
+              <Text
+                style={[
+                  styles.loginLink,
+                  { color: themeColors.primaryLight },
+                ]}
+              >
+                Login
+              </Text>
+            </Pressable>
+          </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
 
   content: {
-    flexGrow: 1,
+    flex: 1,
     paddingHorizontal: 24,
-    paddingTop: Platform.OS === "ios" ? 50 : 30,
-    paddingBottom: 30,
+    paddingTop: 12,
+    paddingBottom: 16,
+    justifyContent: "space-between",
   },
 
   /* Header */
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 12,
   },
 
   backButton: {
@@ -261,59 +472,73 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: colors.textPrimary,
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "700",
   },
 
-  /* Description */
+  /* Hero Section */
+  heroSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    minHeight: 100,
+    marginTop:-20
+  },
+
+  descriptionContainer: {
+    flex: 1,
+    paddingRight: 8,
+  },
+
   description: {
-    color: colors.textPrimary,
     fontSize: 18,
     fontWeight: "600",
     marginBottom: 8,
+    lineHeight: 24,
   },
 
   subDescription: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 24,
+    fontSize: 13,
+    lineHeight: 19,
   },
 
-  /* Input */
+  /* PIN Illustration */
+  illustration: {
+    width: 100,
+    height: 100,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  pinImage: {
+    width: 120,
+    height: 110,
+  },
+
+  /* Email Input */
   inputGroup: {
-    marginBottom: 20,
+    marginTop: 4,
   },
 
   label: {
-    color: colors.textPrimary,
     fontSize: 13,
     fontWeight: "500",
     marginBottom: 8,
   },
 
   inputContainer: {
-    height: 56,
+    height: 52,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: 12,
     paddingHorizontal: 16,
   },
 
-  inputContainerError: {
-    borderColor: "#FF3B30",
-  },
-
   input: {
     flex: 1,
-    color: colors.textPrimary,
     fontSize: 14,
-    height: 56,
+    height: 52,
   },
 
   errorText: {
@@ -326,22 +551,18 @@ const styles = StyleSheet.create({
   securityCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(91, 33, 182, 0.05)",
     borderWidth: 1,
-    borderColor: "rgba(91, 33, 182, 0.1)",
     borderRadius: 14,
-    padding: 16,
-    marginBottom: 24,
+    padding: 12,
   },
 
   securityIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: "rgba(91, 33, 182, 0.08)",
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 14,
+    marginRight: 12,
   },
 
   securityContent: {
@@ -349,26 +570,22 @@ const styles = StyleSheet.create({
   },
 
   securityTitle: {
-    color: colors.textPrimary,
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "600",
     marginBottom: 2,
   },
 
   securityText: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: 11,
+    lineHeight: 15,
   },
 
   /* Send Button */
   sendButton: {
-    height: 56,
+    height: 52,
     borderRadius: 13,
-    backgroundColor: colors.primary,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 24,
   },
 
   sendButtonPressed: {
@@ -390,17 +607,14 @@ const styles = StyleSheet.create({
   dividerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 24,
   },
 
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: colors.border,
   },
 
   dividerText: {
-    color: colors.textSecondary,
     fontSize: 12,
     fontWeight: "500",
     paddingHorizontal: 16,
@@ -408,18 +622,15 @@ const styles = StyleSheet.create({
 
   /* Options */
   optionsContainer: {
-    gap: 12,
-    marginBottom: 32,
+    gap: 8,
   },
 
   optionButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
   },
 
   optionButtonPressed: {
@@ -428,13 +639,13 @@ const styles = StyleSheet.create({
   },
 
   optionIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 11,
+    width: 38,
+    height: 38,
+    borderRadius: 10,
     backgroundColor: "rgba(91, 33, 182, 0.08)",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 14,
+    marginRight: 12,
   },
 
   optionContent: {
@@ -442,15 +653,13 @@ const styles = StyleSheet.create({
   },
 
   optionTitle: {
-    color: colors.textPrimary,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
     marginBottom: 2,
   },
 
   optionSubtext: {
-    color: colors.textSecondary,
-    fontSize: 12,
+    fontSize: 11,
   },
 
   /* Login */
@@ -458,16 +667,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "auto",
   },
 
   loginText: {
-    color: colors.textSecondary,
     fontSize: 14,
   },
 
   loginLink: {
-    color: colors.primaryLight,
     fontSize: 14,
     fontWeight: "600",
   },

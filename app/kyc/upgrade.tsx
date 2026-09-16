@@ -1,6 +1,7 @@
 // app/kyc/upgrade.tsx — verification upgrade flow, reads ?target=2|3
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import {
     Check,
     ChevronLeft,
@@ -11,15 +12,15 @@ import {
 } from "lucide-react-native";
 import React, { useMemo, useState } from "react";
 import {
-    Platform,
     Pressable,
     ScrollView,
     StyleSheet,
     Text,
     View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../../src/store/authStore";
-import { colors } from "../../src/theme/colors";
+import { useTheme } from "../../src/theme/ThemeContext";
 
 interface Requirement {
   key: string;
@@ -80,21 +81,120 @@ const REQUIREMENTS_BY_TARGET: Record<
 
 export default function KycUpgradeScreen() {
   const router = useRouter();
+  const { colors: themeColors, mode } = useTheme();
+  const insets = useSafeAreaInsets();
   const { target } = useLocalSearchParams<{ target?: string }>();
   const targetKey: "2" | "3" = target === "3" ? "3" : "2";
   const config = useMemo(() => REQUIREMENTS_BY_TARGET[targetKey], [targetKey]);
 
   const [acknowledged, setAcknowledged] = useState(false);
 
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        screen: { flex: 1, backgroundColor: themeColors.background },
+        header: {
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingHorizontal: 16,
+          paddingBottom: 12,
+        },
+        iconBtn: {
+          width: 40,
+          height: 40,
+          borderRadius: 12,
+          backgroundColor: themeColors.surface,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        headerTitle: { color: themeColors.textPrimary, fontSize: 17, fontWeight: "600" },
+        scrollContent: { paddingHorizontal: 16, paddingBottom: 40 },
+        blurb: {
+          color: themeColors.textSecondary,
+          fontSize: 14,
+          lineHeight: 20,
+          marginTop: 4,
+          marginBottom: 22,
+        },
+        sectionTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 15.5,
+          fontWeight: "700",
+          marginBottom: 10,
+        },
+        card: {
+          backgroundColor: themeColors.surface,
+          borderRadius: 18,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+          paddingHorizontal: 14,
+          marginBottom: 24,
+        },
+        row: { flexDirection: "row", alignItems: "center", paddingVertical: 14 },
+        rowDivider: { borderBottomWidth: 1, borderBottomColor: themeColors.border },
+        rowIcon: {
+          width: 38,
+          height: 38,
+          borderRadius: 19,
+          backgroundColor: themeColors.background,
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight: 12,
+        },
+        rowTitle: { color: themeColors.textPrimary, fontSize: 14.5, fontWeight: "600" },
+        rowSub: { color: themeColors.textSecondary, fontSize: 12, marginTop: 2 },
+        ackRow: {
+          flexDirection: "row",
+          alignItems: "flex-start",
+          gap: 10,
+          marginBottom: 24,
+        },
+        checkbox: {
+          width: 20,
+          height: 20,
+          borderRadius: 6,
+          borderWidth: 1.5,
+          borderColor: themeColors.border,
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 1,
+        },
+        checkboxChecked: {
+          backgroundColor: themeColors.primary,
+          borderColor: themeColors.primary,
+        },
+        ackText: {
+          flex: 1,
+          color: themeColors.textSecondary,
+          fontSize: 13,
+          lineHeight: 18,
+        },
+        cta: {
+          height: 54,
+          borderRadius: 16,
+          alignItems: "center",
+          justifyContent: "center",
+        },
+        ctaDisabled: { opacity: 0.4 },
+        ctaLabel: { color: "#fff", fontSize: 15.5, fontWeight: "700" },
+      }),
+    [themeColors]
+  );
+
   return (
     <View style={styles.screen}>
-      <View style={styles.header}>
+      <StatusBar style={mode === "light" ? "dark" : "light"} />
+
+      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <Pressable
           style={styles.iconBtn}
           onPress={() => router.back()}
           hitSlop={10}
         >
-          <ChevronLeft color={colors.textPrimary} size={22} />
+          <ChevronLeft color={themeColors.textPrimary} size={22} />
         </Pressable>
         <Text style={styles.headerTitle}>{config.heading}</Text>
         <View style={styles.iconBtn} />
@@ -117,7 +217,7 @@ export default function KycUpgradeScreen() {
               ]}
             >
               <View style={styles.rowIcon}>
-                <item.icon color={colors.primary} size={18} />
+                <item.icon color={themeColors.primary} size={18} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.rowTitle}>{item.title}</Text>
@@ -150,7 +250,7 @@ export default function KycUpgradeScreen() {
           }}
         >
           <LinearGradient
-            colors={[colors.primary, colors.primary]}
+            colors={[themeColors.primary, themeColors.primary]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={[styles.cta, !acknowledged && styles.ctaDisabled]}
@@ -162,95 +262,3 @@ export default function KycUpgradeScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.background },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingTop: Platform.OS === "ios" ? 54 : 24,
-    paddingBottom: 12,
-  },
-  iconBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  headerTitle: { color: colors.textPrimary, fontSize: 17, fontWeight: "600" },
-  scrollContent: { paddingHorizontal: 16, paddingBottom: 40 },
-  blurb: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
-    marginTop: 4,
-    marginBottom: 22,
-  },
-  sectionTitle: {
-    color: colors.textPrimary,
-    fontSize: 15.5,
-    fontWeight: "700",
-    marginBottom: 10,
-  },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: 14,
-    marginBottom: 24,
-  },
-  row: { flexDirection: "row", alignItems: "center", paddingVertical: 14 },
-  rowDivider: { borderBottomWidth: 1, borderBottomColor: colors.border },
-  rowIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    backgroundColor: colors.background,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
-  },
-  rowTitle: { color: colors.textPrimary, fontSize: 14.5, fontWeight: "600" },
-  rowSub: { color: colors.textSecondary, fontSize: 12, marginTop: 2 },
-  ackRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 10,
-    marginBottom: 24,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 6,
-    borderWidth: 1.5,
-    borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 1,
-  },
-  checkboxChecked: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  ackText: {
-    flex: 1,
-    color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
-  },
-  cta: {
-    height: 54,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  ctaDisabled: { opacity: 0.4 },
-  ctaLabel: { color: "#fff", fontSize: 15.5, fontWeight: "700" },
-});

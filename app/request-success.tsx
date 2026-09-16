@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
@@ -7,11 +8,12 @@ import { SuccessBadge } from '../src/components/request-success/SuccessBadge';
 import { RequestDetailsCard } from '../src/components/request-success/RequestDetailsCard';
 import { WhatHappensNextCard } from '../src/components/request-success/WhatHappensNextCard';
 import { RequestSuccessActions } from '../src/components/request-success/RequestSuccessActions';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 import { getCurrency, CurrencyCode } from '../src/constants/currencies';
 
 export default function RequestSuccessScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
   const params = useLocalSearchParams<{
     requestId?: string;
     recipientName?: string;
@@ -21,6 +23,52 @@ export default function RequestSuccessScreen() {
     currency?: string;
     note?: string;
   }>();
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: { flex: 1, backgroundColor: themeColors.background },
+        fixedHeader: {
+          paddingHorizontal: 20,
+          paddingBottom: 8,
+          backgroundColor: themeColors.background,
+        },
+        scroll: { flex: 1 },
+        content: {
+          paddingHorizontal: 20,
+          paddingTop: 2,
+          paddingBottom: 16,
+          gap: 10,
+        },
+        badgeCard: {
+          backgroundColor: themeColors.surface,
+          borderRadius: 16,
+          paddingVertical: 12,
+          alignItems: 'center',
+        },
+        successTitle: { color: themeColors.textPrimary, fontSize: 16, fontWeight: '700', marginTop: 2 },
+        successSub: { color: themeColors.textSecondary, fontSize: 10.5, marginTop: 2 },
+        pendingPill: {
+          flexDirection: 'row', alignItems: 'center', gap: 5,
+          backgroundColor: 'rgba(245,158,11,0.15)',
+          borderRadius: 18,
+          paddingHorizontal: 11,
+          paddingVertical: 5,
+          marginTop: 8,
+        },
+        pendingText: { color: '#F59E0B', fontSize: 10, fontWeight: '700' },
+        doneBtn: {
+          backgroundColor: themeColors.primary,
+          borderRadius: 14,
+          paddingVertical: 14,
+          alignItems: 'center',
+        },
+        doneText: { color: '#fff', fontSize: 13.5, fontWeight: '700' },
+        footerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
+        footerText: { color: themeColors.textSecondary, fontSize: 9.5 },
+      }),
+    [themeColors],
+  );
 
   const currencyCode: CurrencyCode =
     params.currency === 'USD' || params.currency === 'EUR' ? params.currency : 'NGN';
@@ -97,52 +145,10 @@ export default function RequestSuccessScreen() {
         </TouchableOpacity>
 
         <View style={styles.footerRow}>
-          <Feather name="lock" size={10} color={colors.textSecondary} />
+          <Feather name="lock" size={10} color={themeColors.textSecondary} />
           <Text style={styles.footerText}>Your request is secure and private</Text>
         </View>
       </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  fixedHeader: {
-    paddingHorizontal: 20,
-    paddingBottom: 8,
-    backgroundColor: colors.background,
-  },
-  scroll: { flex: 1 },
-  content: {
-    paddingHorizontal: 20,
-    paddingTop: 2,
-    paddingBottom: 16,
-    gap: 10,
-  },
-  badgeCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    paddingVertical: 12,
-    alignItems: 'center',
-  },
-  successTitle: { color: colors.textPrimary, fontSize: 16, fontWeight: '700', marginTop: 2 },
-  successSub: { color: colors.textSecondary, fontSize: 10.5, marginTop: 2 },
-  pendingPill: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: 'rgba(245,158,11,0.15)',
-    borderRadius: 18,
-    paddingHorizontal: 11,
-    paddingVertical: 5,
-    marginTop: 8,
-  },
-  pendingText: { color: '#F59E0B', fontSize: 10, fontWeight: '700' },
-  doneBtn: {
-    backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  doneText: { color: '#fff', fontSize: 13.5, fontWeight: '700' },
-  footerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5 },
-  footerText: { color: colors.textSecondary, fontSize: 9.5 },
-});

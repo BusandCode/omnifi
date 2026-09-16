@@ -1,40 +1,19 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function OfficeCard() {
-  return (
-    <View>
-      <Text style={styles.sectionTitle}>Our Office</Text>
-      <Text style={styles.sectionSub}>Visit us at our headquarters.</Text>
-
-      <View style={styles.card}>
-        <View style={styles.iconBox}>
-          <Ionicons name="location" size={18} color={colors.primaryLight} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>OmniFi HQ</Text>
-          <Text style={styles.sub}>
-            Plot 1234, Finance Avenue, Central Business District, Abuja, FCT, Nigeria.
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.directionsBtn}>
-          <Feather name="navigation" size={12} color={colors.textPrimary} />
-          <Text style={styles.directionsText}>Get Directions</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionTitle: { color: colors.textPrimary, fontSize: 14.5, fontWeight: '700', marginBottom: 3 },
-  sectionSub: { color: colors.textSecondary, fontSize: 11.5, marginBottom: 12 },
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  sectionTitle: { color: themeColors.textPrimary, fontSize: 14.5, fontWeight: '700', marginBottom: 3 },
+  sectionSub: { color: themeColors.textSecondary, fontSize: 11.5, marginBottom: 12 },
   card: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
-    backgroundColor: colors.surface,
+    backgroundColor: themeColors.surface,
     borderRadius: 16,
     padding: 14,
   },
@@ -48,17 +27,44 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   textContainer: { flex: 1 },
-  title: { color: colors.textPrimary, fontSize: 13, fontWeight: '700' },
-  sub: { color: colors.textSecondary, fontSize: 11, marginTop: 3, lineHeight: 15 },
+  title: { color: themeColors.textPrimary, fontSize: 13, fontWeight: '700' },
+  sub: { color: themeColors.textSecondary, fontSize: 11, marginTop: 3, lineHeight: 15 },
   directionsBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: themeColors.border,
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 8,
   },
-  directionsText: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '600' },
-});
+  directionsText: { color: themeColors.textPrimary, fontSize: 10.5, fontWeight: '600' },
+}),
+    [themeColors]
+  );
+
+  return (
+    <View>
+      <Text style={styles.sectionTitle}>Our Office</Text>
+      <Text style={styles.sectionSub}>Visit us at our headquarters.</Text>
+
+      <View style={styles.card}>
+        <View style={styles.iconBox}>
+          <Ionicons name="location" size={18} color={themeColors.primaryLight} />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>OmniFi HQ</Text>
+          <Text style={styles.sub}>
+            Plot 1234, Finance Avenue, Central Business District, Abuja, FCT, Nigeria.
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.directionsBtn}>
+          <Feather name="navigation" size={12} color={themeColors.textPrimary} />
+          <Text style={styles.directionsText}>Get Directions</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+

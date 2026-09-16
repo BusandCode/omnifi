@@ -1,7 +1,8 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import Svg, { Circle, Path } from 'react-native-svg';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { BudgetCategory, DurationOption, DURATION_DAILY_DIVISOR } from '../../constants/budgetData';
 import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
@@ -14,6 +15,23 @@ const CONFETTI = [
 ];
 
 function SuccessBadge() {
+  const { colors: themeColors } = useTheme();
+  const illStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        wrap: { width: 170, height: 102, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', position: 'relative' },
+        glow: { position: 'absolute', width: 94, height: 94, borderRadius: 47, backgroundColor: themeColors.primary, opacity: 0.25 },
+        circle: {
+          width: 75, height: 75, borderRadius: 37.5,
+          backgroundColor: themeColors.primary,
+          justifyContent: 'center', alignItems: 'center',
+          shadowColor: themeColors.primary, shadowOpacity: 0.6, shadowRadius: 18, shadowOffset: { width: 0, height: 0 }, elevation: 8,
+        },
+        confetti: { position: 'absolute', width: 7, height: 7, borderRadius: 2 },
+      }),
+    [themeColors]
+  );
+
   return (
     <View style={illStyles.wrap}>
       {CONFETTI.map((c, i) => (
@@ -27,19 +45,21 @@ function SuccessBadge() {
   );
 }
 
-const illStyles = StyleSheet.create({
-  wrap: { width: 170, height: 102, alignSelf: 'center', alignItems: 'center', justifyContent: 'center', position: 'relative' },
-  glow: { position: 'absolute', width: 94, height: 94, borderRadius: 47, backgroundColor: colors.primary, opacity: 0.25 },
-  circle: {
-    width: 75, height: 75, borderRadius: 37.5,
-    backgroundColor: colors.primary,
-    justifyContent: 'center', alignItems: 'center',
-    shadowColor: colors.primary, shadowOpacity: 0.6, shadowRadius: 18, shadowOffset: { width: 0, height: 0 }, elevation: 8,
-  },
-  confetti: { position: 'absolute', width: 7, height: 7, borderRadius: 2 },
-});
-
 function WalletIllustration() {
+  const { colors: themeColors } = useTheme();
+  const walletStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        wrap: { width: 76, height: 60, position: 'relative' },
+        coinStack: { position: 'absolute', right: -5, bottom: 0 },
+        coin: {
+          position: 'absolute', width: 19, height: 19, borderRadius: 9.5,
+          backgroundColor: '#8B5CF6', borderWidth: 1.5, borderColor: themeColors.background,
+        },
+      }),
+    [themeColors]
+  );
+
   return (
     <View style={walletStyles.wrap}>
       <Svg width={60} height={51} viewBox="0 0 70 60">
@@ -56,15 +76,6 @@ function WalletIllustration() {
   );
 }
 
-const walletStyles = StyleSheet.create({
-  wrap: { width: 76, height: 60, position: 'relative' },
-  coinStack: { position: 'absolute', right: -5, bottom: 0 },
-  coin: {
-    position: 'absolute', width: 19, height: 19, borderRadius: 9.5,
-    backgroundColor: '#8B5CF6', borderWidth: 1.5, borderColor: colors.background,
-  },
-});
-
 type Props = {
   currency: CurrencyCode;
   category: BudgetCategory;
@@ -76,6 +87,61 @@ type Props = {
 };
 
 export function BudgetCreatedContent({ currency, category, amount, duration, startDateLabel, alert80, alert100 }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        successTitle: { color: themeColors.textPrimary, fontSize: 15, fontWeight: '700', marginTop: 3, textAlign: 'center' },
+        successSub: { color: themeColors.textSecondary, fontSize: 10, marginTop: 3, textAlign: 'center' },
+        heroCard: {
+          backgroundColor: themeColors.surface,
+          borderRadius: 16,
+          padding: 13,
+          borderWidth: 1,
+          borderColor: 'rgba(139,92,246,0.25)',
+        },
+        heroTopRow: { flexDirection: 'row', alignItems: 'center', gap: 9 },
+        heroIcon: {
+          width: 28, height: 28, borderRadius: 14,
+          backgroundColor: themeColors.primary,
+          justifyContent: 'center', alignItems: 'center',
+        },
+        heroCategoryText: { flex: 1, color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '700' },
+        durationPill: { backgroundColor: 'rgba(167,139,250,0.15)', borderRadius: 7, paddingHorizontal: 8, paddingVertical: 3 },
+        durationPillText: { color: themeColors.primaryLight, fontSize: 9, fontWeight: '700' },
+        heroBodyRow: { flexDirection: 'row', alignItems: 'flex-end', marginTop: 10 },
+        heroLabel: { color: themeColors.textSecondary, fontSize: 9.5 },
+        heroAmount: { color: themeColors.textPrimary, fontSize: 19, fontWeight: '800', marginTop: 3 },
+        heroSub: { color: themeColors.textPrimary, fontSize: 11, fontWeight: '600', marginTop: 7 },
+        heroSubLabel: { color: themeColors.textSecondary, fontSize: 8.5, marginTop: 1 },
+        sectionTitle: { color: themeColors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 7 },
+        detailsCard: { backgroundColor: themeColors.surface, borderRadius: 14, paddingHorizontal: 11 },
+        nextCard: { backgroundColor: themeColors.surface, borderRadius: 16, padding: 13, gap: 12 },
+        nextRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 9 },
+        nextIcon: {
+          width: 26, height: 26, borderRadius: 13,
+          backgroundColor: themeColors.primary,
+          justifyContent: 'center', alignItems: 'center',
+        },
+        nextTitle: { color: themeColors.textPrimary, fontSize: 10.5, fontWeight: '700' },
+        nextSub: { color: themeColors.textSecondary, fontSize: 9, marginTop: 2, lineHeight: 13 },
+        chartCard: {
+          backgroundColor: 'rgba(139,92,246,0.1)',
+          borderRadius: 12,
+          padding: 12,
+          position: 'relative',
+          overflow: 'hidden',
+          minHeight: 78,
+        },
+        miniTrend: { position: 'absolute', right: 9, top: 9, width: 52, height: 38 },
+        trendDot: { position: 'absolute', width: 4.5, height: 4.5, borderRadius: 2.25, backgroundColor: themeColors.primary },
+        chartTitle: { color: themeColors.textPrimary, fontSize: 11, fontWeight: '700', maxWidth: '65%' },
+        chartSub: { color: themeColors.textSecondary, fontSize: 9, marginTop: 3, maxWidth: '65%', lineHeight: 13 },
+        chartHeart: { color: themeColors.primary, fontSize: 11, marginTop: 5 },
+      }),
+    [themeColors]
+  );
+
   const { symbol } = getCurrency(currency);
   const dailyLimit = Math.round(amount / DURATION_DAILY_DIVISOR[duration.key]);
 
@@ -169,75 +235,30 @@ export function BudgetCreatedContent({ currency, category, amount, duration, sta
 }
 
 function DetailRow({ icon, label, value, divider }: { icon: keyof typeof Ionicons.glyphMap; label: string; value: string; divider?: boolean }) {
+  const { colors: themeColors } = useTheme();
+  const detailStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        row: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingVertical: 10 },
+        rowDivider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: themeColors.border },
+        iconBox: {
+          width: 24, height: 24, borderRadius: 8,
+          backgroundColor: 'rgba(167,139,250,0.15)',
+          justifyContent: 'center', alignItems: 'center',
+        },
+        label: { flex: 1, color: themeColors.textPrimary, fontSize: 10, fontWeight: '600' },
+        value: { color: themeColors.primaryLight, fontSize: 10, fontWeight: '700' },
+      }),
+    [themeColors]
+  );
+
   return (
     <View style={[detailStyles.row, divider && detailStyles.rowDivider]}>
       <View style={detailStyles.iconBox}>
-        <Ionicons name={icon} size={12} color={colors.primaryLight} />
+        <Ionicons name={icon} size={12} color={themeColors.primaryLight} />
       </View>
       <Text style={detailStyles.label}>{label}</Text>
       <Text style={detailStyles.value}>{value}</Text>
     </View>
   );
 }
-
-const detailStyles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: 9, paddingVertical: 10 },
-  rowDivider: { borderTopWidth: StyleSheet.hairlineWidth, borderTopColor: colors.border },
-  iconBox: {
-    width: 24, height: 24, borderRadius: 8,
-    backgroundColor: 'rgba(167,139,250,0.15)',
-    justifyContent: 'center', alignItems: 'center',
-  },
-  label: { flex: 1, color: colors.textPrimary, fontSize: 10, fontWeight: '600' },
-  value: { color: colors.primaryLight, fontSize: 10, fontWeight: '700' },
-});
-
-const styles = StyleSheet.create({
-  successTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700', marginTop: 3, textAlign: 'center' },
-  successSub: { color: colors.textSecondary, fontSize: 10, marginTop: 3, textAlign: 'center' },
-  heroCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 13,
-    borderWidth: 1,
-    borderColor: 'rgba(139,92,246,0.25)',
-  },
-  heroTopRow: { flexDirection: 'row', alignItems: 'center', gap: 9 },
-  heroIcon: {
-    width: 28, height: 28, borderRadius: 14,
-    backgroundColor: colors.primary,
-    justifyContent: 'center', alignItems: 'center',
-  },
-  heroCategoryText: { flex: 1, color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
-  durationPill: { backgroundColor: 'rgba(167,139,250,0.15)', borderRadius: 7, paddingHorizontal: 8, paddingVertical: 3 },
-  durationPillText: { color: colors.primaryLight, fontSize: 9, fontWeight: '700' },
-  heroBodyRow: { flexDirection: 'row', alignItems: 'flex-end', marginTop: 10 },
-  heroLabel: { color: colors.textSecondary, fontSize: 9.5 },
-  heroAmount: { color: colors.textPrimary, fontSize: 19, fontWeight: '800', marginTop: 3 },
-  heroSub: { color: colors.textPrimary, fontSize: 11, fontWeight: '600', marginTop: 7 },
-  heroSubLabel: { color: colors.textSecondary, fontSize: 8.5, marginTop: 1 },
-  sectionTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 7 },
-  detailsCard: { backgroundColor: colors.surface, borderRadius: 14, paddingHorizontal: 11 },
-  nextCard: { backgroundColor: colors.surface, borderRadius: 16, padding: 13, gap: 12 },
-  nextRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 9 },
-  nextIcon: {
-    width: 26, height: 26, borderRadius: 13,
-    backgroundColor: colors.primary,
-    justifyContent: 'center', alignItems: 'center',
-  },
-  nextTitle: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '700' },
-  nextSub: { color: colors.textSecondary, fontSize: 9, marginTop: 2, lineHeight: 13 },
-  chartCard: {
-    backgroundColor: 'rgba(139,92,246,0.1)',
-    borderRadius: 12,
-    padding: 12,
-    position: 'relative',
-    overflow: 'hidden',
-    minHeight: 78,
-  },
-  miniTrend: { position: 'absolute', right: 9, top: 9, width: 52, height: 38 },
-  trendDot: { position: 'absolute', width: 4.5, height: 4.5, borderRadius: 2.25, backgroundColor: colors.primary },
-  chartTitle: { color: colors.textPrimary, fontSize: 11, fontWeight: '700', maxWidth: '65%' },
-  chartSub: { color: colors.textSecondary, fontSize: 9, marginTop: 3, maxWidth: '65%', lineHeight: 13 },
-  chartHeart: { color: colors.primary, fontSize: 11, marginTop: 5 },
-});

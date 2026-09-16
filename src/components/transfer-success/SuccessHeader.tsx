@@ -1,21 +1,24 @@
+// src/components/transfer-success/SuccessHeader.tsx
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function SuccessHeader() {
+  const { colors: themeColors } = useTheme();
+
   return (
     <View style={styles.row}>
       <View />
       <TouchableOpacity style={styles.shareBtn}>
-        <Feather name="share" size={14} color={colors.primaryLight} />
-        <Text style={styles.shareText}>Share</Text>
+        <Feather name="share" size={14} color={themeColors.primaryLight} />
+        <Text style={[styles.shareText, { color: themeColors.primaryLight }]}>Share</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', justifyContent: 'flex-end',marginTop: 8, },
+  row: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 8 },
   shareBtn: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  shareText: { color: colors.primaryLight, fontSize: 13, fontWeight: '600' },
+  shareText: { fontSize: 13, fontWeight: '600' },
 });

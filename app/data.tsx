@@ -9,7 +9,7 @@ import { PlanTypeTabs, PlanType } from '../src/components/data/PlanTypeTabs';
 import { DataPlanGrid } from '../src/components/data/DataPlanGrid';
 import { OtherAmountRow } from '../src/components/data/OtherAmountRow';
 import { DataTransactionSummary } from '../src/components/data/DataTransactionSummary';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export type DataPlan = { size: string; validity: string; price: number; popular?: boolean };
 
@@ -57,6 +57,7 @@ const plansByType: Record<PlanType, DataPlan[]> = {
 };
 
 export default function DataScreen() {
+  const { colors: themeColors } = useTheme();
   const [network, setNetwork] = useState<Network>('mtn');
   const [phone, setPhone] = useState('');
   const [planType, setPlanType] = useState<PlanType>('daily');
@@ -65,7 +66,7 @@ export default function DataScreen() {
   const plans = plansByType[planType];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <DataHeader />
       <DataWalletCard />
       <NetworkSelector selected={network} onSelect={setNetwork} />
@@ -91,5 +92,5 @@ export default function DataScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 20, paddingTop: 50, paddingBottom: 16, gap: 8 },
+  container: { flex: 1, paddingHorizontal: 20, paddingTop: 50, paddingBottom: 16, gap: 8 },
 });

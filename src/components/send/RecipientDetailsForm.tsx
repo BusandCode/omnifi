@@ -1,10 +1,11 @@
-import { useMemo } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
-import { FOREIGN_BANK_FIELDS, ForeignAccountBrief, ForeignCurrency } from "../../constants/foreignSendData";
+import {
+  FOREIGN_BANK_FIELDS,
+  ForeignAccountBrief,
+  ForeignCurrency,
+} from "../../constants/foreignSendData";
 
 type Props = {
   currency: ForeignCurrency;
@@ -14,78 +15,95 @@ type Props = {
 };
 
 export function RecipientDetailsForm({ currency, account, values, onChangeField }: Props) {
-  const layoutScale = useLayoutScale();
   const { colors: themeColors } = useTheme();
   const fields = FOREIGN_BANK_FIELDS[currency];
 
-  const { styles, iconSize } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      iconSize: s(14),
-      styles: StyleSheet.create({
-        card: { backgroundColor: themeColors.surface, borderRadius: s(14), padding: s(4) },
-        row: {
-          flexDirection: "row", alignItems: "center", justifyContent: "space-between",
-          paddingHorizontal: s(12), paddingVertical: s(10),
-          borderBottomWidth: 1, borderBottomColor: themeColors.border,
-          gap: s(8),
-        },
-        rowLast: { borderBottomWidth: 0 },
-        col: { flex: 1 },
-        label: { color: themeColors.textSecondary, fontSize: f(9) },
-        valueText: { color: themeColors.textPrimary, fontSize: f(12), fontWeight: "600", marginTop: s(2) },
-        input: { color: themeColors.textPrimary, fontSize: f(12), fontWeight: "600", marginTop: s(2), padding: 0 },
-        actionBox: {
-          width: s(24), height: s(24), borderRadius: s(6),
-          backgroundColor: themeColors.primaryTint,
-          justifyContent: "center", alignItems: "center",
-        },
-      }),
-    };
-  }, [layoutScale, themeColors]);
-
   return (
-    <View style={styles.card}>
-      <View style={styles.row}>
+    <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
+      <View style={[styles.row, { borderBottomColor: themeColors.border }]}>
         <View style={styles.col}>
-          <Text style={styles.label}>Country</Text>
-          <Text style={styles.valueText}>{account.country}</Text>
+          <Text style={[styles.label, { color: themeColors.textSecondary }]}>Country</Text>
+          <Text style={[styles.valueText, { color: themeColors.textPrimary }]}>
+            {account.country}
+          </Text>
         </View>
-        <Ionicons name="chevron-down" size={iconSize} color={themeColors.textSecondary} />
+        <Ionicons name="chevron-down" size={14} color={themeColors.textSecondary} />
       </View>
 
-      <View style={styles.row}>
+      <View style={[styles.row, { borderBottomColor: themeColors.border }]}>
         <View style={styles.col}>
-          <Text style={styles.label}>Account Type</Text>
-          <Text style={styles.valueText}>{account.accountType}</Text>
+          <Text style={[styles.label, { color: themeColors.textSecondary }]}>
+            Account Type
+          </Text>
+          <Text style={[styles.valueText, { color: themeColors.textPrimary }]}>
+            {account.accountType}
+          </Text>
         </View>
-        <Ionicons name="chevron-down" size={iconSize} color={themeColors.textSecondary} />
+        <Ionicons name="chevron-down" size={14} color={themeColors.textSecondary} />
       </View>
 
       {fields.map((field, i) => (
-        <View key={field.key} style={[styles.row, i === fields.length - 1 && styles.rowLast]}>
+        <View
+          key={field.key}
+          style={[
+            styles.row,
+            { borderBottomColor: themeColors.border },
+            i === fields.length - 1 && styles.rowLast,
+          ]}
+        >
           <View style={styles.col}>
-            <Text style={styles.label}>{field.label}</Text>
+            <Text style={[styles.label, { color: themeColors.textSecondary }]}>
+              {field.label}
+            </Text>
             <TextInput
               value={values[field.key] ?? ""}
               onChangeText={(t) => onChangeField(field.key, t)}
-              style={styles.input}
+              style={[styles.input, { color: themeColors.textPrimary }]}
               placeholder={field.label}
               placeholderTextColor={themeColors.textSecondary}
             />
           </View>
           {field.actionIcon && (
-            <TouchableOpacity style={styles.actionBox}>
-              <Feather name={field.actionIcon.name as any} size={iconSize - 3} color={themeColors.primaryLight} />
+            <TouchableOpacity
+              style={[styles.actionBox, { backgroundColor: themeColors.primaryTint }]}
+            >
+              <Feather
+                name={field.actionIcon.name as any}
+                size={11}
+                color={themeColors.primaryLight}
+              />
             </TouchableOpacity>
           )}
           {field.verified && !!values[field.key] && (
-            <Feather name="check-circle" size={iconSize} color={themeColors.success} />
+            <Feather name="check-circle" size={14} color={themeColors.success} />
           )}
         </View>
       ))}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  card: { borderRadius: 16, padding: 4 },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    gap: 8,
+  },
+  rowLast: { borderBottomWidth: 0 },
+  col: { flex: 1 },
+  label: { fontSize: 10 },
+  valueText: { fontSize: 13, fontWeight: "600", marginTop: 2 },
+  input: { fontSize: 13, fontWeight: "600", marginTop: 2, padding: 0 },
+  actionBox: {
+    width: 26,
+    height: 26,
+    borderRadius: 7,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});

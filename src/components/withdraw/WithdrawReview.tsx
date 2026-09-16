@@ -1,9 +1,10 @@
 // src/components/withdraw/WithdrawReview.tsx
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import StepProgress from './StepProgress';
 import WithdrawHeader from './WithdrawHeader';
 import DetailIcon from './DetailIcon';
@@ -11,10 +12,195 @@ import { ClipboardGraphic } from './illustrations';
 
 export default function WithdrawReview() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
 
   const handleConfirm = () => {
     router.push('/withdraw/complete');
   };
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: themeColors.background,
+        },
+        content: {
+          paddingHorizontal: 20,
+          paddingBottom: 40,
+        },
+        introRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 20,
+        },
+        introText: {
+          flex: 1,
+          paddingRight: 12,
+        },
+        reviewTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 20,
+          fontWeight: '700',
+          marginBottom: 4,
+        },
+        reviewSubtext: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+        },
+        summaryCard: {
+          backgroundColor: themeColors.surface,
+          borderRadius: 16,
+          padding: 20,
+          marginBottom: 20,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+        },
+        summaryTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 16,
+          fontWeight: '600',
+          marginBottom: 16,
+        },
+        summaryRow: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingVertical: 4,
+        },
+        feeLabelRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 4,
+        },
+        summaryLabel: {
+          color: themeColors.textSecondary,
+          fontSize: 14,
+        },
+        summaryValue: {
+          color: themeColors.textPrimary,
+          fontSize: 14,
+          fontWeight: '500',
+        },
+        summaryValueFee: {
+          color: themeColors.danger,
+          fontSize: 14,
+          fontWeight: '500',
+        },
+        summaryTotalLabel: {
+          color: themeColors.textPrimary,
+          fontSize: 15,
+          fontWeight: '600',
+        },
+        summaryTotalValue: {
+          color: themeColors.success,
+          fontSize: 18,
+          fontWeight: '700',
+        },
+        summarySubtext: {
+          color: themeColors.textSecondary,
+          fontSize: 12,
+          marginTop: 4,
+        },
+        divider: {
+          height: 1,
+          backgroundColor: themeColors.border,
+          marginVertical: 8,
+        },
+        bankCard: {
+          backgroundColor: themeColors.surface,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 20,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+        },
+        bankCardTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 14,
+          fontWeight: '600',
+          marginBottom: 12,
+        },
+        bankInfo: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+        },
+        bankInfoLeft: {
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+        },
+        bankName: {
+          color: themeColors.textPrimary,
+          fontSize: 14,
+          fontWeight: '500',
+        },
+        bankAccount: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+          marginTop: 2,
+        },
+        bankHolder: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+          marginTop: 2,
+        },
+        chevronRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 2,
+        },
+        changeBank: {
+          color: themeColors.primary,
+          fontSize: 13,
+          fontWeight: '500',
+        },
+        infoCard: {
+          backgroundColor: themeColors.primaryTint,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 24,
+          borderWidth: 1,
+          borderColor: themeColors.primaryTint,
+        },
+        infoIconWrap: {
+          width: 28,
+          height: 28,
+          borderRadius: 14,
+          backgroundColor: themeColors.surface,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 8,
+        },
+        infoTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 14,
+          fontWeight: '600',
+        },
+        infoText: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+          marginTop: 4,
+          lineHeight: 20,
+        },
+        confirmButton: {
+          flexDirection: 'row',
+          backgroundColor: themeColors.primary,
+          borderRadius: 12,
+          paddingVertical: 16,
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 4,
+        },
+        confirmButtonText: {
+          color: '#fff',
+          fontSize: 16,
+          fontWeight: '700',
+        },
+      }),
+    [themeColors]
+  );
 
   return (
     <View style={styles.container}>
@@ -51,7 +237,7 @@ export default function WithdrawReview() {
           <View style={styles.summaryRow}>
             <View style={styles.feeLabelRow}>
               <Text style={styles.summaryLabel}>Processing Fee (1.5%)</Text>
-              <Feather name="info" size={12} color={colors.textSecondary} />
+              <Feather name="info" size={12} color={themeColors.textSecondary} />
             </View>
             <Text style={styles.summaryValueFee}>- ₦375.00</Text>
           </View>
@@ -78,14 +264,14 @@ export default function WithdrawReview() {
             </View>
             <Pressable style={styles.chevronRow}>
               <Text style={styles.changeBank}>Change</Text>
-              <Feather name="chevron-right" size={16} color={colors.primary} />
+              <Feather name="chevron-right" size={16} color={themeColors.primary} />
             </Pressable>
           </View>
         </View>
 
         <View style={styles.infoCard}>
           <View style={styles.infoIconWrap}>
-            <Feather name="info" size={16} color={colors.primary} />
+            <Feather name="info" size={16} color={themeColors.primary} />
           </View>
           <Text style={styles.infoTitle}>Important Information</Text>
           <Text style={styles.infoText}>
@@ -103,183 +289,3 @@ export default function WithdrawReview() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-  },
-  introRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  introText: {
-    flex: 1,
-    paddingRight: 12,
-  },
-  reviewTitle: {
-    color: colors.textPrimary,
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  reviewSubtext: {
-    color: colors.textSecondary,
-    fontSize: 13,
-  },
-  summaryCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  summaryTitle: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 4,
-  },
-  feeLabelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  summaryLabel: {
-    color: colors.textSecondary,
-    fontSize: 14,
-  },
-  summaryValue: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  summaryValueFee: {
-    color: colors.danger,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  summaryTotalLabel: {
-    color: colors.textPrimary,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  summaryTotalValue: {
-    color: colors.success,
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  summarySubtext: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    marginTop: 4,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: 8,
-  },
-  bankCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  bankCardTitle: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 12,
-  },
-  bankInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  bankInfoLeft: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  bankName: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  bankAccount: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    marginTop: 2,
-  },
-  bankHolder: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    marginTop: 2,
-  },
-  chevronRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-  },
-  changeBank: {
-    color: colors.primary,
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  infoCard: {
-    backgroundColor: colors.primaryTint,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: colors.primaryTint,
-  },
-  infoIconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  infoTitle: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  infoText: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    marginTop: 4,
-    lineHeight: 20,
-  },
-  confirmButton: {
-    flexDirection: 'row',
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-  },
-  confirmButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-});

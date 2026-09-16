@@ -9,15 +9,16 @@ import UnlockTierCard from "../src/components/account-limits/UnlockTierCard";
 import VerificationLevelCard from "../src/components/account-limits/VerificationLevelCard";
 import { TIER_CONFIGS } from "../src/config/tierConfig";
 import { useAuthStore } from "../src/store/authStore";
-import { colors } from "../src/theme/colors";
+import { useTheme } from "../src/theme/ThemeContext";
 
 export default function AccountLimitsScreen() {
   const router = useRouter();
+  const { colors: themeColors } = useTheme();
   const accountTier = useAuthStore((state) => state.accountTier);
   const config = useMemo(() => TIER_CONFIGS[accountTier], [accountTier]);
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, { backgroundColor: themeColors.background }]}>
       <AccountLimitsHeader
         onBack={() => router.back()}
         filledShield={config.tier === 3}
@@ -52,7 +53,6 @@ export default function AccountLimitsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   scrollContent: {
     paddingHorizontal: 14,

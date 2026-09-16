@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Goal = {
   id: string;
@@ -13,40 +14,68 @@ type Goal = {
   color: string;
 };
 
-const goals: Goal[] = [
-  {
-    id: 'house',
-    icon: <Ionicons name="home" size={18} color="#4B23B6" />,
-    bg: 'rgba(167,139,250,0.2)',
-    name: 'New House',
-    status: 'On Track',
-    target: 10000000,
-    saved: 4250000,
-    color: colors.primary,
-  },
-  {
-    id: 'education',
-    icon: <Ionicons name="school" size={18} color="#F5A623" />,
-    bg: 'rgba(245,166,35,0.2)',
-    name: 'Education Fund',
-    target: 5000000,
-    saved: 2150000,
-    color: '#F5A623',
-  },
-  {
-    id: 'vacation',
-    icon: <Ionicons name="airplane" size={18} color="#34C759" />,
-    bg: 'rgba(52,199,89,0.2)',
-    name: 'Vacation Trip',
-    target: 2000000,
-    saved: 850000,
-    color: '#34C759',
-  },
-];
-
 const fmt = (n: number) => `₦${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 
 export function SavingsGoalsList() {
+  const { colors: themeColors } = useTheme();
+
+  const goals: Goal[] = useMemo(
+    () => [
+      {
+        id: 'house',
+        icon: <Ionicons name="home" size={18} color="#4B23B6" />,
+        bg: 'rgba(167,139,250,0.2)',
+        name: 'New House',
+        status: 'On Track',
+        target: 10000000,
+        saved: 4250000,
+        color: themeColors.primary,
+      },
+      {
+        id: 'education',
+        icon: <Ionicons name="school" size={18} color="#F5A623" />,
+        bg: 'rgba(245,166,35,0.2)',
+        name: 'Education Fund',
+        target: 5000000,
+        saved: 2150000,
+        color: '#F5A623',
+      },
+      {
+        id: 'vacation',
+        icon: <Ionicons name="airplane" size={18} color="#34C759" />,
+        bg: 'rgba(52,199,89,0.2)',
+        name: 'Vacation Trip',
+        target: 2000000,
+        saved: 850000,
+        color: '#34C759',
+      },
+    ],
+    [themeColors]
+  );
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
+        title: { color: themeColors.textPrimary, fontSize: 15, fontWeight: '600' },
+        viewAll: { color: themeColors.primaryLight, fontSize: 12, fontWeight: '600' },
+        card: { backgroundColor: themeColors.surface, borderRadius: 16, padding: 14 },
+        topRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
+        iconCircle: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
+        nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+        name: { color: themeColors.textPrimary, fontSize: 13.5, fontWeight: '700' },
+        statusPill: { backgroundColor: 'rgba(167,139,250,0.2)', paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6 },
+        statusText: { color: themeColors.primaryLight, fontSize: 9, fontWeight: '600' },
+        targetText: { color: themeColors.textSecondary, fontSize: 11, marginTop: 2 },
+        track: { height: 5, borderRadius: 3, backgroundColor: '#2C2C2E', overflow: 'hidden', marginBottom: 8 },
+        fill: { height: 5, borderRadius: 3 },
+        bottomRow: { flexDirection: 'row', justifyContent: 'space-between' },
+        savedText: { color: themeColors.textPrimary, fontSize: 11, fontWeight: '500' },
+        pctText: { color: themeColors.textPrimary, fontSize: 11, fontWeight: '600' },
+      }),
+    [themeColors]
+  );
+
   return (
     <View>
       <View style={styles.header}>
@@ -72,7 +101,7 @@ export function SavingsGoalsList() {
                   </View>
                   <Text style={styles.targetText}>Target: {fmt(g.target)}</Text>
                 </View>
-                <Feather name="chevron-right" size={16} color={colors.textSecondary} />
+                <Feather name="chevron-right" size={16} color={themeColors.textSecondary} />
               </View>
 
               <View style={styles.track}>
@@ -90,22 +119,3 @@ export function SavingsGoalsList() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
-  title: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
-  viewAll: { color: colors.primaryLight, fontSize: 12, fontWeight: '600' },
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 14 },
-  topRow: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 10 },
-  iconCircle: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
-  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  name: { color: colors.textPrimary, fontSize: 13.5, fontWeight: '700' },
-  statusPill: { backgroundColor: 'rgba(167,139,250,0.2)', paddingHorizontal: 7, paddingVertical: 2, borderRadius: 6 },
-  statusText: { color: colors.primaryLight, fontSize: 9, fontWeight: '600' },
-  targetText: { color: colors.textSecondary, fontSize: 11, marginTop: 2 },
-  track: { height: 5, borderRadius: 3, backgroundColor: '#2C2C2E', overflow: 'hidden', marginBottom: 8 },
-  fill: { height: 5, borderRadius: 3 },
-  bottomRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  savedText: { color: colors.textPrimary, fontSize: 11, fontWeight: '500' },
-  pctText: { color: colors.textPrimary, fontSize: 11, fontWeight: '600' },
-});

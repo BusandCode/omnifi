@@ -1,35 +1,57 @@
-// src/components/food/FoodTabBar.tsx — bottom tab bar, restyled to the cream/red food theme
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Home, Search, ShoppingBag, User } from "lucide-react-native";
-import { foodColors } from "../../theme/foodTheme";
+// src/components/food/FoodTabBar.tsx
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { useRouter, usePathname } from 'expo-router';
+import { foodColors } from '../../constants/foodColors';
 
-type TabKey = "home" | "search" | "orders" | "profile";
+type TabItem = {
+  key: string;
+  label: string;
+  icon: keyof typeof Feather.glyphMap;
+  route: string;
+};
 
-const TABS: { key: TabKey; label: string; icon: typeof Home }[] = [
-  { key: "home", label: "Home", icon: Home },
-  { key: "search", label: "Search", icon: Search },
-  { key: "orders", label: "Orders", icon: ShoppingBag },
-  { key: "profile", label: "Profile", icon: User },
+const tabs: TabItem[] = [
+  { key: 'home', label: 'Home', icon: 'home', route: '/' },
+  { key: 'echop', label: 'E-Chop', icon: 'coffee', route: '/food' },
+  { key: 'ewash', label: 'E-Wash', icon: 'droplet', route: '/wash' },
+  { key: 'profile', label: 'Profile', icon: 'user', route: '/food/profile' },
 ];
 
-export default function FoodTabBar({
-  active,
-  onChange,
-}: {
-  active: TabKey;
-  onChange: (tab: TabKey) => void;
-}) {
+export function FoodTabBar() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const isActive = (route: string) => {
+    if (route === '/food' && pathname === '/food') return true;
+    if (route === '/food/profile' && pathname === '/food/profile') return true;
+    return pathname === route;
+  };
+
   return (
-    <View style={styles.bar}>
-      {TABS.map((tab) => {
-        const isActive = tab.key === active;
-        const Icon = tab.icon;
+    <View style={styles.container}>
+      {tabs.map((tab) => {
+        const active = isActive(tab.route);
         return (
-          <Pressable key={tab.key} style={styles.tab} onPress={() => onChange(tab.key)}>
-            <Icon color={isActive ? foodColors.red : foodColors.textSecondary} size={20} />
-            <Text style={[styles.label, isActive && styles.labelActive]}>{tab.label}</Text>
-          </Pressable>
+          <TouchableOpacity
+            key={tab.key}
+            style={styles.tab}
+            onPress={() => router.push(tab.route as any)}
+          >
+            <Feather
+              name={tab.icon}
+              size={22}
+              color={active ? foodColors.primary : foodColors.textMuted}
+            />
+            <Text
+              style={[
+                styles.label,
+                active ? styles.labelActive : styles.labelInactive,
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
         );
       })}
     </View>
@@ -37,15 +59,33 @@ export default function FoodTabBar({
 }
 
 const styles = StyleSheet.create({
-  bar: {
-    flexDirection: "row",
-    borderTopWidth: 1,
-    borderTopColor: foodColors.border,
+  container: {
+    flexDirection: 'row',
     backgroundColor: foodColors.surface,
-    paddingTop: 8,
-    paddingBottom: 6,
+    paddingVertical: 8,
+    paddingBottom: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.05)',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: -2 },
+    elevation: 4,
   },
-  tab: { flex: 1, alignItems: "center", gap: 3 },
-  label: { color: foodColors.textSecondary, fontSize: 10, fontWeight: "600" },
-  labelActive: { color: foodColors.red },
+  tab: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 2,
+  },
+  label: {
+    fontSize: 10,
+    fontWeight: '600',
+  },
+  labelActive: {
+    color: foodColors.primary,
+  },
+  labelInactive: {
+    color: foodColors.textMuted,
+  },
 });

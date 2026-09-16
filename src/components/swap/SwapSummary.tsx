@@ -1,7 +1,7 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { CurrencyCode } from '../../data/currencies';
-import { colors } from '../../theme/colors';
-// import { router } from '@/.expo/types/router';
+import { useTheme } from '../../theme/ThemeContext';
 import { router } from 'expo-router';
 
 type Props = {
@@ -13,6 +13,23 @@ type Props = {
 };
 
 export function SwapSummary({ sendCurrency, receiveCurrency, sendAmount, receiveAmount, rate }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  card: { backgroundColor: themeColors.surface, borderRadius: 14, padding: 12 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
+  label: { color: themeColors.textSecondary, fontSize: 10.5 },
+  value: { color: themeColors.textPrimary, fontSize: 10.5, fontWeight: '600' },
+  fee: { color: themeColors.success, fontSize: 10.5, fontWeight: '600' },
+  divider: { height: 1, borderStyle: 'dashed', borderWidth: 0.7, borderColor: themeColors.border, marginVertical: 6 },
+  totalLabel: { color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '700' },
+  totalValue: { color: themeColors.textPrimary, fontSize: 13, fontWeight: '700' },
+  cta: { backgroundColor: themeColors.primary, borderRadius: 14, paddingVertical: 13, alignItems: 'center' },
+  ctaText: { color: '#fff', fontSize: 13.5, fontWeight: '700' },
+}),
+    [themeColors]
+  );
+
   const sendSymbol = sendCurrency === 'NGN' ? '₦' : sendCurrency === 'USD' ? '$' : '€';
   const receiveSymbol = receiveCurrency === 'NGN' ? '₦' : receiveCurrency === 'USD' ? '$' : '€';
 
@@ -40,25 +57,9 @@ export function SwapSummary({ sendCurrency, receiveCurrency, sendAmount, receive
         </View>
       </View>
 
-      {/* <TouchableOpacity style={styles.cta}>
-        <Text style={styles.ctaText}>Review Swap</Text>
-      </TouchableOpacity> */}
       <TouchableOpacity style={styles.cta} onPress={() => router.push('/review-swap')}>
         <Text style={styles.ctaText}>Review Swap</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 14, padding: 12 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 },
-  label: { color: colors.textSecondary, fontSize: 10.5 },
-  value: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '600' },
-  fee: { color: colors.success, fontSize: 10.5, fontWeight: '600' },
-  divider: { height: 1, borderStyle: 'dashed', borderWidth: 0.7, borderColor: '#3A3A3C', marginVertical: 6 },
-  totalLabel: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '700' },
-  totalValue: { color: colors.textPrimary, fontSize: 13, fontWeight: '700' },
-  cta: { backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 13, alignItems: 'center' },
-  ctaText: { color: '#fff', fontSize: 13.5, fontWeight: '700' },
-});

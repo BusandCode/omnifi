@@ -5,12 +5,14 @@ import { SavingsQuickActions } from '../src/components/savings/SavingsQuickActio
 import { SavingsGoalsList } from '../src/components/savings/SavingsGoalsList';
 import { HigherReturnsBanner } from '../src/components/savings/HigherReturnsBanner';
 import { RecentSavingsTransactions } from '../src/components/savings/RecentSavingsTransactions';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export default function SavingsScreen() {
+  const { colors: themeColors } = useTheme();
+
   return (
-    <View style={styles.container}>
-      <View style={styles.fixedHeader}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <View style={[styles.fixedHeader, { backgroundColor: themeColors.background }]}>
         <SavingsHeader />
         <SavingsBalanceCard />
       </View>
@@ -29,13 +31,12 @@ export default function SavingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1 },
   fixedHeader: {
     paddingHorizontal: 20,
     paddingTop: 55,
     paddingBottom: 14,
     gap: 16,
-    backgroundColor: colors.background,
   },
   content: { paddingHorizontal: 20, paddingTop: 4, paddingBottom: 30, gap: 18 },
 });

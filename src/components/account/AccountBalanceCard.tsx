@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
 type AccountBalanceCardProps = {
@@ -17,6 +17,33 @@ function formatMoney(n: number) {
 }
 
 export function AccountBalanceCard({ flag, code, balance, onHold }: AccountBalanceCardProps) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  wrapper: { borderRadius: 18, padding: 16, overflow: 'hidden' },
+  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  left: { flexDirection: 'row', gap: 10 },
+  flag: { fontSize: 30, marginTop: 2 },
+  labelRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  label: { color: 'rgba(255,255,255,0.65)', fontSize: 11.5 },
+  amount: { color: '#fff', fontSize: 24, fontWeight: '700', marginTop: 4 },
+  activeBadge: {
+    backgroundColor: 'rgba(52,199,89,0.2)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+  },
+  activeText: { color: themeColors.success, fontSize: 10.5, fontWeight: '700' },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(255,255,255,0.15)', marginVertical: 16 },
+  footerRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  footerLabel: { color: 'rgba(255,255,255,0.55)', fontSize: 10.5 },
+  footerValue: { color: '#fff', fontSize: 13.5, fontWeight: '700', marginTop: 4 },
+  onHoldGroup: { alignItems: 'flex-end' },
+  onHoldLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+}),
+    [themeColors]
+  );
+
   const [visible, setVisible] = useState(true);
   const availableBalance = balance - onHold;
   const { symbol } = getCurrency(code);
@@ -74,25 +101,3 @@ export function AccountBalanceCard({ flag, code, balance, onHold }: AccountBalan
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: { borderRadius: 18, padding: 16, overflow: 'hidden' },
-  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  left: { flexDirection: 'row', gap: 10 },
-  flag: { fontSize: 30, marginTop: 2 },
-  labelRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  label: { color: 'rgba(255,255,255,0.65)', fontSize: 11.5 },
-  amount: { color: '#fff', fontSize: 24, fontWeight: '700', marginTop: 4 },
-  activeBadge: {
-    backgroundColor: 'rgba(52,199,89,0.2)',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 10,
-  },
-  activeText: { color: colors.success, fontSize: 10.5, fontWeight: '700' },
-  divider: { height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(255,255,255,0.15)', marginVertical: 16 },
-  footerRow: { flexDirection: 'row', justifyContent: 'space-between' },
-  footerLabel: { color: 'rgba(255,255,255,0.55)', fontSize: 10.5 },
-  footerValue: { color: '#fff', fontSize: 13.5, fontWeight: '700', marginTop: 4 },
-  onHoldGroup: { alignItems: 'flex-end' },
-  onHoldLabelRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-});

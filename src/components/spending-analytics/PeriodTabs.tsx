@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { PeriodKey } from '../../constants/spendingData';
 
 const TABS: { key: PeriodKey; label: string }[] = [
@@ -15,6 +16,29 @@ type Props = {
 };
 
 export function PeriodTabs({ active }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    backgroundColor: themeColors.surface,
+    borderRadius: 14,
+    padding: 4,
+    gap: 4,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 11,
+    alignItems: 'center',
+  },
+  tabActive: { backgroundColor: themeColors.primary },
+  label: { color: themeColors.textSecondary, fontSize: 12, fontWeight: '600' },
+  labelActive: { color: '#fff' },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.row}>
       {TABS.map((t) => {
@@ -38,21 +62,3 @@ export function PeriodTabs({ active }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    padding: 4,
-    gap: 4,
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 11,
-    alignItems: 'center',
-  },
-  tabActive: { backgroundColor: colors.primary },
-  label: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
-  labelActive: { color: '#fff' },
-});

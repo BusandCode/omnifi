@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { ScrollView, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export type FilterType = 'all' | 'in' | 'out' | 'airtime_data' | 'other';
 
@@ -17,6 +18,28 @@ type Props = {
 };
 
 export function HistoryFilterTabs({ active, onChange }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  row: { flexDirection: 'row', gap: 8, paddingHorizontal: 20 },
+  tab: {
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 20,
+    backgroundColor: themeColors.surface,
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+  },
+  tabActive: {
+    backgroundColor: themeColors.primary,
+    borderColor: themeColors.primary,
+  },
+  label: { color: themeColors.textSecondary, fontSize: 12, fontWeight: '600' },
+  labelActive: { color: '#fff' },
+}),
+    [themeColors]
+  );
+
   return (
     <ScrollView
       horizontal
@@ -39,20 +62,3 @@ export function HistoryFilterTabs({ active, onChange }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  row: { flexDirection: 'row', gap: 8, paddingHorizontal: 20 },
-  tab: {
-    paddingHorizontal: 14,
-    paddingVertical: 9,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    borderWidth: 1.5,
-    borderColor: 'transparent',
-  },
-  tabActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  label: { color: colors.textSecondary, fontSize: 12, fontWeight: '600' },
-  labelActive: { color: '#fff' },
-});

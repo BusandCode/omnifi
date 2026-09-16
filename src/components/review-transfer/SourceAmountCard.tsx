@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Props = {
   flag: string;
@@ -10,6 +11,58 @@ type Props = {
 };
 
 export function SourceAmountCard({ flag, accountLabel, availableBalanceLabel, amountLabel, currencyBadge }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  card: { backgroundColor: themeColors.surface, borderRadius: 18, padding: 16 },
+  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  left: { flexDirection: 'row', gap: 10, flex: 1 },
+  flagCircle: {
+    width: 34, height: 34, borderRadius: 17,
+    backgroundColor: '#1a1a1a',
+    justifyContent: 'center', alignItems: 'center',
+    overflow: 'hidden',
+  },
+  flag: { fontSize: 18 },
+  label: { color: themeColors.textSecondary, fontSize: 10.5 },
+  accountName: { color: themeColors.textPrimary, fontSize: 14, fontWeight: '700', marginTop: 2 },
+  statusRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 4 },
+  statusDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: themeColors.success },
+  statusText: { color: themeColors.success, fontSize: 10.5, fontWeight: '600' },
+  balanceCol: { alignItems: 'flex-end' },
+  balanceLabel: { color: themeColors.textSecondary, fontSize: 10 },
+  balanceValue: { color: themeColors.success, fontSize: 15, fontWeight: '700', marginTop: 3 },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: themeColors.border, marginVertical: 14 },
+  sendRow: { flexDirection: 'row', alignItems: 'flex-start' },
+  sendLabel: { color: themeColors.textSecondary, fontSize: 11 },
+  sendAmount: { color: themeColors.textPrimary, fontSize: 26, fontWeight: '800', marginTop: 4 },
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(255,255,255,0.06)',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginTop: 8,
+  },
+  badgeText: { color: themeColors.textSecondary, fontSize: 10.5, fontWeight: '600' },
+  coinIllustration: { width: 70, height: 70, justifyContent: 'center', alignItems: 'center' },
+  coinBack: {
+    width: 60, height: 60, borderRadius: 30,
+    backgroundColor: 'rgba(167,139,250,0.3)',
+    justifyContent: 'flex-end', alignItems: 'center',
+    paddingBottom: 2,
+  },
+  coinFront: {
+    width: 52, height: 52, borderRadius: 26,
+    backgroundColor: themeColors.primary,
+    justifyContent: 'center', alignItems: 'center',
+    position: 'absolute', top: -8,
+  },
+  coinSymbol: { color: '#fff', fontSize: 22, fontWeight: '800' },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.card}>
       <View style={styles.topRow}>
@@ -56,50 +109,3 @@ export function SourceAmountCard({ flag, accountLabel, availableBalanceLabel, am
   );
 }
 
-const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 18, padding: 16 },
-  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  left: { flexDirection: 'row', gap: 10, flex: 1 },
-  flagCircle: {
-    width: 34, height: 34, borderRadius: 17,
-    backgroundColor: '#1a1a1a',
-    justifyContent: 'center', alignItems: 'center',
-    overflow: 'hidden',
-  },
-  flag: { fontSize: 18 },
-  label: { color: colors.textSecondary, fontSize: 10.5 },
-  accountName: { color: colors.textPrimary, fontSize: 14, fontWeight: '700', marginTop: 2 },
-  statusRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 4 },
-  statusDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.success },
-  statusText: { color: colors.success, fontSize: 10.5, fontWeight: '600' },
-  balanceCol: { alignItems: 'flex-end' },
-  balanceLabel: { color: colors.textSecondary, fontSize: 10 },
-  balanceValue: { color: colors.success, fontSize: 15, fontWeight: '700', marginTop: 3 },
-  divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: 14 },
-  sendRow: { flexDirection: 'row', alignItems: 'flex-start' },
-  sendLabel: { color: colors.textSecondary, fontSize: 11 },
-  sendAmount: { color: colors.textPrimary, fontSize: 26, fontWeight: '800', marginTop: 4 },
-  badge: {
-    alignSelf: 'flex-start',
-    backgroundColor: 'rgba(255,255,255,0.06)',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginTop: 8,
-  },
-  badgeText: { color: colors.textSecondary, fontSize: 10.5, fontWeight: '600' },
-  coinIllustration: { width: 70, height: 70, justifyContent: 'center', alignItems: 'center' },
-  coinBack: {
-    width: 60, height: 60, borderRadius: 30,
-    backgroundColor: 'rgba(167,139,250,0.3)',
-    justifyContent: 'flex-end', alignItems: 'center',
-    paddingBottom: 2,
-  },
-  coinFront: {
-    width: 52, height: 52, borderRadius: 26,
-    backgroundColor: colors.primary,
-    justifyContent: 'center', alignItems: 'center',
-    position: 'absolute', top: -8,
-  },
-  coinSymbol: { color: '#fff', fontSize: 22, fontWeight: '800' },
-});

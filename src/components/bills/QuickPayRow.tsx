@@ -1,9 +1,8 @@
-import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextStyle } from 'react-native';
 import { Feather, Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from '../../theme/ThemeContext';
+
+const ICON_SIZE = 18;
 
 type Biller = {
   id: string;
@@ -22,49 +21,39 @@ const billers: Biller[] = [
 
 function BillerIcon({
   kind,
-  iconSize,
   dstvTextStyle,
 }: {
   kind: Biller['kind'];
-  iconSize: number;
   dstvTextStyle: TextStyle;
 }) {
-  if (kind === 'dstv') return <Text style={[dstvTextStyle, { fontSize: iconSize * 0.6 }]}>DStv</Text>;
-  if (kind === 'bulb') return <Ionicons name="bulb" size={iconSize} color="#F5C518" />;
-  if (kind === 'wifi') return <Feather name="wifi" size={iconSize - 2} color="#34C759" />;
-  return <Feather name="droplet" size={iconSize - 2} color="#3DB2FF" />;
+  if (kind === 'dstv') return <Text style={[dstvTextStyle, { fontSize: ICON_SIZE * 0.6 }]}>DStv</Text>;
+  if (kind === 'bulb') return <Ionicons name="bulb" size={ICON_SIZE} color="#F5C518" />;
+  if (kind === 'wifi') return <Feather name="wifi" size={ICON_SIZE - 2} color="#34C759" />;
+  return <Feather name="droplet" size={ICON_SIZE - 2} color="#3DB2FF" />;
 }
 
 export function QuickPayRow() {
-  const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
-  const { styles, iconSize } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      iconSize: s(18),
-      styles: StyleSheet.create({
-        header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: s(14) },
-        title: { color: colors.textPrimary, fontSize: f(15), fontWeight: '600' },
-        manage: { color: colors.primaryLight, fontSize: f(12), fontWeight: '600' },
-        row: { flexDirection: 'row', justifyContent: 'space-between' },
-        item: { alignItems: 'center', gap: s(6), width: s(60) },
-        iconCircle: { 
-          width: s(48), height: s(48), borderRadius: s(24), 
-          justifyContent: 'center', alignItems: 'center' 
-        },
-        addCircle: {
-          width: s(48), height: s(48), borderRadius: s(24),
-          borderWidth: 1.5, borderColor: '#3A3A3C', borderStyle: 'dashed',
-          justifyContent: 'center', alignItems: 'center',
-        },
-        dstvText: { color: '#fff', fontWeight: '800' },
-        name: { color: colors.textPrimary, fontSize: f(10.5), fontWeight: '600', textAlign: 'center' },
-        sub: { color: colors.textSecondary, fontSize: f(9), textAlign: 'center' },
-      }),
-    };
-  }, [layoutScale]);
+  const styles = StyleSheet.create({
+    header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 14 },
+    title: { color: themeColors.textPrimary, fontSize: 15, fontWeight: '600' },
+    manage: { color: themeColors.primaryLight, fontSize: 12, fontWeight: '600' },
+    row: { flexDirection: 'row', justifyContent: 'space-between' },
+    item: { alignItems: 'center', gap: 6, width: 60 },
+    iconCircle: {
+      width: 48, height: 48, borderRadius: 24,
+      justifyContent: 'center', alignItems: 'center',
+    },
+    addCircle: {
+      width: 48, height: 48, borderRadius: 24,
+      borderWidth: 1.5, borderColor: themeColors.border, borderStyle: 'dashed',
+      justifyContent: 'center', alignItems: 'center',
+    },
+    dstvText: { color: '#fff', fontWeight: '800' },
+    name: { color: themeColors.textPrimary, fontSize: 10.5, fontWeight: '600', textAlign: 'center' },
+    sub: { color: themeColors.textSecondary, fontSize: 9, textAlign: 'center' },
+  });
 
   return (
     <View>
@@ -77,7 +66,7 @@ export function QuickPayRow() {
         {billers.map((b) => (
           <TouchableOpacity key={b.id} style={styles.item}>
             <View style={[styles.iconCircle, { backgroundColor: b.bg }]}>
-              <BillerIcon kind={b.kind} iconSize={iconSize} dstvTextStyle={styles.dstvText} />
+              <BillerIcon kind={b.kind} dstvTextStyle={styles.dstvText} />
             </View>
             <Text style={styles.name} numberOfLines={1}>{b.name}</Text>
             <Text style={styles.sub} numberOfLines={1}>{b.sub}</Text>
@@ -86,7 +75,7 @@ export function QuickPayRow() {
 
         <TouchableOpacity style={styles.item}>
           <View style={styles.addCircle}>
-            <Feather name="plus" size={iconSize} color={colors.textSecondary} />
+            <Feather name="plus" size={ICON_SIZE} color={themeColors.textSecondary} />
           </View>
           <Text style={styles.name}>Add new</Text>
         </TouchableOpacity>

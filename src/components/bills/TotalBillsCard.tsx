@@ -1,59 +1,50 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from '../../theme/ThemeContext';
 
 const total = '562,430.00';
+const ICON_SIZE = 14;
 
 export function TotalBillsCard() {
-  const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
   const [visible, setVisible] = useState(true);
 
-  const { styles, iconSize } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      iconSize: s(14),
-      styles: StyleSheet.create({
-        wrapper: { 
-          flexDirection: 'row', 
-          borderRadius: s(20), 
-          padding: s(15), 
-          overflow: 'hidden',
-          marginTop: s(-4),
-        },
-        left: { flex: 1 },
-        labelRow: { 
-          flexDirection: 'row', 
-          alignItems: 'center', 
-          gap: s(6), 
-          marginBottom: s(10) 
-        },
-        label: { color: 'rgba(255,255,255,0.7)', fontSize: f(13) },
-        amountRow: { 
-          flexDirection: 'row', 
-          alignItems: 'center', 
-          gap: s(8), 
-          marginBottom: s(8) 
-        },
-        currency: { color: '#fff', fontSize: f(15), fontWeight: '600' },
-        amount: { color: '#fff', fontSize: f(22), fontWeight: '700' },
-        periodRow: { flexDirection: 'row', alignItems: 'center', gap: s(4) },
-        period: { color: 'rgba(255,255,255,0.55)', fontSize: f(11) },
-        illustration: { width: s(80), justifyContent: 'center', alignItems: 'center' },
-        checkBadge: {
-          position: 'absolute', bottom: s(-2), right: s(6),
-          width: s(26), height: s(26), borderRadius: s(13), backgroundColor: colors.primary,
-          justifyContent: 'center', alignItems: 'center',
-          borderWidth: 3, borderColor: '#160D33',
-        },
-      }),
-    };
-  }, [layoutScale]);
+  const styles = StyleSheet.create({
+    wrapper: {
+      flexDirection: 'row',
+      borderRadius: 20,
+      padding: 15,
+      overflow: 'hidden',
+      marginTop: -4,
+    },
+    left: { flex: 1 },
+    labelRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 6,
+      marginBottom: 10,
+    },
+    label: { color: 'rgba(255,255,255,0.7)', fontSize: 13 },
+    amountRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      marginBottom: 8,
+    },
+    currency: { color: '#fff', fontSize: 15, fontWeight: '600' },
+    amount: { color: '#fff', fontSize: 22, fontWeight: '700' },
+    periodRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+    period: { color: 'rgba(255,255,255,0.55)', fontSize: 11 },
+    illustration: { width: 80, justifyContent: 'center', alignItems: 'center' },
+    checkBadge: {
+      position: 'absolute', bottom: -2, right: 6,
+      width: 26, height: 26, borderRadius: 13, backgroundColor: themeColors.primary,
+      justifyContent: 'center', alignItems: 'center',
+      borderWidth: 3, borderColor: '#160D33',
+    },
+  });
 
   return (
     <View style={styles.wrapper}>
@@ -68,10 +59,10 @@ export function TotalBillsCard() {
         <View style={styles.labelRow}>
           <Text style={styles.label}>Total bills paid</Text>
           <TouchableOpacity onPress={() => setVisible((v) => !v)} hitSlop={8}>
-            <Ionicons 
-              name={visible ? 'eye-outline' : 'eye-off-outline'} 
-              size={iconSize} 
-              color="rgba(255,255,255,0.6)" 
+            <Ionicons
+              name={visible ? 'eye-outline' : 'eye-off-outline'}
+              size={ICON_SIZE}
+              color="rgba(255,255,255,0.6)"
             />
           </TouchableOpacity>
         </View>
@@ -83,14 +74,14 @@ export function TotalBillsCard() {
 
         <TouchableOpacity style={styles.periodRow}>
           <Text style={styles.period}>This month</Text>
-          <Ionicons name="chevron-down" size={iconSize - 2} color="rgba(255,255,255,0.6)" />
+          <Ionicons name="chevron-down" size={ICON_SIZE - 2} color="rgba(255,255,255,0.6)" />
         </TouchableOpacity>
       </View>
 
       <View style={styles.illustration}>
-        <Feather name="file-text" size={iconSize * 3.8} color="rgba(167,139,250,0.35)" />
+        <Feather name="file-text" size={ICON_SIZE * 3.8} color="rgba(167,139,250,0.35)" />
         <View style={styles.checkBadge}>
-          <Feather name="check" size={iconSize} color="#fff" />
+          <Feather name="check" size={ICON_SIZE} color="#fff" />
         </View>
       </View>
     </View>

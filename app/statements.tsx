@@ -1,18 +1,50 @@
-import { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StatementsHeader } from "../src/components/statements/StatementsHeader";
-import { AccountSelectorCard } from "../src/components/statements/AccountSelectorCard";
-import { StatementsTabs, StatementsTab } from "../src/components/statements/StatementsTabs";
-import { FiltersRow } from "../src/components/statements/FiltersRow";
-import { AccountStatementsList } from "../src/components/statements/AccountStatementsList";
-import { OtherDocumentsGrid } from "../src/components/statements/OtherDocumentsGrid";
-import { PasswordProtectedNote } from "../src/components/statements/PasswordProtectedNote";
-import { colors } from "../src/theme/colors";
+import { useMemo, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatementsHeader } from '../src/components/statements/StatementsHeader';
+import { AccountSelectorCard } from '../src/components/statements/AccountSelectorCard';
+import { StatementsTabs, StatementsTab } from '../src/components/statements/StatementsTabs';
+import { FiltersRow } from '../src/components/statements/FiltersRow';
+import { AccountStatementsList } from '../src/components/statements/AccountStatementsList';
+import { OtherDocumentsGrid } from '../src/components/statements/OtherDocumentsGrid';
+import { PasswordProtectedNote } from '../src/components/statements/PasswordProtectedNote';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export default function StatementsScreen() {
   const insets = useSafeAreaInsets();
-  const [tab, setTab] = useState<StatementsTab>("statements");
+  const { colors: themeColors } = useTheme();
+  const [tab, setTab] = useState<StatementsTab>('statements');
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: themeColors.background,
+        },
+        fixedHeader: {
+          paddingHorizontal: 20,
+          paddingBottom: 12,
+          backgroundColor: themeColors.background,
+        },
+        scroll: {
+          flex: 1,
+        },
+        content: {
+          paddingHorizontal: 20,
+          paddingTop: 16,
+          paddingBottom: 20,
+          gap: 18,
+        },
+        fixedBottom: {
+          paddingHorizontal: 20,
+          paddingTop: 10,
+          paddingBottom: 10,
+          backgroundColor: themeColors.background,
+        },
+      }),
+    [themeColors],
+  );
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
@@ -28,7 +60,7 @@ export default function StatementsScreen() {
         <AccountSelectorCard />
         <StatementsTabs active={tab} onChange={setTab} />
 
-        {tab === "statements" ? (
+        {tab === 'statements' ? (
           <>
             <FiltersRow />
             <AccountStatementsList />
@@ -44,30 +76,3 @@ export default function StatementsScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  fixedHeader: {
-    paddingHorizontal: 20,
-    paddingBottom: 12,
-    backgroundColor: colors.background,
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 20,
-    gap: 18,
-  },
-  fixedBottom: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
-    backgroundColor: colors.background,
-  },
-});

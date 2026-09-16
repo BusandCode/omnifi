@@ -14,13 +14,14 @@ export type ThemeColors = typeof lightColors;
 const STORAGE_KEY = "omnifi_theme_mode_v1";
 
 const darkColors: ThemeColors = {
+  // background: "#01000e",
   background: "#000000",
   border: "rgba(255,255,255,0.08)",
   surface: "#151217",
   surfaceAlt: "#211D26",
   primary: "#8B5CF6",
   primaryLight: "#8B5CF6",
-  primaryDark: "#6D28D9",
+  primaryDark: "#9D28D9",
   primaryTint: "rgba(139, 92, 246, 0.12)",
   textPrimary: "#FFFFFF",
   textSecondary: "#8E8E93",

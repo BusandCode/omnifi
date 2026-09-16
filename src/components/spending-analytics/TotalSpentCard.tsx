@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import Svg, { Path } from 'react-native-svg';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
 type Props = {
@@ -47,6 +47,38 @@ function WalletIllustration() {
 }
 
 export function TotalSpentCard({ totalSpent, vsLastPeriodPercent, moneyIn, moneyOut, currency }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  card: { borderRadius: 20, padding: 16, overflow: 'hidden' },
+  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  labelRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
+  label: { color: 'rgba(255,255,255,0.65)', fontSize: 11.5 },
+  amount: { color: '#fff', fontSize: 26, fontWeight: '800' },
+  changeRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
+  changePill: { flexDirection: 'row', alignItems: 'center', gap: 3, borderRadius: 8, paddingHorizontal: 7, paddingVertical: 3 },
+  changeText: { fontSize: 10.5, fontWeight: '700' },
+  changeSub: { color: 'rgba(255,255,255,0.5)', fontSize: 10.5 },
+  rightCol: { alignItems: 'flex-end', gap: 10 },
+  currencyPill: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 8,
+    paddingHorizontal: 9,
+    paddingVertical: 6,
+  },
+  currencyText: { color: '#fff', fontSize: 10.5, fontWeight: '700' },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(255,255,255,0.12)', marginVertical: 14 },
+  summaryRow: { flexDirection: 'row', alignItems: 'center' },
+  summaryItem: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
+  summaryDivider: { width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.12)', marginHorizontal: 10 },
+  summaryIcon: { width: 26, height: 26, borderRadius: 13, justifyContent: 'center', alignItems: 'center' },
+  summaryLabel: { color: 'rgba(255,255,255,0.55)', fontSize: 9.5 },
+  summaryValue: { color: '#fff', fontSize: 12, fontWeight: '700', marginTop: 2 },
+}),
+    [themeColors]
+  );
+
   const [visible, setVisible] = useState(true);
   const { symbol } = getCurrency(currency);
 
@@ -77,8 +109,8 @@ export function TotalSpentCard({ totalSpent, vsLastPeriodPercent, moneyIn, money
 
           <View style={styles.changeRow}>
             <View style={[styles.changePill, { backgroundColor: isDown ? 'rgba(52,199,89,0.15)' : 'rgba(255,59,48,0.15)' }]}>
-              <Feather name={isDown ? 'arrow-down' : 'arrow-up'} size={10} color={isDown ? colors.success : colors.danger} />
-              <Text style={[styles.changeText, { color: isDown ? colors.success : colors.danger }]}>
+              <Feather name={isDown ? 'arrow-down' : 'arrow-up'} size={10} color={isDown ? themeColors.success : themeColors.danger} />
+              <Text style={[styles.changeText, { color: isDown ? themeColors.success : themeColors.danger }]}>
                 {Math.abs(vsLastPeriodPercent)}%
               </Text>
             </View>
@@ -100,7 +132,7 @@ export function TotalSpentCard({ totalSpent, vsLastPeriodPercent, moneyIn, money
       <View style={styles.summaryRow}>
         <View style={styles.summaryItem}>
           <View style={[styles.summaryIcon, { backgroundColor: 'rgba(52,199,89,0.15)' }]}>
-            <Feather name="arrow-up" size={12} color={colors.success} />
+            <Feather name="arrow-up" size={12} color={themeColors.success} />
           </View>
           <View>
             <Text style={styles.summaryLabel}>Money In</Text>
@@ -112,7 +144,7 @@ export function TotalSpentCard({ totalSpent, vsLastPeriodPercent, moneyIn, money
 
         <View style={styles.summaryItem}>
           <View style={[styles.summaryIcon, { backgroundColor: 'rgba(255,59,48,0.15)' }]}>
-            <Feather name="arrow-down" size={12} color={colors.danger} />
+            <Feather name="arrow-down" size={12} color={themeColors.danger} />
           </View>
           <View>
             <Text style={styles.summaryLabel}>Money Out</Text>
@@ -147,30 +179,3 @@ const illStyles = StyleSheet.create({
   pie: { position: 'absolute', right: -4, top: -2 },
 });
 
-const styles = StyleSheet.create({
-  card: { borderRadius: 20, padding: 16, overflow: 'hidden' },
-  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  labelRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
-  label: { color: 'rgba(255,255,255,0.65)', fontSize: 11.5 },
-  amount: { color: '#fff', fontSize: 26, fontWeight: '800' },
-  changeRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 },
-  changePill: { flexDirection: 'row', alignItems: 'center', gap: 3, borderRadius: 8, paddingHorizontal: 7, paddingVertical: 3 },
-  changeText: { fontSize: 10.5, fontWeight: '700' },
-  changeSub: { color: 'rgba(255,255,255,0.5)', fontSize: 10.5 },
-  rightCol: { alignItems: 'flex-end', gap: 10 },
-  currencyPill: {
-    flexDirection: 'row', alignItems: 'center', gap: 4,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderRadius: 8,
-    paddingHorizontal: 9,
-    paddingVertical: 6,
-  },
-  currencyText: { color: '#fff', fontSize: 10.5, fontWeight: '700' },
-  divider: { height: StyleSheet.hairlineWidth, backgroundColor: 'rgba(255,255,255,0.12)', marginVertical: 14 },
-  summaryRow: { flexDirection: 'row', alignItems: 'center' },
-  summaryItem: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8 },
-  summaryDivider: { width: 1, height: 30, backgroundColor: 'rgba(255,255,255,0.12)', marginHorizontal: 10 },
-  summaryIcon: { width: 26, height: 26, borderRadius: 13, justifyContent: 'center', alignItems: 'center' },
-  summaryLabel: { color: 'rgba(255,255,255,0.55)', fontSize: 9.5 },
-  summaryValue: { color: '#fff', fontSize: 12, fontWeight: '700', marginTop: 2 },
-});

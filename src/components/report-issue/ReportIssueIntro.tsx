@@ -1,9 +1,58 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function ReportIssueIntro() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  card: {
+    backgroundColor: themeColors.surface,
+    borderRadius: 16,
+    padding: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  textContainer: { flex: 1 },
+  title: { color: themeColors.textPrimary, fontSize: 17, fontWeight: '700', marginBottom: 8 },
+  sub: { color: themeColors.textSecondary, fontSize: 12, lineHeight: 17 },
+  illustration: {
+    width: 68,
+    height: 68,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bubble: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alertBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: themeColors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: themeColors.surface,
+  },
+  alertText: { color: '#fff', fontSize: 12, fontWeight: '800' },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.card}>
       <View style={styles.row}>
@@ -32,46 +81,3 @@ export function ReportIssueIntro() {
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 16,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  textContainer: { flex: 1 },
-  title: { color: colors.textPrimary, fontSize: 17, fontWeight: '700', marginBottom: 8 },
-  sub: { color: colors.textSecondary, fontSize: 12, lineHeight: 17 },
-  illustration: {
-    width: 68,
-    height: 68,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bubble: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  alertBadge: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: colors.surface,
-  },
-  alertText: { color: '#fff', fontSize: 12, fontWeight: '800' },
-});

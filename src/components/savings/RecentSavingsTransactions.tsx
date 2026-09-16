@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Txn = { name: string; time: string; amount: string; icon: keyof typeof Feather.glyphMap; bg: string };
 
@@ -10,6 +11,23 @@ const transactions: Txn[] = [
 ];
 
 export function RecentSavingsTransactions() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
+  title: { color: themeColors.textPrimary, fontSize: 15, fontWeight: '600' },
+  viewAll: { color: themeColors.primaryLight, fontSize: 12, fontWeight: '600' },
+  card: { backgroundColor: themeColors.surface, borderRadius: 16, paddingHorizontal: 14 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 13 },
+  divider: { borderBottomWidth: 1, borderBottomColor: themeColors.border },
+  iconCircle: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
+  name: { color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '600' },
+  time: { color: themeColors.textSecondary, fontSize: 10, marginTop: 2 },
+  amount: { color: themeColors.success, fontSize: 12, fontWeight: '600' },
+}),
+    [themeColors]
+  );
+
   return (
     <View>
       <View style={styles.header}>
@@ -21,7 +39,7 @@ export function RecentSavingsTransactions() {
         {transactions.map((t, i) => (
           <View key={t.name} style={[styles.row, i !== transactions.length - 1 && styles.divider]}>
             <View style={[styles.iconCircle, { backgroundColor: t.bg }]}>
-              <Feather name={t.icon} size={15} color={colors.success} />
+              <Feather name={t.icon} size={15} color={themeColors.success} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.name}>{t.name}</Text>
@@ -34,16 +52,3 @@ export function RecentSavingsTransactions() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
-  title: { color: colors.textPrimary, fontSize: 15, fontWeight: '600' },
-  viewAll: { color: colors.primaryLight, fontSize: 12, fontWeight: '600' },
-  card: { backgroundColor: colors.surface, borderRadius: 16, paddingHorizontal: 14 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 13 },
-  divider: { borderBottomWidth: 1, borderBottomColor: '#2C2C2E' },
-  iconCircle: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
-  name: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '600' },
-  time: { color: colors.textSecondary, fontSize: 10, marginTop: 2 },
-  amount: { color: colors.success, fontSize: 12, fontWeight: '600' },
-});

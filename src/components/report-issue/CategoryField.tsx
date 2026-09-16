@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
+
+const ICON_ACCENT = '#A78BFA';
 
 export type IssueCategory = {
   id: string;
@@ -10,46 +12,14 @@ export type IssueCategory = {
 };
 
 export const categories: IssueCategory[] = [
-  {
-    id: 'payment',
-    label: 'Payment Issue',
-    icon: <Feather name="credit-card" size={16} color={colors.primaryLight} />,
-  },
-  {
-    id: 'transfer',
-    label: 'Transfer & Transaction',
-    icon: <MaterialCommunityIcons name="swap-horizontal" size={18} color={colors.primaryLight} />,
-  },
-  {
-    id: 'account',
-    label: 'Account Issue',
-    icon: <Feather name="user" size={16} color={colors.primaryLight} />,
-  },
-  {
-    id: 'security',
-    label: 'Security & Fraud',
-    icon: <Ionicons name="shield" size={16} color={colors.primaryLight} />,
-  },
-  {
-    id: 'app',
-    label: 'App Bug / Technical Issue',
-    icon: <Feather name="alert-triangle" size={16} color={colors.primaryLight} />,
-  },
-  {
-    id: 'card',
-    label: 'Card Issue',
-    icon: <Feather name="credit-card" size={16} color={colors.primaryLight} />,
-  },
-  {
-    id: 'kyc',
-    label: 'KYC & Verification',
-    icon: <Feather name="user-check" size={16} color={colors.primaryLight} />,
-  },
-  {
-    id: 'other',
-    label: 'Other',
-    icon: <Feather name="more-horizontal" size={16} color={colors.primaryLight} />,
-  },
+  { id: 'payment', label: 'Payment Issue', icon: <Feather name="credit-card" size={16} color={ICON_ACCENT} /> },
+  { id: 'transfer', label: 'Transfer & Transaction', icon: <MaterialCommunityIcons name="swap-horizontal" size={18} color={ICON_ACCENT} /> },
+  { id: 'account', label: 'Account Issue', icon: <Feather name="user" size={16} color={ICON_ACCENT} /> },
+  { id: 'security', label: 'Security & Fraud', icon: <Ionicons name="shield" size={16} color={ICON_ACCENT} /> },
+  { id: 'app', label: 'App Bug / Technical Issue', icon: <Feather name="alert-triangle" size={16} color={ICON_ACCENT} /> },
+  { id: 'card', label: 'Card Issue', icon: <Feather name="credit-card" size={16} color={ICON_ACCENT} /> },
+  { id: 'kyc', label: 'KYC & Verification', icon: <Feather name="user-check" size={16} color={ICON_ACCENT} /> },
+  { id: 'other', label: 'Other', icon: <Feather name="more-horizontal" size={16} color={ICON_ACCENT} /> },
 ];
 
 type CategoryFieldProps = {
@@ -58,6 +28,60 @@ type CategoryFieldProps = {
 };
 
 export function CategoryField({ value, onChange }: CategoryFieldProps) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        label: { color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '600', marginBottom: 8 },
+        required: { color: '#FF3B30' },
+        field: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 10,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+          borderRadius: 12,
+          paddingHorizontal: 14,
+          paddingVertical: 13,
+        },
+        value: { flex: 1, color: themeColors.textPrimary, fontSize: 13 },
+        placeholder: { color: themeColors.textSecondary },
+        overlay: {
+          flex: 1,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          justifyContent: 'flex-end',
+        },
+        sheet: {
+          backgroundColor: themeColors.surface,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          paddingHorizontal: 16,
+          paddingTop: 16,
+          paddingBottom: 28,
+        },
+        sheetTitle: { color: themeColors.textPrimary, fontSize: 15, fontWeight: '700', marginBottom: 12 },
+        option: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 12,
+          paddingVertical: 12,
+          borderRadius: 12,
+          paddingHorizontal: 8,
+        },
+        optionActive: { backgroundColor: 'rgba(167,139,250,0.1)' },
+        optionIcon: {
+          width: 32,
+          height: 32,
+          borderRadius: 16,
+          backgroundColor: 'rgba(167,139,250,0.15)',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        optionText: { flex: 1, color: themeColors.textPrimary, fontSize: 13, fontWeight: '600' },
+      }),
+    [themeColors]
+  );
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -66,11 +90,11 @@ export function CategoryField({ value, onChange }: CategoryFieldProps) {
         Issue Category <Text style={styles.required}>*</Text>
       </Text>
       <TouchableOpacity style={styles.field} onPress={() => setOpen(true)}>
-        <Ionicons name="apps" size={16} color={colors.primaryLight} />
+        <Ionicons name="apps" size={16} color={themeColors.primaryLight} />
         <Text style={[styles.value, !value && styles.placeholder]}>
           {value?.label ?? 'Select a category'}
         </Text>
-        <Feather name="chevron-down" size={16} color={colors.textSecondary} />
+        <Feather name="chevron-down" size={16} color={themeColors.textSecondary} />
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
@@ -89,7 +113,7 @@ export function CategoryField({ value, onChange }: CategoryFieldProps) {
                 <View style={styles.optionIcon}>{c.icon}</View>
                 <Text style={styles.optionText}>{c.label}</Text>
                 {value?.id === c.id && (
-                  <Ionicons name="checkmark" size={16} color={colors.primaryLight} />
+                  <Ionicons name="checkmark" size={16} color={themeColors.primaryLight} />
                 )}
               </TouchableOpacity>
             ))}
@@ -99,52 +123,3 @@ export function CategoryField({ value, onChange }: CategoryFieldProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  label: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '600', marginBottom: 8 },
-  required: { color: '#FF3B30' },
-  field: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 13,
-  },
-  value: { flex: 1, color: colors.textPrimary, fontSize: 13 },
-  placeholder: { color: colors.textSecondary },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
-  sheet: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 28,
-  },
-  sheetTitle: { color: colors.textPrimary, fontSize: 15, fontWeight: '700', marginBottom: 12 },
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    paddingVertical: 12,
-    borderRadius: 12,
-    paddingHorizontal: 8,
-  },
-  optionActive: { backgroundColor: 'rgba(167,139,250,0.1)' },
-  optionIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(167,139,250,0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  optionText: { flex: 1, color: colors.textPrimary, fontSize: 13, fontWeight: '600' },
-});

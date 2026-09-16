@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 type Message = {
   id: string;
@@ -59,6 +60,45 @@ const messages: Message[] = [
 ];
 
 export function ChatMessageList() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  list: { gap: 4 },
+  dateBadge: {
+    alignSelf: 'center',
+    backgroundColor: themeColors.surface,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    marginBottom: 10,
+  },
+  dateText: { color: themeColors.textSecondary, fontSize: 10.5, fontWeight: '600' },
+  bubbleWrap: { marginBottom: 12, maxWidth: '82%' },
+  alignLeft: { alignSelf: 'flex-start' },
+  alignRight: { alignSelf: 'flex-end' },
+  bubble: {
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  agentBubble: {
+    backgroundColor: themeColors.surface,
+    borderTopLeftRadius: 4,
+  },
+  userBubble: {
+    backgroundColor: themeColors.primary,
+    borderTopRightRadius: 4,
+  },
+  bubbleText: { color: themeColors.textPrimary, fontSize: 12.5, lineHeight: 19 },
+  userBubbleText: { color: '#fff' },
+  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
+  metaLeft: { justifyContent: 'flex-start' },
+  metaRight: { justifyContent: 'flex-end' },
+  timeText: { color: themeColors.textSecondary, fontSize: 9.5 },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.list}>
       <View style={styles.dateBadge}>
@@ -78,7 +118,7 @@ export function ChatMessageList() {
             <View style={[styles.metaRow, isUser ? styles.metaRight : styles.metaLeft]}>
               <Text style={styles.timeText}>{m.time}</Text>
               {isUser && m.read && (
-                <Ionicons name="checkmark-done" size={13} color={colors.primaryLight} />
+                <Ionicons name="checkmark-done" size={13} color={themeColors.primaryLight} />
               )}
             </View>
           </View>
@@ -88,37 +128,3 @@ export function ChatMessageList() {
   );
 }
 
-const styles = StyleSheet.create({
-  list: { gap: 4 },
-  dateBadge: {
-    alignSelf: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    marginBottom: 10,
-  },
-  dateText: { color: colors.textSecondary, fontSize: 10.5, fontWeight: '600' },
-  bubbleWrap: { marginBottom: 12, maxWidth: '82%' },
-  alignLeft: { alignSelf: 'flex-start' },
-  alignRight: { alignSelf: 'flex-end' },
-  bubble: {
-    borderRadius: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  agentBubble: {
-    backgroundColor: colors.surface,
-    borderTopLeftRadius: 4,
-  },
-  userBubble: {
-    backgroundColor: colors.primary,
-    borderTopRightRadius: 4,
-  },
-  bubbleText: { color: colors.textPrimary, fontSize: 12.5, lineHeight: 19 },
-  userBubbleText: { color: '#fff' },
-  metaRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
-  metaLeft: { justifyContent: 'flex-start' },
-  metaRight: { justifyContent: 'flex-end' },
-  timeText: { color: colors.textSecondary, fontSize: 9.5 },
-});

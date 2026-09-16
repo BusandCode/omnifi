@@ -1,6 +1,7 @@
+// src/components/transfer-success/TransactionDetails.tsx
 import { View, Text, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
 type Props = {
@@ -12,13 +13,14 @@ type Props = {
 };
 
 export function TransactionDetails({ amount, currency, reference, dateTime, paymentMethod }: Props) {
+  const { colors: themeColors } = useTheme();
   const { symbol } = getCurrency(currency);
   const fmt = `${symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const feeFmt = `${symbol}0.00`;
 
   const rows = [
     { label: 'Amount sent', value: fmt },
-    { label: 'Transfer fee', value: feeFmt, valueColor: colors.success, info: true },
+    { label: 'Transfer fee', value: feeFmt, valueColor: themeColors.success, info: true },
   ];
 
   const metaRows = [
@@ -28,31 +30,31 @@ export function TransactionDetails({ amount, currency, reference, dateTime, paym
   ];
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.title}>Transaction Details</Text>
+    <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>Transaction Details</Text>
 
       {rows.map((r) => (
         <View key={r.label} style={styles.row}>
           <View style={styles.labelRow}>
-            <Text style={styles.label}>{r.label}</Text>
-            {r.info && <Feather name="info" size={10} color={colors.textSecondary} />}
+            <Text style={[styles.label, { color: themeColors.textSecondary }]}>{r.label}</Text>
+            {r.info && <Feather name="info" size={10} color={themeColors.textSecondary} />}
           </View>
-          <Text style={[styles.value, r.valueColor && { color: r.valueColor }]}>{r.value}</Text>
+          <Text style={[styles.value, { color: themeColors.textPrimary }, r.valueColor && { color: r.valueColor }]}>{r.value}</Text>
         </View>
       ))}
 
-      <View style={styles.divider} />
+      <View style={[styles.divider, { backgroundColor: themeColors.border }]} />
 
       <View style={styles.row}>
-        <Text style={styles.totalLabel}>Total</Text>
-        <Text style={styles.totalValue}>{fmt}</Text>
+        <Text style={[styles.totalLabel, { color: themeColors.textPrimary }]}>Total</Text>
+        <Text style={[styles.totalValue, { color: themeColors.textPrimary }]}>{fmt}</Text>
       </View>
 
       <View style={{ marginTop: 2 }}>
         {metaRows.map((r) => (
           <View key={r.label} style={styles.row}>
-            <Text style={styles.label}>{r.label}</Text>
-            <Text style={styles.metaValue}>{r.value}</Text>
+            <Text style={[styles.label, { color: themeColors.textSecondary }]}>{r.label}</Text>
+            <Text style={[styles.metaValue, { color: themeColors.textSecondary }]}>{r.value}</Text>
           </View>
         ))}
       </View>
@@ -61,14 +63,14 @@ export function TransactionDetails({ amount, currency, reference, dateTime, paym
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 20 },
-  title: { color: colors.textPrimary, fontSize: 12, fontWeight: '600', marginBottom: 10 },
+  card: { borderRadius: 16, padding: 20 },
+  title: { fontSize: 12, fontWeight: '600', marginBottom: 10 },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 5 },
   labelRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  label: { color: colors.textSecondary, fontSize: 10.5 },
-  value: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '600' },
-  divider: { height: 1, backgroundColor: '#2C2C2E', marginVertical: 4 },
-  totalLabel: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
-  totalValue: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700' },
-  metaValue: { color: colors.textSecondary, fontSize: 10.5, fontWeight: '500' },
+  label: { fontSize: 10.5 },
+  value: { fontSize: 10.5, fontWeight: '600' },
+  divider: { height: 1, marginVertical: 4 },
+  totalLabel: { fontSize: 11.5, fontWeight: '700' },
+  totalValue: { fontSize: 11.5, fontWeight: '700' },
+  metaValue: { fontSize: 10.5, fontWeight: '500' },
 });

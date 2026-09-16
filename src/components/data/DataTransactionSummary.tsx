@@ -1,7 +1,8 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Network } from '../airtime/NetworkSelector';
 import { DataPlan } from '../../../app/data';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 const NETWORK_LABELS: Record<Network, string> = {
   mtn: 'MTN', airtel: 'Airtel', glo: 'Glo', '9mobile': '9mobile',
@@ -19,6 +20,24 @@ type Props = {
 };
 
 export function DataTransactionSummary({ network, phone, plan, planTypeLabel }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  card: { backgroundColor: themeColors.surface, borderRadius: 16, padding: 15 },
+  title: { color: themeColors.textPrimary, fontSize: 14, fontWeight: '700', marginBottom: 10 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 },
+  label: { color: themeColors.textSecondary, fontSize: 12.5 },
+  value: { color: themeColors.textPrimary, fontSize: 12.5, fontWeight: '600' },
+  divider: { height: 1, backgroundColor: '#2C2C2E', marginVertical: 8 },
+  totalLabel: { color: themeColors.textPrimary, fontSize: 14.5, fontWeight: '700' },
+  totalValue: { color: themeColors.textPrimary, fontSize: 15, fontWeight: '700' },
+  cta: { backgroundColor: themeColors.primary, borderRadius: 16, paddingVertical: 15, alignItems: 'center' },
+  ctaDisabled: { backgroundColor: themeColors.surface, opacity: 0.5 },
+  ctaText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={{ gap: 10 }}>
       <View style={styles.card}>
@@ -59,16 +78,3 @@ export function DataTransactionSummary({ network, phone, plan, planTypeLabel }: 
   );
 }
 
-const styles = StyleSheet.create({
-  card: { backgroundColor: colors.surface, borderRadius: 16, padding: 15 },
-  title: { color: colors.textPrimary, fontSize: 14, fontWeight: '700', marginBottom: 10 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 },
-  label: { color: colors.textSecondary, fontSize: 12.5 },
-  value: { color: colors.textPrimary, fontSize: 12.5, fontWeight: '600' },
-  divider: { height: 1, backgroundColor: '#2C2C2E', marginVertical: 8 },
-  totalLabel: { color: colors.textPrimary, fontSize: 14.5, fontWeight: '700' },
-  totalValue: { color: colors.textPrimary, fontSize: 15, fontWeight: '700' },
-  cta: { backgroundColor: colors.primary, borderRadius: 16, paddingVertical: 15, alignItems: 'center' },
-  ctaDisabled: { backgroundColor: colors.surface, opacity: 0.5 },
-  ctaText: { color: '#fff', fontSize: 15, fontWeight: '700' },
-});

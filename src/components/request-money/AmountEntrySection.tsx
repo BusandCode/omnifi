@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
 const SUGGESTED_BY_CURRENCY: Record<CurrencyCode, number[]> = {
@@ -22,6 +23,65 @@ export function AmountEntrySection({
   amount,
   onChangeAmount,
 }: AmountEntrySectionProps) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  wrapper:{marginTop:-10},
+  sectionTitle: { color: themeColors.textPrimary, fontSize: 13, fontWeight: '700', marginBottom: 12 },
+  card: {
+    backgroundColor: themeColors.surface,
+    borderRadius: 16,
+    padding: 12,
+  },
+  topRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  currencyPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+  flag: { fontSize: 15 },
+  currencyText: { color: themeColors.textPrimary, fontSize: 12, fontWeight: '600' },
+  amountInput: {
+    flex: 1,
+    color: themeColors.textPrimary,
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'right',
+    padding: 0,
+  },
+  maxBtn: {
+    borderWidth: 1,
+    borderColor: themeColors.primary,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  maxText: { color: themeColors.primaryLight, fontSize: 11, fontWeight: '700' },
+  metaRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
+  metaText: { color: themeColors.textSecondary, fontSize: 10.5 },
+  feesRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  feesText: { color: themeColors.success, fontSize: 10.5, fontWeight: '600' },
+  suggestedBlock: { marginTop: 14 },
+  suggestedLabel: { color: themeColors.textSecondary, fontSize: 10.5, marginBottom: 8 },
+  chipsRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
+  chip: {
+    flex: 1,
+    minWidth: 60,
+    borderWidth: 1,
+    borderColor: themeColors.primary,
+    borderRadius: 8,
+    paddingVertical: 8,
+    alignItems: 'center',
+  },
+  chipText: { color: themeColors.primaryLight, fontSize: 11, fontWeight: '600' },
+}),
+    [themeColors]
+  );
+
   const { flag, symbol } = getCurrency(currency);
   const suggested = SUGGESTED_BY_CURRENCY[currency];
 
@@ -39,7 +99,7 @@ export function AmountEntrySection({
           <TouchableOpacity style={styles.currencyPill}>
             <Text style={styles.flag}>{flag}</Text>
             <Text style={styles.currencyText}>{currency}</Text>
-            <Ionicons name="chevron-down" size={13} color={colors.textSecondary} />
+            <Ionicons name="chevron-down" size={13} color={themeColors.textSecondary} />
           </TouchableOpacity>
 
           <TextInput
@@ -47,7 +107,7 @@ export function AmountEntrySection({
             onChangeText={(t) => onChangeAmount(t.replace(/[^0-9]/g, ''))}
             keyboardType="number-pad"
             placeholder={`${symbol}0.00`}
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={themeColors.textSecondary}
             style={styles.amountInput}
           />
 
@@ -63,7 +123,7 @@ export function AmountEntrySection({
           <Text style={styles.metaText}>Available Balance: {formattedBalance}</Text>
           <View style={styles.feesRow}>
             <Text style={styles.feesText}>No fees to request</Text>
-            <Ionicons name="information-circle-outline" size={12} color={colors.success} />
+            <Ionicons name="information-circle-outline" size={12} color={themeColors.success} />
           </View>
         </View>
 
@@ -92,57 +152,3 @@ export function AmountEntrySection({
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper:{marginTop:-10},
-  sectionTitle: { color: colors.textPrimary, fontSize: 13, fontWeight: '700', marginBottom: 12 },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 12,
-  },
-  topRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  currencyPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  flag: { fontSize: 15 },
-  currencyText: { color: colors.textPrimary, fontSize: 12, fontWeight: '600' },
-  amountInput: {
-    flex: 1,
-    color: colors.textPrimary,
-    fontSize: 22,
-    fontWeight: '700',
-    textAlign: 'right',
-    padding: 0,
-  },
-  maxBtn: {
-    borderWidth: 1,
-    borderColor: colors.primary,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  maxText: { color: colors.primaryLight, fontSize: 11, fontWeight: '700' },
-  metaRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 },
-  metaText: { color: colors.textSecondary, fontSize: 10.5 },
-  feesRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  feesText: { color: colors.success, fontSize: 10.5, fontWeight: '600' },
-  suggestedBlock: { marginTop: 14 },
-  suggestedLabel: { color: colors.textSecondary, fontSize: 10.5, marginBottom: 8 },
-  chipsRow: { flexDirection: 'row', gap: 6, flexWrap: 'wrap' },
-  chip: {
-    flex: 1,
-    minWidth: 60,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 8,
-    alignItems: 'center',
-  },
-  chipText: { color: colors.primaryLight, fontSize: 11, fontWeight: '600' },
-});

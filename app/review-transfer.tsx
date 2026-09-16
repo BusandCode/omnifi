@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,12 +8,13 @@ import { SourceAmountCard } from '../src/components/review-transfer/SourceAmount
 import { RecipientCard } from '../src/components/review-transfer/RecipientCard';
 import { TransferSummaryCard } from '../src/components/review-transfer/TransferSummaryCard';
 import { SecurityInfoCard } from '../src/components/review-transfer/SecurityInfoCard';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 import { getCurrency, CurrencyCode } from '../src/constants/currencies';
 import { useBalances } from '../src/store/BalanceContext';
 
 export default function ReviewTransferScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
   const { debit, balances } = useBalances();
   const params = useLocalSearchParams<{
     currency?: string;
@@ -24,6 +26,35 @@ export default function ReviewTransferScreen() {
     refValue?: string;
     note?: string;
   }>();
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: { flex: 1, backgroundColor: themeColors.background },
+        fixedHeader: { paddingHorizontal: 20, paddingBottom: 10, backgroundColor: themeColors.background },
+        scroll: { flex: 1 },
+        content: { paddingHorizontal: 20, paddingTop: 26, paddingBottom: 20, gap: 14 },
+        noteBanner: {
+          flexDirection: 'row', alignItems: 'flex-start', gap: 10,
+          backgroundColor: themeColors.surface,
+          borderRadius: 14,
+          padding: 14,
+        },
+        noteText: { flex: 1, color: themeColors.textSecondary, fontSize: 10.5, lineHeight: 15 },
+        fixedFooter: { paddingHorizontal: 20, paddingTop: 8, backgroundColor: themeColors.background },
+        confirmBtn: {
+          flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+          backgroundColor: themeColors.primary,
+          borderRadius: 16,
+          paddingVertical: 16,
+        },
+        confirmText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
+        termsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginTop: 10, marginBottom: 4 },
+        termsText: { color: themeColors.textSecondary, fontSize: 10 },
+        termsLink: { color: themeColors.primaryLight, fontWeight: '600' },
+      }),
+    [themeColors],
+  );
 
   const currencyCode: CurrencyCode =
     params.currency === 'USD' || params.currency === 'EUR' ? params.currency : 'USD';
@@ -96,7 +127,7 @@ export default function ReviewTransferScreen() {
         <SecurityInfoCard />
 
         <View style={styles.noteBanner}>
-          <Ionicons name="information-circle-outline" size={16} color={colors.textSecondary} />
+          <Ionicons name="information-circle-outline" size={16} color={themeColors.textSecondary} />
           <Text style={styles.noteText}>
             Transfers made after 5:00 PM EST or on weekends may be processed the next business day.
           </Text>
@@ -109,7 +140,7 @@ export default function ReviewTransferScreen() {
           <Ionicons name="chevron-forward" size={16} color="#fff" />
         </TouchableOpacity>
         <View style={styles.termsRow}>
-          <Ionicons name="lock-closed" size={10} color={colors.textSecondary} />
+          <Ionicons name="lock-closed" size={10} color={themeColors.textSecondary} />
           <Text style={styles.termsText}>
             By confirming, you agree to our <Text style={styles.termsLink}>Terms & Conditions</Text>
           </Text>
@@ -118,28 +149,3 @@ export default function ReviewTransferScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  fixedHeader: { paddingHorizontal: 20, paddingBottom: 10, backgroundColor: colors.background },
-  scroll: { flex: 1 },
-  content: { paddingHorizontal: 20, paddingTop: 26, paddingBottom: 20, gap: 14 },
-  noteBanner: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 10,
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    padding: 14,
-  },
-  noteText: { flex: 1, color: colors.textSecondary, fontSize: 10.5, lineHeight: 15 },
-  fixedFooter: { paddingHorizontal: 20, paddingTop: 8, backgroundColor: colors.background },
-  confirmBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: colors.primary,
-    borderRadius: 16,
-    paddingVertical: 16,
-  },
-  confirmText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
-  termsRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5, marginTop: 10, marginBottom: 4 },
-  termsText: { color: colors.textSecondary, fontSize: 10 },
-  termsLink: { color: colors.primaryLight, fontWeight: '600' },
-});

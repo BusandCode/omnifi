@@ -1,11 +1,68 @@
 import { Feather } from '@expo/vector-icons';
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 const STEPS = ['Amount', 'Bank Details', 'Review', 'Complete'];
 
 export default function StepProgress({ currentStep }: { currentStep: number }) {
+  const { colors: themeColors } = useTheme();
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        row: {
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+          marginBottom: 24,
+        },
+        col: {
+          alignItems: 'center',
+          width: 60,
+        },
+        circle: {
+          width: 32,
+          height: 32,
+          borderRadius: 16,
+          backgroundColor: themeColors.surfaceAlt,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        circleActive: {
+          backgroundColor: themeColors.primary,
+        },
+        circleText: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+          fontWeight: '600',
+        },
+        circleTextActive: {
+          color: '#fff',
+        },
+        line: {
+          flex: 1,
+          height: 2,
+          backgroundColor: themeColors.border,
+          marginTop: 15,
+          marginHorizontal: -6,
+        },
+        lineActive: {
+          backgroundColor: themeColors.primary,
+        },
+        label: {
+          color: themeColors.textSecondary,
+          fontSize: 10,
+          marginTop: 6,
+          textAlign: 'center',
+        },
+        labelActive: {
+          color: themeColors.textPrimary,
+          fontWeight: '500',
+        },
+      }),
+    [themeColors]
+  );
+
   return (
     <View style={styles.row}>
       {STEPS.map((label, i) => {
@@ -38,54 +95,3 @@ export default function StepProgress({ currentStep }: { currentStep: number }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 24,
-  },
-  col: {
-    alignItems: 'center',
-    width: 60,
-  },
-  circle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: colors.surfaceAlt,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  circleActive: {
-    backgroundColor: colors.primary,
-  },
-  circleText: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  circleTextActive: {
-    color: '#fff',
-  },
-  line: {
-    flex: 1,
-    height: 2,
-    backgroundColor: colors.border,
-    marginTop: 15,
-    marginHorizontal: -6,
-  },
-  lineActive: {
-    backgroundColor: colors.primary,
-  },
-  label: {
-    color: colors.textSecondary,
-    fontSize: 10,
-    marginTop: 6,
-    textAlign: 'center',
-  },
-  labelActive: {
-    color: colors.textPrimary,
-    fontWeight: '500',
-  },
-});

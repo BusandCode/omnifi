@@ -1,6 +1,7 @@
+import { useMemo } from 'react';
 // src/components/data/PlanTypeTabs.tsx
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export type PlanType = 'daily' | 'weekly' | 'monthly' | 'special' | 'night';
 
@@ -18,6 +19,39 @@ type Props = {
 };
 
 export function PlanTypeTabs({ active, onChange }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  // row: { flexDirection: 'row', gap: 6, paddingVertical: 2 },
+  row: { flexDirection: 'row', gap: 6, paddingVertical: 2 },
+  tab: {
+    paddingHorizontal: 12,
+    height: 28,
+    // marginBottom:200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    backgroundColor: themeColors.surface,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  tabActive: {
+    borderColor: themeColors.primary,
+    backgroundColor: 'rgba(167,139,250,0.1)',
+  },
+  label: {
+    color: themeColors.textSecondary,
+    fontSize: 11,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  labelActive: {
+    color: themeColors.primaryLight,
+  },
+}),
+    [themeColors]
+  );
+
   return (
     <ScrollView
       horizontal
@@ -43,31 +77,3 @@ export function PlanTypeTabs({ active, onChange }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  // row: { flexDirection: 'row', gap: 6, paddingVertical: 2 },
-  row: { flexDirection: 'row', gap: 6, paddingVertical: 2 },
-  tab: {
-    paddingHorizontal: 12,
-    height: 28,
-    // marginBottom:200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: 'transparent',
-  },
-  tabActive: {
-    borderColor: colors.primary,
-    backgroundColor: 'rgba(167,139,250,0.1)',
-  },
-  label: {
-    color: colors.textSecondary,
-    fontSize: 11,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  labelActive: {
-    color: colors.primaryLight,
-  },
-});

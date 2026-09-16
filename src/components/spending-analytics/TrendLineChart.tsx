@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import {useState, useMemo} from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Svg, { Path, Line, Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import { TrendPoint } from '../../constants/spendingData';
 
 type Props = {
@@ -12,6 +12,26 @@ type Props = {
 };
 
 export function TrendLineChart({ points, symbol, width, height = 130 }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  tooltip: {
+    position: 'absolute',
+    backgroundColor: themeColors.surface,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: themeColors.border,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    width: 110,
+    alignItems: 'center',
+  },
+  tooltipDate: { color: themeColors.textSecondary, fontSize: 9 },
+  tooltipAmount: { color: themeColors.textPrimary, fontSize: 11, fontWeight: '700', marginTop: 1 },
+}),
+    [themeColors]
+  );
+
   const [activeIndex, setActiveIndex] = useState<number | null>(
     points.length ? points.reduce((maxI, p, i, arr) => (p.amount > arr[maxI].amount ? i : maxI), 0) : null,
   );
@@ -68,21 +88,21 @@ export function TrendLineChart({ points, symbol, width, height = 130 }: Props) {
         <Svg width={width} height={height}>
           <Defs>
             <LinearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
-              <Stop offset="0" stopColor={colors.primary} stopOpacity={0.35} />
-              <Stop offset="1" stopColor={colors.primary} stopOpacity={0} />
+              <Stop offset="0" stopColor={themeColors.primary} stopOpacity={0.35} />
+              <Stop offset="1" stopColor={themeColors.primary} stopOpacity={0} />
             </LinearGradient>
           </Defs>
 
           <Path d={areaPath} fill="url(#trendFill)" />
-          <Path d={linePath} stroke={colors.primary} strokeWidth={2} fill="none" strokeLinejoin="round" strokeLinecap="round" />
+          <Path d={linePath} stroke={themeColors.primary} strokeWidth={2} fill="none" strokeLinejoin="round" strokeLinecap="round" />
 
           {active && (
             <>
               <Line
                 x1={activeX} y1={paddingTop} x2={activeX} y2={paddingTop + chartHeight}
-                stroke={colors.primary} strokeWidth={1} strokeDasharray="3 4" opacity={0.5}
+                stroke={themeColors.primary} strokeWidth={1} strokeDasharray="3 4" opacity={0.5}
               />
-              <Circle cx={activeX} cy={activeY} r={5} fill={colors.primary} stroke="#fff" strokeWidth={1.5} />
+              <Circle cx={activeX} cy={activeY} r={5} fill={themeColors.primary} stroke="#fff" strokeWidth={1.5} />
             </>
           )}
         </Svg>
@@ -98,18 +118,3 @@ export function TrendLineChart({ points, symbol, width, height = 130 }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  tooltip: {
-    position: 'absolute',
-    backgroundColor: colors.surface,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    width: 110,
-    alignItems: 'center',
-  },
-  tooltipDate: { color: colors.textSecondary, fontSize: 9 },
-  tooltipAmount: { color: colors.textPrimary, fontSize: 11, fontWeight: '700', marginTop: 1 },
-});

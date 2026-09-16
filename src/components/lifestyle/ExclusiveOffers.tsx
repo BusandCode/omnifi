@@ -1,17 +1,16 @@
 import { Feather } from "@expo/vector-icons";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { colors } from "../../theme/colors";
 import { useTheme } from "../../theme/ThemeContext";
 
 type Offer = {
   brand: string;
-  brandColor: string;
+  brandColor?: string;
   discount: string;
   title: string;
   sub: string;
@@ -34,14 +33,12 @@ const offers: Offer[] = [
   },
   {
     brand: "FilmOne",
-    brandColor: "#fff",
     discount: "20% OFF",
     title: "FilmOne",
     sub: "20% off movie tickets",
   },
   {
     brand: "Nike",
-    brandColor: "#fff",
     discount: "15% OFF",
     title: "Nike Store",
     sub: "15% off on all items",
@@ -74,7 +71,12 @@ export function ExclusiveOffers() {
             key={o.title}
             style={[styles.card, { backgroundColor: themeColors.surface }]}
           >
-            <Text style={[styles.brand, { color: o.brandColor }]}>
+            <Text
+              style={[
+                styles.brand,
+                { color: o.brandColor ?? themeColors.textPrimary },
+              ]}
+            >
               {o.brand}
             </Text>
             <View
@@ -131,11 +133,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 8,
-    // marginTop:12/,
-    // marginTop: ,
   },
-  title: { color: colors.textPrimary, fontSize: 11.5, fontWeight: "600" },
-  viewAll: { color: colors.primaryLight, fontSize: 11, fontWeight: "600" },
+  title: { fontSize: 11.5, fontWeight: "600" },
+  viewAll: { fontSize: 11, fontWeight: "600" },
   row: {
     gap: 3,
     flexDirection: "row",
@@ -145,37 +145,31 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 89,
-    backgroundColor: colors.surface,
     borderRadius: 14,
-    // flex
     padding: 10,
   },
   brand: { fontSize: 10, fontWeight: "800", marginBottom: 5 },
   discountTag: {
     alignSelf: "flex-start",
-    backgroundColor: "rgba(167,139,250,0.15)",
     paddingHorizontal: 5,
     paddingVertical: 2,
     borderRadius: 5,
     marginBottom: 10,
     marginTop: 4,
   },
-  discountText: { color: colors.primaryLight, fontSize: 8, fontWeight: "700" },
+  discountText: { fontSize: 8, fontWeight: "700" },
   offerTitle: {
-    color: colors.textPrimary,
     fontSize: 10,
     fontWeight: "600",
     marginBottom: 6,
   },
   offerSub: {
-    color: colors.textSecondary,
     fontSize: 8.5,
     lineHeight: 10,
     marginBottom: 5,
   },
   viewOfferRow: { flexDirection: "row", alignItems: "center", gap: 2 },
   viewOfferText: {
-    color: colors.primaryLight,
     fontSize: 10,
     fontWeight: "600",
   },

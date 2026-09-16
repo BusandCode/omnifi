@@ -1,9 +1,10 @@
 // src/components/withdraw/WithdrawComplete.tsx
 import { Feather } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 import StepProgress from './StepProgress';
 import WithdrawHeader from './WithdrawHeader';
 import DetailIcon from './DetailIcon';
@@ -11,10 +12,204 @@ import { SuccessGraphic, ShieldGraphic } from './illustrations';
 
 export default function WithdrawComplete() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
 
   const handleGoToDashboard = () => {
     router.replace('/');
   };
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: themeColors.background,
+        },
+        content: {
+          paddingHorizontal: 20,
+          paddingBottom: 40,
+        },
+        successCard: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: themeColors.surface,
+          borderRadius: 16,
+          padding: 18,
+          marginBottom: 20,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+        },
+        successLeft: {
+          flex: 1,
+          paddingRight: 12,
+        },
+        successTitleRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 8,
+          marginBottom: 8,
+        },
+        successBadge: {
+          width: 26,
+          height: 26,
+          borderRadius: 13,
+          backgroundColor: themeColors.success,
+          alignItems: 'center',
+          justifyContent: 'center',
+        },
+        title: {
+          flex: 1,
+          color: themeColors.textPrimary,
+          fontSize: 16,
+          fontWeight: '700',
+        },
+        subtitle: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+          lineHeight: 18,
+        },
+        detailsCard: {
+          backgroundColor: themeColors.surface,
+          borderRadius: 16,
+          padding: 20,
+          marginBottom: 20,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+        },
+        detailsTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 16,
+          fontWeight: '600',
+          marginBottom: 16,
+        },
+        detailRow: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingVertical: 6,
+        },
+        detailLeft: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          flexShrink: 1,
+        },
+        detailLabel: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+        },
+        detailValue: {
+          color: themeColors.textPrimary,
+          fontSize: 13,
+          fontWeight: '500',
+        },
+        detailValueFee: {
+          color: themeColors.danger,
+          fontSize: 13,
+          fontWeight: '500',
+        },
+        detailValueHighlight: {
+          color: themeColors.success,
+          fontSize: 16,
+          fontWeight: '700',
+        },
+        chevronRow: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 4,
+        },
+        infoCard: {
+          backgroundColor: themeColors.primaryTint,
+          borderRadius: 12,
+          padding: 16,
+          marginBottom: 16,
+          borderWidth: 1,
+          borderColor: themeColors.primaryTint,
+        },
+        infoIconWrap: {
+          width: 28,
+          height: 28,
+          borderRadius: 14,
+          backgroundColor: themeColors.surface,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 8,
+        },
+        infoTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 14,
+          fontWeight: '600',
+        },
+        infoText: {
+          color: themeColors.textSecondary,
+          fontSize: 13,
+          marginTop: 4,
+          lineHeight: 18,
+        },
+        securityCard: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 12,
+          padding: 14,
+          backgroundColor: themeColors.surface,
+          borderRadius: 12,
+          marginBottom: 24,
+          borderWidth: 1,
+          borderColor: themeColors.border,
+        },
+        securityTextWrap: {
+          flex: 1,
+        },
+        securityTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 14,
+          fontWeight: '600',
+          marginBottom: 2,
+        },
+        securityText: {
+          color: themeColors.textSecondary,
+          fontSize: 12,
+        },
+        learnMore: {
+          color: themeColors.primary,
+          fontSize: 12,
+          fontWeight: '500',
+          marginTop: 4,
+        },
+        dashboardButton: {
+          flexDirection: 'row',
+          backgroundColor: themeColors.primary,
+          borderRadius: 12,
+          paddingVertical: 16,
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          marginBottom: 12,
+        },
+        dashboardButtonText: {
+          color: '#fff',
+          fontSize: 16,
+          fontWeight: '700',
+        },
+        receiptButton: {
+          flexDirection: 'row',
+          backgroundColor: 'transparent',
+          borderWidth: 1,
+          borderColor: themeColors.border,
+          borderRadius: 12,
+          paddingVertical: 16,
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+        },
+        receiptButtonText: {
+          color: themeColors.textPrimary,
+          fontSize: 16,
+          fontWeight: '600',
+        },
+      }),
+    [themeColors]
+  );
 
   return (
     <View style={styles.container}>
@@ -98,14 +293,14 @@ export default function WithdrawComplete() {
             </View>
             <View style={styles.chevronRow}>
               <Text style={styles.detailValue}>Within 1 - 24 hours</Text>
-              <Feather name="info" size={13} color={colors.textSecondary} />
+              <Feather name="info" size={13} color={themeColors.textSecondary} />
             </View>
           </View>
         </View>
 
         <View style={styles.infoCard}>
           <View style={styles.infoIconWrap}>
-            <Feather name="info" size={16} color={colors.primary} />
+            <Feather name="info" size={16} color={themeColors.primary} />
           </View>
           <Text style={styles.infoTitle}>What happens next?</Text>
           <Text style={styles.infoText}>
@@ -133,199 +328,10 @@ export default function WithdrawComplete() {
         </Pressable>
 
         <Pressable style={styles.receiptButton}>
-          <Feather name="download" size={16} color={colors.textPrimary} />
+          <Feather name="download" size={16} color={themeColors.textPrimary} />
           <Text style={styles.receiptButtonText}>Download Receipt</Text>
         </Pressable>
       </ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-  },
-  successCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 18,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  successLeft: {
-    flex: 1,
-    paddingRight: 12,
-  },
-  successTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 8,
-  },
-  successBadge: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: colors.success,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    flex: 1,
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  subtitle: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    lineHeight: 18,
-  },
-  detailsCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  detailsTitle: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 6,
-  },
-  detailLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexShrink: 1,
-  },
-  detailLabel: {
-    color: colors.textSecondary,
-    fontSize: 13,
-  },
-  detailValue: {
-    color: colors.textPrimary,
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  detailValueFee: {
-    color: colors.danger,
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  detailValueHighlight: {
-    color: colors.success,
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  chevronRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  infoCard: {
-    backgroundColor: colors.primaryTint,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.primaryTint,
-  },
-  infoIconWrap: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-  },
-  infoTitle: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  infoText: {
-    color: colors.textSecondary,
-    fontSize: 13,
-    marginTop: 4,
-    lineHeight: 18,
-  },
-  securityCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 14,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    marginBottom: 24,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  securityTextWrap: {
-    flex: 1,
-  },
-  securityTitle: {
-    color: colors.textPrimary,
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 2,
-  },
-  securityText: {
-    color: colors.textSecondary,
-    fontSize: 12,
-  },
-  learnMore: {
-    color: colors.primary,
-    fontSize: 12,
-    fontWeight: '500',
-    marginTop: 4,
-  },
-  dashboardButton: {
-    flexDirection: 'row',
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    marginBottom: 12,
-  },
-  dashboardButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  receiptButton: {
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  receiptButtonText: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});

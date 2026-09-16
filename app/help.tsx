@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HelpHeader } from "../src/components/help/HelpHeader";
@@ -7,10 +8,42 @@ import { PopularTopics } from "../src/components/help/PopularTopics";
 import { NeedMoreHelp } from "../src/components/help/NeedMoreHelp";
 import { OtherWaysToGetHelp } from "../src/components/help/OtherWaysToGetHelp";
 import { CantFindFooter } from "../src/components/help/CantFindFooter";
-import { colors } from "../src/theme/colors";
+import { useTheme } from "../src/theme/ThemeContext";
 
 export default function HelpScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: themeColors.background,
+        },
+        fixedHeader: {
+          paddingHorizontal: 20,
+          paddingBottom: 12,
+          backgroundColor: themeColors.background,
+        },
+        scroll: {
+          flex: 1,
+        },
+        content: {
+          paddingHorizontal: 10,
+          paddingTop: 8,
+          gap: 20,
+        },
+        fixedFooter: {
+          paddingHorizontal: 10,
+          paddingTop: 12,
+          backgroundColor: themeColors.background,
+          borderTopWidth: StyleSheet.hairlineWidth,
+          borderTopColor: themeColors.border,
+        },
+      }),
+    [themeColors]
+  );
 
   return (
     <View style={styles.container}>
@@ -36,30 +69,3 @@ export default function HelpScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  fixedHeader: {
-    paddingHorizontal: 20,
-    paddingBottom: 12,
-    backgroundColor: colors.background,
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: 10,
-    paddingTop: 8,
-    gap: 20,
-  },
-  fixedFooter: {
-    paddingHorizontal: 10,
-    paddingTop: 12,
-    backgroundColor: colors.background,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-  },
-});

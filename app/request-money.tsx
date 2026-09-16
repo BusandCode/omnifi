@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -10,12 +10,13 @@ import { AmountEntrySection } from "../src/components/request-money/AmountEntryS
 import { NoteField } from "../src/components/request-money/NoteField";
 import { HowItWorksRow } from "../src/components/request-money/HowItWorksRow";
 import { RecentRequestsList } from "../src/components/request-money/RecentRequestsList";
-import { colors } from "../src/theme/colors";
+import { useTheme } from "../src/theme/ThemeContext";
 import { CurrencyCode } from "../src/constants/currencies";
 import { useBalances } from "../src/store/BalanceContext";
 
 export default function RequestMoneyScreen() {
   const insets = useSafeAreaInsets();
+  const { colors: themeColors } = useTheme();
   const { currency } = useLocalSearchParams<{ currency?: string }>();
   const activeCurrency: CurrencyCode =
     currency === "USD" || currency === "EUR" ? currency : "NGN";
@@ -26,6 +27,41 @@ export default function RequestMoneyScreen() {
   const [recipientMode, setRecipientMode] = useState<RecipientMode>("omnifi");
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
+
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: themeColors.background,
+        },
+        fixedHeader: {
+          paddingHorizontal: 20,
+          paddingBottom: 12,
+          backgroundColor: themeColors.background,
+        },
+        scroll: {
+          flex: 1,
+        },
+        content: {
+          paddingHorizontal: 20,
+          paddingTop: 16,
+          paddingBottom: 24,
+          gap: 20,
+        },
+        submitBtn: {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+          backgroundColor: themeColors.primary,
+          borderRadius: 14,
+          paddingVertical: 16,
+        },
+        submitText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
+      }),
+    [themeColors]
+  );
 
   const handleRequestMoney = () => {
     const numericAmount = Number(amount);
@@ -75,34 +111,3 @@ export default function RequestMoneyScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  fixedHeader: {
-    paddingHorizontal: 20,
-    paddingBottom: 12,
-    backgroundColor: colors.background,
-  },
-  scroll: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 24,
-    gap: 20,
-  },
-  submitBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 16,
-  },
-  submitText: { color: '#fff', fontSize: 14.5, fontWeight: '700' },
-});

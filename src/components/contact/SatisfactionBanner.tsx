@@ -1,9 +1,39 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 export function SatisfactionBanner() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  wrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderRadius: 18,
+    padding: 16,
+    overflow: 'hidden',
+  },
+  iconBox: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textContainer: { flex: 1 },
+  title: { color: '#fff', fontSize: 13, fontWeight: '700', marginBottom: 3 },
+  sub: { color: 'rgba(255,255,255,0.65)', fontSize: 10.5, lineHeight: 14 },
+  illustration: {
+    marginLeft: 4,
+  },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.wrapper}>
       <LinearGradient
@@ -31,27 +61,3 @@ export function SatisfactionBanner() {
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    borderRadius: 18,
-    padding: 16,
-    overflow: 'hidden',
-  },
-  iconBox: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textContainer: { flex: 1 },
-  title: { color: '#fff', fontSize: 13, fontWeight: '700', marginBottom: 3 },
-  sub: { color: 'rgba(255,255,255,0.65)', fontSize: 10.5, lineHeight: 14 },
-  illustration: {
-    marginLeft: 4,
-  },
-});

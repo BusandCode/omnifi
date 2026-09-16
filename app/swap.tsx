@@ -8,9 +8,10 @@ import { CurrencyChooser } from '../src/components/swap/CurrencyChooser';
 import { SwapSummary } from '../src/components/swap/SwapSummary';
 import { SwapFooter } from '../src/components/swap/SwapFooter';
 import { currencies, CurrencyCode } from '../src/data/currencies';
-import { colors } from '../src/theme/colors';
+import { useTheme } from '../src/theme/ThemeContext';
 
 export default function SwapScreen() {
+  const { colors: themeColors } = useTheme();
   const [sendCurrency, setSendCurrency] = useState<CurrencyCode>('USD');
   const [receiveCurrency, setReceiveCurrency] = useState<CurrencyCode>('NGN');
   const [sendAmount, setSendAmount] = useState('1000.00');
@@ -31,7 +32,7 @@ export default function SwapScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <SwapHeader />
       <RatesBanner />
 
@@ -63,5 +64,5 @@ export default function SwapScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 20, paddingTop: 46, paddingBottom: 10, gap: 7 },
+  container: { flex: 1, paddingHorizontal: 20, paddingTop: 46, paddingBottom: 10, gap: 7 },
 });

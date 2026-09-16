@@ -2,8 +2,7 @@
 import { useState, useRef } from 'react';
 import { View, StyleSheet, ActivityIndicator, Text, Pressable, BackHandler, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { useRouter } from 'expo-router';
-import { useFocusEffect } from '@react-navigation/native';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -31,7 +30,7 @@ export default function Strawise() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <StatusBar style="light" backgroundColor={BG_DARK} translucent={false} />
+      <StatusBar style="light" />
 
       <View style={styles.header}>
         <Pressable
@@ -41,7 +40,7 @@ export default function Strawise() {
         >
           <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
         </Pressable>
-        <Text style={styles.title}>Strawise Store</Text>
+        <Text style={styles.title}>STRA Store</Text>
         <Pressable onPress={() => router.back()} style={styles.iconBtn} hitSlop={12}>
           <Ionicons name="close" size={22} color="#FFFFFF" />
         </Pressable>
@@ -94,7 +93,7 @@ const styles = StyleSheet.create({
   title: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
   webviewWrap: { flex: 1, backgroundColor: BG_DARK },
   loadingOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: BG_DARK,
     alignItems: 'center',
     justifyContent: 'center',

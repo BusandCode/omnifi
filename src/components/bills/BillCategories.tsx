@@ -1,9 +1,7 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { colors } from '../../theme/colors';
-import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
-import { fontScale, moderateScale } from "../../theme/scale";
+import { useTheme } from '../../theme/ThemeContext';
 
 type Category = { icon: keyof typeof Feather.glyphMap; title: string; sub: string };
 
@@ -19,56 +17,54 @@ const categories: Category[] = [
   { icon: 'more-horizontal', title: 'Others', sub: 'View more\nbillers' },
 ];
 
+const ICON_SIZE = 14;
+
 export function BillCategories() {
-  const layoutScale = useLayoutScale();
+  const { colors: themeColors } = useTheme();
 
-  const { styles, iconSize } = useMemo(() => {
-    const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
-    const f = (n: number) => applyLayoutScale(fontScale(n), layoutScale);
-
-    return {
-      iconSize: s(14),
-      styles: StyleSheet.create({
-        header: { 
-          flexDirection: 'row', 
-          justifyContent: 'space-between', 
-          marginBottom: s(8) 
+  const styles = useMemo(
+    () =>
+      StyleSheet.create({
+        header: {
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          marginBottom: 8,
         },
-        title: { color: colors.textPrimary, fontSize: f(13), fontWeight: '600' },
-        viewAll: { color: colors.primaryLight, fontSize: f(10), fontWeight: '600' },
-        grid: { flexDirection: 'row', flexWrap: 'wrap', gap: s(6) },
+        title: { color: themeColors.textPrimary, fontSize: 13, fontWeight: '600' },
+        viewAll: { color: themeColors.primaryLight, fontSize: 10, fontWeight: '600' },
+        grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
         card: {
-          width: '31%', 
-          backgroundColor: colors.surface, 
-          borderRadius: s(10), 
-          padding: s(8), 
-          minHeight: s(72),
+          width: '31%',
+          backgroundColor: themeColors.surface,
+          borderRadius: 10,
+          padding: 8,
+          minHeight: 72,
           justifyContent: 'center',
           alignItems: 'center',
         },
         iconBox: {
-          width: s(26), height: s(26), borderRadius: s(6), 
-          backgroundColor: 'rgba(167,139,250,0.15)',
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          marginBottom: s(4),
+          width: 26, height: 26, borderRadius: 6,
+          backgroundColor: themeColors.primaryTint,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginBottom: 4,
         },
-        cardTitle: { 
-          color: colors.textPrimary, 
-          fontSize: f(9), 
-          fontWeight: '600', 
-          marginBottom: s(1),
+        cardTitle: {
+          color: themeColors.textPrimary,
+          fontSize: 9,
+          fontWeight: '600',
+          marginBottom: 1,
           textAlign: 'center',
         },
-        cardSub: { 
-          color: colors.textSecondary, 
-          fontSize: f(7.5), 
-          lineHeight: s(9),
+        cardSub: {
+          color: themeColors.textSecondary,
+          fontSize: 7.5,
+          lineHeight: 9,
           textAlign: 'center',
         },
       }),
-    };
-  }, [layoutScale]);
+    [themeColors]
+  );
 
   return (
     <View>
@@ -81,7 +77,7 @@ export function BillCategories() {
         {categories.map((c) => (
           <TouchableOpacity key={c.title} style={styles.card}>
             <View style={styles.iconBox}>
-              <Feather name={c.icon} size={iconSize} color={colors.primaryLight} />
+              <Feather name={c.icon} size={ICON_SIZE} color={themeColors.primaryLight} />
             </View>
             <Text style={styles.cardTitle}>{c.title}</Text>
             <Text style={styles.cardSub}>{c.sub}</Text>

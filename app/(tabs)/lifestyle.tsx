@@ -5,7 +5,6 @@ import { FeaturedCarousel } from "../../src/components/lifestyle/FeaturedCarouse
 import { LifestyleBalanceCard } from "../../src/components/lifestyle/LifestyleBalanceCard";
 import { LifestyleHeader } from "../../src/components/lifestyle/LifestyleHeader";
 import { ReferEarnCard } from "../../src/components/lifestyle/ReferEarnCard";
-import { colors } from "../../src/theme/colors";
 import { useTheme } from "../../src/theme/ThemeContext";
 
 export default function LifestyleScreen() {
@@ -34,7 +33,7 @@ export default function LifestyleScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { flex: 1 },
   header: {
     paddingHorizontal: 20,
     paddingTop: 46,

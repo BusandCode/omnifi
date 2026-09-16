@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { colors } from "../../theme/colors";
 import { applyLayoutScale, useLayoutScale } from "../../theme/ScaleContext";
 import { fontScale, moderateScale } from "../../theme/scale";
 import { useTheme } from "../../theme/ThemeContext";
@@ -24,7 +23,8 @@ type Props = { selected: string; onSelect: (id: string) => void };
 
 function ActionsRow({ selected, onSelect }: Props) {
   const layoutScale = useLayoutScale();
-  const { colors: themeColors } = useTheme();
+  const { colors: themeColors, mode } = useTheme();
+  const isLight = mode === "light";
 
   const { styles, iconSize } = useMemo(() => {
     const s = (n: number) => applyLayoutScale(moderateScale(n), layoutScale);
@@ -46,10 +46,16 @@ function ActionsRow({ selected, onSelect }: Props) {
           paddingVertical: s(8),
           borderRadius: s(10),
         },
+        // Active tile used to always render a fixed dark-purple block, which
+        // stood out oddly against a white/light-theme background. It now
+        // uses a soft translucent primary tint in light mode and keeps the
+        // deep purple treatment in dark mode.
         itemActive: {
-          backgroundColor: "#2A1858",
+          backgroundColor: isLight
+            ? "rgba(124,79,224,0.12)"
+            : "#2A1858",
           borderWidth: 1,
-          borderColor: colors.primary,
+          borderColor: themeColors.primary,
         },
         iconBox: {
           width: s(30),
@@ -59,19 +65,30 @@ function ActionsRow({ selected, onSelect }: Props) {
           justifyContent: "center",
           alignItems: "center",
         },
+        iconBoxActive: {
+          backgroundColor: isLight
+            ? "rgba(124,79,224,0.16)"
+            : "rgba(255,255,255,0.12)",
+        },
         title: {
           color: themeColors.textPrimary,
           fontSize: f(10.5),
           fontWeight: "700",
+        },
+        titleActive: {
+          color: isLight ? themeColors.primary : "#fff",
         },
         sub: {
           color: themeColors.textSecondary,
           fontSize: f(8.5),
           textAlign: "center",
         },
+        subActive: {
+          color: isLight ? themeColors.primary : "rgba(255,255,255,0.65)",
+        },
       }),
     };
-  }, [layoutScale, themeColors]);
+  }, [layoutScale, themeColors, isLight]);
 
   return (
     <View style={styles.row}>
@@ -83,15 +100,25 @@ function ActionsRow({ selected, onSelect }: Props) {
             style={[styles.item, active && styles.itemActive]}
             onPress={() => onSelect(a.id)}
           >
-            <View style={styles.iconBox}>
+            <View style={[styles.iconBox, active && styles.iconBoxActive]}>
               <Feather
                 name={a.icon}
                 size={iconSize}
-                color={themeColors.textPrimary}
+                color={
+                  active
+                    ? isLight
+                      ? themeColors.primary
+                      : "#fff"
+                    : themeColors.textPrimary
+                }
               />
             </View>
-            <Text style={styles.title}>{a.title}</Text>
-            <Text style={styles.sub}>{a.sub}</Text>
+            <Text style={[styles.title, active && styles.titleActive]}>
+              {a.title}
+            </Text>
+            <Text style={[styles.sub, active && styles.subActive]}>
+              {a.sub}
+            </Text>
           </TouchableOpacity>
         );
       })}

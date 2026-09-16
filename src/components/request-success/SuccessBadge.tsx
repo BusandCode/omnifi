@@ -1,8 +1,9 @@
+import { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle } from 'react-native-svg';
-import { colors } from '../../theme/colors';
+import { useTheme } from '../../theme/ThemeContext';
 
 const CONFETTI = [
   { x: 18, y: 26, color: '#8B5CF6', rotate: '15deg', shape: 'diamond' as const },
@@ -14,6 +15,46 @@ const CONFETTI = [
 ];
 
 export function SuccessBadge() {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  wrap: {
+    width: 200,
+    height: 120,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignSelf: 'center',
+    position: 'relative',
+  },
+  glow: {
+    position: 'absolute',
+    top: 4,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: themeColors.primary,
+    opacity: 0.25,
+  },
+  circle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: themeColors.primary,
+    shadowOpacity: 0.6,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 8,
+  },
+  podium: { marginTop: -4 },
+  confetti: { position: 'absolute', width: 7, height: 7, borderRadius: 2 },
+  confettiRect: { width: 4, height: 10, borderRadius: 2 },
+}),
+    [themeColors]
+  );
+
   return (
     <View style={styles.wrap}>
       {CONFETTI.map((c, i) => (
@@ -47,38 +88,3 @@ export function SuccessBadge() {
   );
 }
 
-const styles = StyleSheet.create({
-  wrap: {
-    width: 200,
-    height: 120,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    alignSelf: 'center',
-    position: 'relative',
-  },
-  glow: {
-    position: 'absolute',
-    top: 4,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: colors.primary,
-    opacity: 0.25,
-  },
-  circle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    shadowColor: colors.primary,
-    shadowOpacity: 0.6,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 8,
-  },
-  podium: { marginTop: -4 },
-  confetti: { position: 'absolute', width: 7, height: 7, borderRadius: 2 },
-  confettiRect: { width: 4, height: 10, borderRadius: 2 },
-});

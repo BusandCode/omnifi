@@ -1,7 +1,8 @@
+import { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import Svg, { Circle, Path, Polyline } from 'react-native-svg';
-import { colors } from '../../theme/colors';
+import Svg, { Circle, Path } from 'react-native-svg';
+import { useTheme } from '../../theme/ThemeContext';
 import { BUDGET_CATEGORIES, BudgetCategoryKey } from '../../constants/budgetData';
 import { CurrencyCode, getCurrency } from '../../constants/currencies';
 
@@ -17,31 +18,103 @@ const ICON_MAP: Record<string, React.ComponentType<any>> = {
 };
 
 function TargetIllustration() {
+  const { colors: themeColors } = useTheme();
+  const illStyles = useMemo(
+    () => StyleSheet.create({ wrap: { width: 58, height: 58, justifyContent: 'center', alignItems: 'center' } }),
+    []
+  );
+
   return (
     <View style={illStyles.wrap}>
       <Svg width={52} height={52} viewBox="0 0 64 64">
-        <Circle cx={30} cy={34} r={24} fill="rgba(167,139,250,0.15)" stroke={colors.primaryLight} strokeWidth={1.8} />
-        <Circle cx={30} cy={34} r={15} fill="rgba(167,139,250,0.15)" stroke={colors.primaryLight} strokeWidth={1.8} />
-        <Circle cx={30} cy={34} r={5} fill={colors.primary} />
-        <Path d="M52 10 L30 34" stroke={colors.primaryLight} strokeWidth={2.4} strokeLinecap="round" />
-        <Path d="M52 10 L40 10 M52 10 L52 22" stroke={colors.primaryLight} strokeWidth={2.4} strokeLinecap="round" />
+        <Circle cx={30} cy={34} r={24} fill={themeColors.primaryTint} stroke={themeColors.primaryLight} strokeWidth={1.8} />
+        <Circle cx={30} cy={34} r={15} fill={themeColors.primaryTint} stroke={themeColors.primaryLight} strokeWidth={1.8} />
+        <Circle cx={30} cy={34} r={5} fill={themeColors.primary} />
+        <Path d="M52 10 L30 34" stroke={themeColors.primaryLight} strokeWidth={2.4} strokeLinecap="round" />
+        <Path d="M52 10 L40 10 M52 10 L52 22" stroke={themeColors.primaryLight} strokeWidth={2.4} strokeLinecap="round" />
       </Svg>
     </View>
   );
 }
 
-const illStyles = StyleSheet.create({
-  wrap: { width: 58, height: 58, justifyContent: 'center', alignItems: 'center' },
-});
-
 type Props = {
   currency: CurrencyCode;
   selected: BudgetCategoryKey;
   onSelect: (key: BudgetCategoryKey) => void;
-  onContinue: () => void;
 };
 
-export function CategoryStep({ currency, selected, onSelect, onContinue }: Props) {
+export function CategoryStep({ currency, selected, onSelect }: Props) {
+  const { colors: themeColors } = useTheme();
+  const styles = useMemo(
+    () => StyleSheet.create({
+  introCard: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: themeColors.surface,
+    borderRadius: 16,
+    padding: 13,
+    borderWidth: 1,
+    borderColor: themeColors.primaryTint,
+  },
+  introTitle: { color: themeColors.textPrimary, fontSize: 14, fontWeight: '700' },
+  introSub: { color: themeColors.textSecondary, fontSize: 9.5, marginTop: 4, lineHeight: 13 },
+  sectionTitle: { color: themeColors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 2 },
+  sectionSub: { color: themeColors.textSecondary, fontSize: 9.5, marginBottom: 10 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  item: {
+    width: '22.5%',
+    alignItems: 'center', gap: 5,
+    paddingVertical: 6,
+    borderRadius: 10,
+    borderWidth: 1.5, borderColor: 'transparent',
+  },
+  itemActive: { borderColor: themeColors.primary },
+  iconCircle: {
+    width: 38, height: 38, borderRadius: 19,
+    justifyContent: 'center', alignItems: 'center',
+    position: 'relative',
+  },
+  checkBadge: {
+    position: 'absolute', top: -3, right: -3,
+    width: 13, height: 13, borderRadius: 6.5,
+    backgroundColor: themeColors.primary,
+    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 2, borderColor: themeColors.background,
+  },
+  itemLabel: { color: themeColors.textSecondary, fontSize: 7.5, textAlign: 'center' },
+  infoNote: {
+    flexDirection: 'row', alignItems: 'flex-start', gap: 7,
+    backgroundColor: themeColors.primaryTint,
+    borderRadius: 10,
+    padding: 10,
+  },
+  infoText: { flex: 1, color: themeColors.textSecondary, fontSize: 9.5, lineHeight: 13 },
+  insightCard: { backgroundColor: themeColors.surface, borderRadius: 12, padding: 11 },
+  insightHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
+  insightIconBox: {
+    width: 22, height: 22, borderRadius: 11,
+    backgroundColor: themeColors.primaryTint,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  insightTitle: { flex: 1, color: themeColors.textPrimary, fontSize: 10.5, fontWeight: '700' },
+  insightAmount: { color: themeColors.textPrimary, fontSize: 11, fontWeight: '700' },
+  insightText: { color: themeColors.textSecondary, fontSize: 9.5, marginTop: 7, lineHeight: 13 },
+  tipCard: {
+    flexDirection: 'row', alignItems: 'center', gap: 8,
+    backgroundColor: themeColors.surface,
+    borderRadius: 12,
+    padding: 11,
+  },
+  tipIconBox: {
+    width: 24, height: 24, borderRadius: 12,
+    backgroundColor: themeColors.primaryTint,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  tipTitle: { color: themeColors.textPrimary, fontSize: 10.5, fontWeight: '700' },
+  tipText: { color: themeColors.textSecondary, fontSize: 9, marginTop: 2, lineHeight: 13 },
+}),
+    [themeColors]
+  );
+
   const { symbol } = getCurrency(currency);
   const activeCategory = BUDGET_CATEGORIES.find((c) => c.key === selected)!;
 
@@ -87,7 +160,7 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
       </View>
 
       <View style={styles.infoNote}>
-        <Ionicons name="information-circle-outline" size={13} color={colors.primaryLight} />
+        <Ionicons name="information-circle-outline" size={13} color={themeColors.primaryLight} />
         <Text style={styles.infoText}>
           Budgets help you track spending and avoid overspending. You'll receive alerts when you're close to your limit.
         </Text>
@@ -96,7 +169,7 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
       <View style={styles.insightCard}>
         <View style={styles.insightHeaderRow}>
           <View style={styles.insightIconBox}>
-            <MaterialCommunityIcons name="chart-bar" size={12} color={colors.primaryLight} />
+            <MaterialCommunityIcons name="chart-bar" size={12} color={themeColors.primaryLight} />
           </View>
           <Text style={styles.insightTitle}>Your Insight</Text>
           <Text style={styles.insightAmount}>{symbol}{activeCategory.avgLastMonth.toLocaleString()}</Text>
@@ -108,7 +181,7 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
 
       <View style={styles.tipCard}>
         <View style={styles.tipIconBox}>
-          <Ionicons name="bulb-outline" size={13} color={colors.primaryLight} />
+          <Ionicons name="bulb-outline" size={13} color={themeColors.primaryLight} />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.tipTitle}>Budgeting Tip</Text>
@@ -116,87 +189,8 @@ export function CategoryStep({ currency, selected, onSelect, onContinue }: Props
             Start with a realistic amount based on your past spending to set yourself up for success.
           </Text>
         </View>
-        <Feather name="chevron-right" size={13} color={colors.textSecondary} />
+        <Feather name="chevron-right" size={13} color={themeColors.textSecondary} />
       </View>
-
-      <TouchableOpacity style={styles.continueBtn} onPress={onContinue}>
-        <Text style={styles.continueText}>Continue</Text>
-        <Ionicons name="chevron-forward" size={14} color="#fff" />
-      </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  introCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    padding: 13,
-    borderWidth: 1,
-    borderColor: 'rgba(139,92,246,0.25)',
-  },
-  introTitle: { color: colors.textPrimary, fontSize: 14, fontWeight: '700' },
-  introSub: { color: colors.textSecondary, fontSize: 9.5, marginTop: 4, lineHeight: 13 },
-  sectionTitle: { color: colors.textPrimary, fontSize: 11.5, fontWeight: '700', marginBottom: 2 },
-  sectionSub: { color: colors.textSecondary, fontSize: 9.5, marginBottom: 10 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  item: {
-    width: '22.5%',
-    alignItems: 'center', gap: 5,
-    paddingVertical: 6,
-    borderRadius: 10,
-    borderWidth: 1.5, borderColor: 'transparent',
-  },
-  itemActive: { borderColor: colors.primary },
-  iconCircle: {
-    width: 38, height: 38, borderRadius: 19,
-    justifyContent: 'center', alignItems: 'center',
-    position: 'relative',
-  },
-  checkBadge: {
-    position: 'absolute', top: -3, right: -3,
-    width: 13, height: 13, borderRadius: 6.5,
-    backgroundColor: colors.primary,
-    justifyContent: 'center', alignItems: 'center',
-    borderWidth: 2, borderColor: colors.background,
-  },
-  itemLabel: { color: colors.textSecondary, fontSize: 7.5, textAlign: 'center' },
-  infoNote: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 7,
-    backgroundColor: 'rgba(167,139,250,0.08)',
-    borderRadius: 10,
-    padding: 10,
-  },
-  infoText: { flex: 1, color: colors.textSecondary, fontSize: 9.5, lineHeight: 13 },
-  insightCard: { backgroundColor: colors.surface, borderRadius: 12, padding: 11 },
-  insightHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  insightIconBox: {
-    width: 22, height: 22, borderRadius: 11,
-    backgroundColor: 'rgba(167,139,250,0.15)',
-    justifyContent: 'center', alignItems: 'center',
-  },
-  insightTitle: { flex: 1, color: colors.textPrimary, fontSize: 10.5, fontWeight: '700' },
-  insightAmount: { color: colors.textPrimary, fontSize: 11, fontWeight: '700' },
-  insightText: { color: colors.textSecondary, fontSize: 9.5, marginTop: 7, lineHeight: 13 },
-  tipCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 11,
-  },
-  tipIconBox: {
-    width: 24, height: 24, borderRadius: 12,
-    backgroundColor: 'rgba(167,139,250,0.15)',
-    justifyContent: 'center', alignItems: 'center',
-  },
-  tipTitle: { color: colors.textPrimary, fontSize: 10.5, fontWeight: '700' },
-  tipText: { color: colors.textSecondary, fontSize: 9, marginTop: 2, lineHeight: 13 },
-  continueBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7,
-    backgroundColor: colors.primary,
-    borderRadius: 14,
-    paddingVertical: 13,
-  },
-  continueText: { color: '#fff', fontSize: 12.5, fontWeight: '700' },
-});
