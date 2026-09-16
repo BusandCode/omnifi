@@ -14,7 +14,10 @@
       "android": {
         "buildType": "apk"
       },
-      "channel": "preview" 
+      "channel": "preview",
+      "env": {
+        "EAS_NO_FROZEN_LOCKFILE": "1"
+      }
     },
     "production": {
       "autoIncrement": true,
