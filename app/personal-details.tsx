@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { PersonalDetailsHeader } from '../src/components/personal-details/PersonalDetailsHeader';
 import { ProfileCard } from '../src/components/personal-details/ProfileCard';
@@ -5,9 +6,14 @@ import { InfoBanner } from '../src/components/personal-details/InfoBanner';
 import { InfoSection } from '../src/components/personal-details/InfoSection';
 import { LogoutButton } from '../src/components/personal-details/LogoutButton';
 import { useTheme } from '../src/theme/ThemeContext';
+import { useProfileStore } from '../src/store/profileStore';
 
 export default function PersonalDetailsScreen() {
   const { colors: themeColors } = useTheme();
+  const { fullName, email, phone, dob, gender, address } = useProfileStore();
+
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(true);
+  const [biometricEnabled, setBiometricEnabled] = useState(true);
 
   return (
     <ScrollView
@@ -22,12 +28,12 @@ export default function PersonalDetailsScreen() {
       <InfoSection
         title="Basic Information"
         items={[
-          { icon: 'user', label: 'Full Name', value: 'Silver Abdul' },
-          { icon: 'mail', label: 'Email Address', value: 'silverabdul@email.com' },
-          { icon: 'phone', label: 'Phone Number', value: '+234 803 123 4567' },
-          { icon: 'calendar', label: 'Date of Birth', value: '12 March 1999' },
-          { icon: 'user', label: 'Gender', value: 'Male' },
-          { icon: 'map-pin', label: 'Residential Address', value: 'Abuja, FCT, Nigeria' },
+          { icon: 'user', label: 'Full Name', value: fullName },
+          { icon: 'mail', label: 'Email Address', value: email },
+          { icon: 'phone', label: 'Phone Number', value: phone },
+          { icon: 'calendar', label: 'Date of Birth', value: dob },
+          { icon: 'user', label: 'Gender', value: gender },
+          { icon: 'map-pin', label: 'Residential Address', value: address },
         ]}
       />
 
@@ -35,8 +41,20 @@ export default function PersonalDetailsScreen() {
         title="Security Information"
         items={[
           { icon: 'lock', label: 'Password', value: '********' },
-          { icon: 'shield', label: 'Two-Factor Authentication', value: 'Enabled', valueColor: themeColors.success },
-          { icon: 'smartphone', label: 'Biometric Login', value: 'Enabled', valueColor: themeColors.success },
+          {
+            icon: 'shield',
+            label: 'Two-Factor Authentication',
+            type: 'toggle',
+            value: twoFactorEnabled,
+            onToggle: setTwoFactorEnabled,
+          },
+          {
+            icon: 'smartphone',
+            label: 'Biometric Login',
+            type: 'toggle',
+            value: biometricEnabled,
+            onToggle: setBiometricEnabled,
+          },
         ]}
       />
 
@@ -45,7 +63,7 @@ export default function PersonalDetailsScreen() {
         items={[
           { icon: 'globe', label: 'Language', value: 'English' },
           { icon: 'bell', label: 'Notification Preferences', value: '' },
-          { icon: 'moon', label: 'Theme', value: 'Dark' },
+          // { icon: 'moon', label: 'Theme', value: 'Dark' },
         ]}
       />
 

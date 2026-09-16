@@ -27,8 +27,6 @@ export default function Index() {
   const [isReady, setIsReady] = useState(false);
   const isDark = mode === "dark";
 
-  // Splash-only background override — keeps the app's shared dark background
-  // (themeColors.background) untouched everywhere else.
   const splashBackground = isDark ? "#010010" : themeColors.background;
 
  const FEATURES = [

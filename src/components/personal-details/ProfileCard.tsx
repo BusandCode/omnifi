@@ -1,16 +1,26 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '../../theme/ThemeContext';
+import { useProfileStore } from '../../store/profileStore';
 
 export function ProfileCard() {
   const { colors: themeColors } = useTheme();
+  const { fullName, email, phone } = useProfileStore();
+
+  const initials = fullName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('');
 
   return (
     <View style={[styles.card, { backgroundColor: themeColors.surface }]}>
       <View style={styles.left}>
         <View style={styles.avatarWrap}>
           <View style={[styles.avatar, { backgroundColor: themeColors.primaryTint }]}>
-            <Text style={[styles.avatarText, { color: themeColors.primaryLight }]}>SA</Text>
+            <Text style={[styles.avatarText, { color: themeColors.primaryLight }]}>{initials || 'SA'}</Text>
           </View>
           <View
             style={[
@@ -24,17 +34,17 @@ export function ProfileCard() {
 
         <View style={{ flex: 1 }}>
           <View style={styles.nameRow}>
-            <Text style={[styles.name, { color: themeColors.textPrimary }]}>Silver Abdul</Text>
+            <Text style={[styles.name, { color: themeColors.textPrimary }]}>{fullName}</Text>
             <View style={[styles.verifiedBadge, { backgroundColor: themeColors.primary }]}>
               <Feather name="check" size={9} color="#fff" />
             </View>
           </View>
-          <Text style={[styles.detail, { color: themeColors.textSecondary }]}>silverabdul@email.com</Text>
-          <Text style={[styles.detail, { color: themeColors.textSecondary }]}>+234 803 123 4567</Text>
+          <Text style={[styles.detail, { color: themeColors.textSecondary }]}>{email}</Text>
+          <Text style={[styles.detail, { color: themeColors.textSecondary }]}>{phone}</Text>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.editRow}>
+      <TouchableOpacity style={styles.editRow} onPress={() => router.push('/edit-profile')}>
         <Text style={[styles.editText, { color: themeColors.primaryLight }]}>Edit Profile</Text>
         <Feather name="chevron-right" size={13} color={themeColors.primaryLight} />
       </TouchableOpacity>
